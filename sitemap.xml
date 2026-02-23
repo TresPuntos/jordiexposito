@@ -7,51 +7,57 @@
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://www.jordiexposito.com/about.html</loc>
+        <loc>https://www.jordiexposito.com/about</loc>
         <lastmod>2026-02-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://www.jordiexposito.com/work.html</loc>
+        <loc>https://www.jordiexposito.com/work</loc>
         <lastmod>2026-02-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://www.jordiexposito.com/workflow.html</loc>
+        <loc>https://www.jordiexposito.com/workflow</loc>
         <lastmod>2026-02-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://www.jordiexposito.com/gym.html</loc>
+        <loc>https://www.jordiexposito.com/gym</loc>
         <lastmod>2026-02-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://www.jordiexposito.com/contacto.html</loc>
+        <loc>https://www.jordiexposito.com/contacto</loc>
         <lastmod>2026-02-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://www.jordiexposito.com/invoices.html</loc>
+        <loc>https://www.jordiexposito.com/invoices</loc>
         <lastmod>2026-02-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://www.jordiexposito.com/sync-engine.html</loc>
+        <loc>https://www.jordiexposito.com/sync-engine</loc>
         <lastmod>2026-02-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://www.jordiexposito.com/linkedin.html</loc>
+        <loc>https://www.jordiexposito.com/linkedin</loc>
         <lastmod>2026-02-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://www.jordiexposito.com/design-engineer-madrid</loc>
+        <lastmod>2026-02-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
     </url>
 </urlset>

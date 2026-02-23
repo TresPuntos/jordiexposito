@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prime Gym App — Case Study UX/UI | Jordi Expósito, Design Engineer Barcelona</title>
+    <title>Prime Gym App — Case Study | Jordi Expósito, Design Engineer Barcelona</title>
     <meta name="description"
         content="Case Study UX/UI: Prime, app de fitness diseñada y desarrollada por Jordi Expósito, Design Engineer en Barcelona. Arquitectura Local-First, latencia cero y experiencia sin fricción." />
 
@@ -687,8 +687,7 @@
                     Lab</a>
                 <a href="/workflow"
                     class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Workflow</a>
-                <a href="/about"
-                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">About</a>
+                <a href="/about" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">About</a>
                 <a href="/contacto"
                     class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4">¿Hablamos?</a>
             </nav>
@@ -750,7 +749,8 @@
                             style="border-color: rgba(59,130,246,0.2); box-shadow: 0 0 80px var(--accent-glow);">
                             <div class="iphone-notch"></div>
                             <div class="iphone-screen bg-black">
-                                <video src="/Proyectos/gym/gym_demo.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
+                                <video src="/Proyectos/gym/gym_demo.mp4" autoplay loop muted playsinline
+                                    class="w-full h-full object-cover"></video>
                             </div>
                         </div>
                     </div>
@@ -1231,8 +1231,8 @@
                                 <input type="checkbox" name="privacy" required>
                                 <span class="checkmark"></span>
                                 <span class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Acepto las
-                                    <a href="/aviso-legal" target="_blank"
-                                        class="text-acid hover:underline">condiciones legales</a> y la
+                                    <a href="/aviso-legal" target="_blank" class="text-acid hover:underline">condiciones
+                                        legales</a> y la
                                     <a href="/privacidad" target="_blank" class="text-acid hover:underline">Política
                                         de Privacidad</a></span>
                             </label>
@@ -1587,14 +1587,14 @@
     <script src="cursor.js" defer></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             let lazyVideos = [].slice.call(document.querySelectorAll("video.lazy-video"));
 
             if ("IntersectionObserver" in window) {
-                let lazyVideoObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(video) {
+                let lazyVideoObserver = new IntersectionObserver(function (entries, observer) {
+                    entries.forEach(function (video) {
                         if (video.isIntersecting) {
-                            if(video.target.dataset.src) {
+                            if (video.target.dataset.src) {
                                 video.target.src = video.target.dataset.src;
                             }
                             video.target.load();
@@ -1604,28 +1604,28 @@
                     });
                 });
 
-                lazyVideos.forEach(function(lazyVideo) {
+                lazyVideos.forEach(function (lazyVideo) {
                     lazyVideoObserver.observe(lazyVideo);
                 });
             }
         });
     </script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Small script to ensure videos play on mobile when navigating internally
-      const videos = document.querySelectorAll("video");
-      videos.forEach(video => {
-        video.play().catch(function(error) {
-          console.log("Autoplay was prevented:", error);
-          // Wait for a user interaction to start playing
-          document.addEventListener("click", function() {
-            video.play();
-          }, { once: true });
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Small script to ensure videos play on mobile when navigating internally
+            const videos = document.querySelectorAll("video");
+            videos.forEach(video => {
+                video.play().catch(function (error) {
+                    console.log("Autoplay was prevented:", error);
+                    // Wait for a user interaction to start playing
+                    document.addEventListener("click", function () {
+                        video.play();
+                    }, { once: true });
+                });
+            });
         });
-      });
-    });
-  </script>
+    </script>
 </body>
 
 </html>
