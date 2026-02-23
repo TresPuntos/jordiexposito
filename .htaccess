@@ -1,2 +1,10 @@
-# Archivo temporalmente vaciado para eliminar las reglas en bucle
-# Delegando redirecciones al panel de Hostinger
+# Redirección de www a NO www y Forzar HTTPS
+RewriteEngine On
+
+# 1. Forzar HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 2. Redirigir www a la versión sin www (la preferida por SEO en esta web)
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
