@@ -1,10 +1,10 @@
-# Redirección de www a NO www y Forzar HTTPS
+# Redirección de NO www a WWW y Forzar HTTPS
 RewriteEngine On
 
-# 1. Forzar HTTPS
+# 1. Redirigir el dominio sin www a la versión con www
+RewriteCond %{HTTP_HOST} ^jordiexposito\.com$ [NC]
+RewriteRule ^(.*)$ https://www.jordiexposito.com/$1 [R=301,L]
+
+# 2. Forzar HTTPS
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# 2. Redirigir www a la versión sin www (la preferida por SEO en esta web)
-RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
