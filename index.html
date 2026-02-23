@@ -97,7 +97,10 @@
     rel="stylesheet">
 
   <!-- Tailwind CSS (CDN) -->
-  <link rel="stylesheet" href="dist.css">
+  <link rel="stylesheet" href="dist.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="dist.css">
+  </noscript>
   <style>
     body {
       background-color: #09090B;
@@ -588,8 +591,14 @@
       margin-bottom: 2px;
     }
   </style>
-  <link rel="stylesheet" href="device.css">
-  <link rel="stylesheet" href="cursor.css">
+  <link rel="stylesheet" href="device.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="device.css">
+  </noscript>
+  <link rel="stylesheet" href="cursor.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="cursor.css">
+  </noscript>
   <style>
     /* Codrops Line Hover Style 02 (link--io) */
     .link--io {
@@ -1224,7 +1233,8 @@
                   <div class="iphone-frame shadow-2xl">
                     <div class="iphone-notch"></div>
                     <div class="iphone-screen bg-black">
-                      <video src="/Proyectos/gym/gym_demo.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
+                      <video src="/Proyectos/gym/gym_demo.mp4" autoplay loop muted playsinline
+                        class="w-full h-full object-cover"></video>
                     </div>
                   </div>
                 </div>
@@ -1648,7 +1658,7 @@
         <div class="reveal">
           <div
             class="w-24 h-24 bg-zinc-800 rounded-full mb-8 overflow-hidden grayscale hover:grayscale-0 transition-all border-2 border-zinc-800 hover:border-acid">
-            <img src="jordi/jordi_exposito.png" alt="Jordi Expósito" class="w-full h-full object-cover">
+            <img src="jordi/jordi_exposito.webp" alt="Jordi Expósito" class="w-full h-full object-cover" loading="lazy">
           </div>
           <h2 class="text-4xl font-extrabold text-white-off mb-6">Deja de validar con diapositivas.</h2>
           <p class="text-xl text-zinc-400 leading-relaxed mb-8 max-w-lg">
@@ -1770,10 +1780,8 @@
       Lab</a>
     <a href="/workflow"
       class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Workflow</a>
-    <a href="/about"
-      class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">About</a>
-    <a href="/contacto"
-      class="link--io text-2xl font-bold text-white-off uppercase tracking-widest mt-4 mobile-link">
+    <a href="/about" class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">About</a>
+    <a href="/contacto" class="link--io text-2xl font-bold text-white-off uppercase tracking-widest mt-4 mobile-link">
       ¿Hablamos?
     </a>
   </div>
@@ -1903,17 +1911,17 @@
   <script src="contact-form.js" defer></script>
   <script src="cursor.js" defer></script>
 
-  
+
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       // Small script to ensure videos play on mobile when navigating internally
       const videos = document.querySelectorAll("video");
       videos.forEach(video => {
-        video.play().catch(function(error) {
+        video.play().catch(function (error) {
           console.log("Autoplay was prevented:", error);
           // Wait for a user interaction to start playing
-          document.addEventListener("click", function() {
+          document.addEventListener("click", function () {
             video.play();
           }, { once: true });
         });

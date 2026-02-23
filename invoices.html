@@ -60,7 +60,10 @@
     }
     </script>
 
-    <link rel="stylesheet" href="dist.css">
+    <link rel="stylesheet" href="dist.css" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="dist.css">
+    </noscript>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
@@ -794,7 +797,10 @@
             margin-bottom: 2px;
         }
     </style>
-    <link rel="stylesheet" href="cursor.css">
+    <link rel="stylesheet" href="cursor.css" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="cursor.css">
+    </noscript>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZSD834B88"></script>
     <script>
@@ -820,8 +826,7 @@
                     Lab</a>
                 <a href="/workflow"
                     class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Workflow</a>
-                <a href="/about"
-                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">About</a>
+                <a href="/about" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">About</a>
                 <a href="/contacto"
                     class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4">¿Hablamos?</a>
             </nav>
@@ -1449,7 +1454,7 @@
                 <div class="reveal">
                     <div
                         class="w-24 h-24 bg-zinc-800 rounded-full mb-8 overflow-hidden grayscale hover:grayscale-0 transition-all border-2 border-zinc-800 hover:border-acid">
-                        <img src="jordi/jordi_exposito.png" alt="Jordi Expósito" class="w-full h-full object-cover">
+                        <img src="jordi/jordi_exposito.webp" alt="Jordi Expósito" class="w-full h-full object-cover">
                     </div>
                     <h2 class="text-4xl font-extrabold text-white-off mb-6">Deja de validar con diapositivas.</h2>
                     <p class="text-xl text-zinc-400 leading-relaxed mb-8 max-w-lg">
@@ -1516,8 +1521,8 @@
                                 <input type="checkbox" name="privacy" required>
                                 <span class="checkmark"></span>
                                 <span class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Acepto las
-                                    <a href="/aviso-legal" target="_blank"
-                                        class="text-acid hover:underline">condiciones legales</a> y la
+                                    <a href="/aviso-legal" target="_blank" class="text-acid hover:underline">condiciones
+                                        legales</a> y la
                                     <a href="/privacidad" target="_blank" class="text-acid hover:underline">Política
                                         de Privacidad</a></span>
                             </label>
