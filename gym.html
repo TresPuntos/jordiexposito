@@ -679,7 +679,7 @@
     <header id="navbar"
         class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 border-b border-transparent">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <a href="index.html" class="block hover:opacity-80 transition-opacity">
+            <a href="/" class="block hover:opacity-80 transition-opacity">
                 <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
             </a>
             <nav class="hidden md:flex items-center gap-8">
@@ -750,8 +750,7 @@
                             style="border-color: rgba(59,130,246,0.2); box-shadow: 0 0 80px var(--accent-glow);">
                             <div class="iphone-notch"></div>
                             <div class="iphone-screen bg-black">
-                                <video src="Proyectos/gym/gym_demo.mp4" autoplay loop muted playsinline
-                                    class="w-full h-full object-cover"></video>
+                                <video data-src="Proyectos/gym/gym_demo.mp4" loop muted playsinline preload="none" class="lazy-video w-full h-full object-cover"></video>
                             </div>
                         </div>
                     </div>
@@ -1294,7 +1293,7 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu"
         class="fixed inset-0 bg-zinc-950 z-[60] transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center gap-8">
-        <a href="index.html" class="block hover:opacity-80 transition-opacity">
+        <a href="/" class="block hover:opacity-80 transition-opacity">
             <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
         </a>
         <button id="close-menu-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white">
@@ -1586,6 +1585,31 @@
     </script>
     <script src="contact-form.js" defer></script>
     <script src="cursor.js" defer></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let lazyVideos = [].slice.call(document.querySelectorAll("video.lazy-video"));
+
+            if ("IntersectionObserver" in window) {
+                let lazyVideoObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(video) {
+                        if (video.isIntersecting) {
+                            if(video.target.dataset.src) {
+                                video.target.src = video.target.dataset.src;
+                            }
+                            video.target.load();
+                            video.target.play().catch(e => console.log('Autoplay prevented:', e));
+                            lazyVideoObserver.unobserve(video.target);
+                        }
+                    });
+                });
+
+                lazyVideos.forEach(function(lazyVideo) {
+                    lazyVideoObserver.observe(lazyVideo);
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

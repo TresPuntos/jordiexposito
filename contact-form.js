@@ -115,11 +115,11 @@
                 formData.delete('page_title');
                 formData.delete('page_url');
 
-                // We add them back with descriptive labels
-                formData.set('Nombre_Organización', userName);
-                formData.set('Modalidad_Seleccionada', projectType);
-                formData.set('Reto_Técnico', userMessage);
-                formData.set('Página_Origen', document.title + ' (' + window.location.pathname + ')');
+                // We add them back with descriptive labels (no accents to avoid encoding issues)
+                formData.set('Organizacion', userName);
+                formData.set('Modalidad', projectType);
+                formData.set('Mensaje', userMessage);
+                formData.set('Origen', document.title + ' (' + window.location.pathname + ')');
 
                 const response = await fetch(CONFIG.endpoint, {
                     method: 'POST',
