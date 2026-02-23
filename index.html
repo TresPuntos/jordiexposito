@@ -1224,7 +1224,7 @@
                   <div class="iphone-frame shadow-2xl">
                     <div class="iphone-notch"></div>
                     <div class="iphone-screen bg-black">
-                      <video src="Proyectos/gym/gym_demo.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
+                      <video src="/Proyectos/gym/gym_demo.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
                     </div>
                   </div>
                 </div>
@@ -1904,6 +1904,22 @@
   <script src="cursor.js" defer></script>
 
   
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Small script to ensure videos play on mobile when navigating internally
+      const videos = document.querySelectorAll("video");
+      videos.forEach(video => {
+        video.play().catch(function(error) {
+          console.log("Autoplay was prevented:", error);
+          // Wait for a user interaction to start playing
+          document.addEventListener("click", function() {
+            video.play();
+          }, { once: true });
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>
