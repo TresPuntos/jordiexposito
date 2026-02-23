@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Automatización de Facturación con IA — Case Study | Jordi Expósito, Design Engineer</title>
+    <meta name="description"
+        content="Case Study: automatización de facturación con IA diseñada por Jordi Expósito, Design Engineer Barcelona. Sistema end-to-end de procesamiento semántico integrado con Holded CRM." />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://jordiexposito.com/invoices.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jordiexposito.com/invoices.html">
+    <meta property="og:title" content="Financial Ingestion Pipeline — Case Study por Jordi Expósito">
+    <meta property="og:description"
+        content="Automatización End-to-End de facturación con LLMs y procesamiento asíncrono.">
+    <meta property="og:image" content="https://jordiexposito.com/og-image.png">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Jordi Expósito">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Financial Ingestion Pipeline — Case Study">
+    <meta name="twitter:description"
+        content="Automatización End-to-End de facturación con LLMs y procesamiento asíncrono.">
+    <meta name="twitter:image" content="https://jordiexposito.com/og-image.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CreativeWork",
+          "@id": "https://jordiexposito.com/invoices.html",
+          "url": "https://jordiexposito.com/invoices.html",
+          "name": "Financial Ingestion Pipeline",
+          "description": "Sistema de procesamiento asíncrono y extracción de datos mediante LLMs para reconciliación contable automática.",
+          "author": {"@id": "https://jordiexposito.com/#person"},
+          "inLanguage": "es",
+          "keywords": ["LLM", "Automatización", "Facturación", "Holded", "OCR", "Pipeline"]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordiexposito.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Work / Lab", "item": "https://jordiexposito.com/work.html"},
+            {"@type": "ListItem", "position": 3, "name": "Invoices Pipeline", "item": "https://jordiexposito.com/invoices.html"}
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="dist.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --accent: #F59E0B;
+            --accent-glow: rgba(245, 158, 11, 0.15);
+            --acid: #CCFF00;
+        }
+
+        body {
+            background-color: #000000;
+            color: #f4f4f5;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* ANIMATIONS */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal.delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .reveal.delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal.delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .reveal.delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        .reveal.delay-5 {
+            transition-delay: 0.5s;
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .btn-hyperion:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Codrops Line Hover Style 02 (link--io) */
+        .link--io {
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            color: inherit;
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        .link--io::before,
+        .link--io::after {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: currentColor;
+            top: 100%;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .link--io::before {
+            content: '';
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+        }
+
+        .link--io:hover::before {
+            transform-origin: 0% 50%;
+            transform: scale3d(1, 1, 1);
+            transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+        }
+
+        .link--io::after {
+            content: '';
+            top: calc(100% + 4px);
+            transform-origin: 0% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+        }
+
+        .link--io:hover::after {
+            transform-origin: 100% 50%;
+            transform: scale3d(1, 1, 1);
+            transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+        }
+
+        .line-reveal {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .line-reveal::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transform: scaleX(1);
+            transform-origin: right;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .line-reveal.active::after {
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+
+        .counter-value {
+            display: inline-block;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .parallax-slow {
+            will-change: transform;
+        }
+
+        section {
+            position: relative;
+        }
+
+        /* IDE & ORBIT ANIMATIONS */
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes orbit {
+            from {
+                transform: rotate(0deg) translateX(280px) rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg) translateX(280px) rotate(-360deg);
+            }
+        }
+
+        .orbit-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .orbit-item {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            margin-left: -30px;
+            margin-top: -30px;
+            animation: orbit 30s linear infinite;
+        }
+
+        /* 2 items distributed over 30s orbit -> 15s interval */
+        .orbit-item:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .orbit-item:nth-child(2) {
+            animation-delay: -15s;
+        }
+
+        .code-line {
+            display: block;
+            white-space: pre;
+            overflow: hidden;
+            border-right: 2px solid transparent;
+            width: 0;
+            animation: typing 4s steps(30, end) infinite alternate;
+        }
+
+        /* Staggered typing animation for ~15 lines */
+        .code-line:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .code-line:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .code-line:nth-child(3) {
+            animation-delay: 1.0s;
+        }
+
+        .code-line:nth-child(4) {
+            animation-delay: 1.5s;
+        }
+
+        .code-line:nth-child(5) {
+            animation-delay: 2.0s;
+        }
+
+        .code-line:nth-child(6) {
+            animation-delay: 2.5s;
+        }
+
+        .code-line:nth-child(7) {
+            animation-delay: 3.0s;
+        }
+
+        .code-line:nth-child(8) {
+            animation-delay: 3.5s;
+        }
+
+        .code-line:nth-child(9) {
+            animation-delay: 4.0s;
+        }
+
+        .code-line:nth-child(10) {
+            animation-delay: 4.5s;
+        }
+
+        .code-line:nth-child(11) {
+            animation-delay: 5.0s;
+        }
+
+        .code-line:nth-child(12) {
+            animation-delay: 5.5s;
+        }
+
+        .code-line:nth-child(13) {
+            animation-delay: 6.0s;
+        }
+
+        .code-line:nth-child(14) {
+            animation-delay: 6.5s;
+        }
+
+        .code-line:nth-child(15) {
+            animation-delay: 7.0s;
+        }
+
+        @keyframes cursor-blink {
+            50% {
+                border-color: transparent
+            }
+        }
+
+        .cursor-blink {
+            border-right: 2px solid var(--accent);
+            animation: cursor-blink 0.75s step-end infinite;
+        }
+
+        /* RESTORED ANIMATIONS */
+        @keyframes glow-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 15px var(--accent-glow), 0 0 30px transparent;
+            }
+
+            50% {
+                box-shadow: 0 0 25px var(--accent-glow), 0 0 50px var(--accent-glow);
+            }
+        }
+
+        .glow-ring {
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes float-subtle {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .float-anim {
+            animation: float-subtle 4s ease-in-out infinite;
+        }
+
+        @keyframes flow-pulse {
+            0% {
+                opacity: 0.3;
+                transform: translateX(-100%);
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.3;
+                transform: translateX(100%);
+            }
+        }
+
+        .flow-particle {
+            animation: flow-pulse 2.5s ease-in-out infinite;
+        }
+
+        /* BTN-HYPERION RESTORED */
+        .btn-hyperion {
+            pointer-events: auto;
+            cursor: pointer;
+            background: var(--accent);
+            border: 1px solid #000;
+            padding: 1rem 2rem;
+            font-family: inherit;
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .btn-hyperion span {
+            display: block;
+            position: relative;
+        }
+
+        .btn-hyperion>span {
+            overflow: hidden;
+        }
+
+        .btn-hyperion>span>span {
+            overflow: hidden;
+            mix-blend-mode: normal;
+        }
+
+        .btn-hyperion:hover>span>span {
+            animation: MoveUpInitial 0.2s forwards, MoveUpEnd 0.2s forwards 0.2s;
+        }
+
+        @keyframes MoveUpInitial {
+            to {
+                transform: translate3d(0, -105%, 0);
+            }
+        }
+
+        @keyframes MoveUpEnd {
+            from {
+                transform: translate3d(0, 100%, 0);
+            }
+
+            to {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .btn-hyperion::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+        }
+
+        .btn-hyperion:hover::before {
+            transform: scale3d(1, 1, 1);
+            transform-origin: 0% 50%;
+        }
+
+        .btn-hyperion:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* NEW VISUALS */
+        .pipeline-node {
+            background: rgba(24, 24, 27, 0.8);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #f4f4f5;
+            width: 100%;
+        }
+
+        .pipeline-path {
+            width: 2px;
+            height: 32px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            margin-left: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pipeline-path::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            animation: pipeline-flow 2s linear infinite;
+        }
+
+        @keyframes pipeline-flow {
+            0% {
+                top: -100%;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        .gmail-mockup {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 16px;
+            width: 100%;
+            font-family: sans-serif;
+        }
+
+        .gmail-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .gmail-label-pill {
+            font-size: 9px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .label-processed {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .label-error {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* CONTACT FORM STYLES */
+        .btn-hyperion {
+            pointer-events: auto;
+            cursor: pointer;
+            background: #CCFF00;
+            border: 1px solid #000;
+            padding: 1rem 2rem;
+            margin: 0;
+            font-family: inherit;
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .btn-hyperion span {
+            display: block;
+            position: relative;
+        }
+
+        .btn-hyperion>span {
+            overflow: hidden;
+            mix-blend-mode: normal;
+        }
+
+        .btn-hyperion>span>span {
+            overflow: hidden;
+            mix-blend-mode: normal;
+        }
+
+        .btn-hyperion:hover>span>span {
+            animation: MoveUpInitial 0.2s forwards, MoveUpEnd 0.2s forwards 0.2s;
+        }
+
+        @keyframes MoveUpInitial {
+            to {
+                transform: translate3d(0, -105%, 0);
+            }
+        }
+
+        @keyframes MoveUpEnd {
+            from {
+                transform: translate3d(0, 100%, 0);
+            }
+
+            to {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .btn-hyperion::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+        }
+
+        .btn-hyperion:hover::before {
+            transform: scale3d(1, 1, 1);
+            transform-origin: 0% 50%;
+        }
+
+        .btn-hyperion:hover {
+            color: #CCFF00;
+            border-color: #CCFF00;
+        }
+
+        .input-tech {
+            background-color: transparent;
+            border-bottom: 1px solid #52525B;
+            font-family: 'JetBrains Mono', monospace;
+            color: #ffffff;
+            padding: 0.75rem 0;
+            width: 100%;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+
+        .input-tech:focus {
+            outline: none;
+            border-bottom-color: #CCFF00;
+            box-shadow: 0 1px 0 0 #CCFF00;
+        }
+
+        .input-tech::placeholder {
+            color: #71717A;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+
+        .label-tech {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #A1A1AA;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .select-selected {
+            background-color: transparent;
+            border-bottom: 1px solid #52525B;
+            border-radius: 0;
+            color: #ffffff;
+            padding: 0.75rem 0;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+        }
+
+        .select-selected:after {
+            position: absolute;
+            content: "";
+            top: 50%;
+            right: 0px;
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-color: #71717A transparent transparent transparent;
+            transform: translateY(-25%);
+        }
+
+        .select-selected.select-arrow-active:after {
+            border-color: transparent transparent #ccff00 transparent;
+            transform: translateY(-75%);
+        }
+
+        .select-selected.select-arrow-active,
+        .select-selected:hover {
+            border-bottom-color: #ccff00;
+            box-shadow: 0 1px 0 0 #ccff00;
+        }
+
+        .select-items div,
+        .select-selected {
+            color: #ffffff;
+            padding: 12px 16px;
+            border: 1px solid transparent;
+            border-color: transparent transparent rgba(255, 255, 255, 0.05) transparent;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .select-items {
+            position: absolute;
+            background-color: #09090b;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            border: 1px solid #52525B;
+            border-radius: 0;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            margin-top: 1px;
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .select-hide {
+            display: none;
+        }
+
+        .select-items div:hover,
+        .same-as-selected {
+            background-color: #18181b;
+            color: #ccff00;
+        }
+
+        .select-label {
+            position: relative;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #A1A1AA;
+            display: block;
+            margin-bottom: 0px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .custom-checkbox:hover .checkmark {
+            border-color: #ccff0080;
+        }
+
+        .custom-checkbox input:checked+.checkmark {
+            background: #ccff00;
+            border-color: #ccff00;
+        }
+
+        .custom-checkbox input:checked+.checkmark:after {
+            content: "";
+            width: 5px;
+            height: 10px;
+            border: solid #000;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            margin-bottom: 2px;
+        }
+    </style>
+    <link rel="stylesheet" href="cursor.css">
+</head>
+
+<body class="antialiased">
+
+    <!-- NAVIGATION -->
+    <header id="navbar"
+        class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 border-b border-transparent">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="block hover:opacity-80 transition-opacity">
+                <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
+            </a>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="work.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Work /
+                    Lab</a>
+                <a href="workflow.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Workflow</a>
+                <a href="about.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">About</a>
+                <a href="contacto.html"
+                    class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4">¿Hablamos?</a>
+            </nav>
+            <button id="mobile-menu-btn" class="md:hidden text-white-off focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </div>
+
+    </header>
+
+    <main>
+        <!-- ============================================
+             1. HERO SECTION
+             ============================================ -->
+        <section class="min-h-screen pt-32 pb-20 flex items-center relative overflow-hidden">
+            <div
+                class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-amber-900/20 via-black to-black -z-10">
+            </div>
+
+            <div class="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Text -->
+                <div>
+                    <div
+                        class="reveal inline-flex items-center gap-2 border border-zinc-800 bg-zinc-900/50 rounded-full px-3 py-1 mb-8 backdrop-blur-sm glow-ring">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse"></span>
+                        <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider">Production —
+                            Shipped</span>
+                    </div>
+                    <h1
+                        class="reveal delay-1 text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight leading-[1.1]">
+                        Automatización de facturas con CRM<span class="text-[var(--accent)]">.</span>
+                    </h1>
+                    <p class="reveal delay-2 text-xl text-zinc-300 font-medium mb-6 leading-tight">
+                        Sistema de procesamiento asíncrono y extracción de datos mediante LLMs para la reconciliación
+                        contable automática en Holded.
+                    </p>
+
+                    <div class="reveal delay-3 prose prose-invert text-zinc-400 leading-relaxed mb-8 max-w-lg">
+                        <p>La fricción administrativa es el enemigo de la velocidad de ejecución. El procesamiento
+                            automático transforma la recepción de un servicio el registro contable inmediato y sin
+                            errores.</p>
+                    </div>
+
+                    <!-- Tech Grid -->
+                    <div class="reveal delay-4 grid grid-cols-2 gap-4 max-w-md">
+                        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4">
+                            <span
+                                class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest block mb-1">Rol</span>
+                            <span class="text-white font-bold text-sm">Automation Architect & Design Engineer</span>
+                        </div>
+                        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4">
+                            <span
+                                class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest block mb-1">Estado</span>
+                            <span class="text-[var(--accent)] font-bold text-sm flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Shipped (Production)
+                            </span>
+                        </div>
+                        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 col-span-2">
+                            <span
+                                class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest block mb-1">Stack</span>
+                            <span class="text-zinc-300 text-xs">Make (Integromat) · OpenAI GPT-4o · Gmail API · Holded
+                                API · Node.js</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: IDE + Orbit -->
+                <div class="reveal-right block relative perspective-1000 group h-[400px] lg:h-[500px]">
+                    <!-- Orbits Container -->
+                    <div class="orbit-container">
+                        <!-- Icon 1: Make -->
+                        <div class="orbit-item">
+                            <div
+                                class="bg-zinc-900/40 backdrop-blur border border-zinc-700/50 p-3 rounded-full shadow-[0_0_20px_rgba(111,66,193,0.1)] hover:scale-110 transition-transform cursor-pointer hover:border-[#6f42c1]/50 group flex items-center justify-center w-full h-full">
+                                <svg viewBox="0 0 91.1 66.1"
+                                    class="w-9 h-auto group-hover:drop-shadow-[0_0_8px_rgba(111,66,193,0.8)] transition-all">
+                                    <defs>
+                                        <path id="mk_h1"
+                                            d="M72.8,1.7h15.8c1.2,0,2.2,1,2.2,2.2v58.4c0,1.2-1,2.2-2.2,2.2H72.8c-1.2,0-2.2-1-2.2-2.2V3.9 C70.6,2.7,71.6,1.7,72.8,1.7z" />
+                                        <linearGradient id="mk_h3" gradientUnits="userSpaceOnUse" x1="-395.38"
+                                            y1="-292.43" x2="-394.92" y2="-292.43"
+                                            gradientTransform="matrix(91.4326 -33.7132 33.7132 91.4326 46060.582 13452.0322)">
+                                            <stop offset="0" style="stop-color:#B02DE9" />
+                                            <stop offset="0.8" style="stop-color:#6D00CC" />
+                                        </linearGradient>
+                                        <path id="mk_h4"
+                                            d="M26.4,2.5L0.2,54.7c-0.5,1.1-0.1,2.4,1,2.9l14.1,7.1c1.1,0.5,2.4,0.1,2.9-1l26.2-52.2 c0.5-1.1,0.1-2.4-1-2.9L29.4,1.5c-0.3-0.2-0.6-0.2-1-0.2C27.6,1.3,26.8,1.8,26.4,2.5" />
+                                        <linearGradient id="mk_h6" gradientUnits="userSpaceOnUse" x1="-395.25"
+                                            y1="-292.33" x2="-394.78" y2="-292.33"
+                                            gradientTransform="matrix(98.288 -42.4923 42.4923 98.288 51283.5781 11974.0068)">
+                                            <stop offset="0" style="stop-color:#FF00FF" />
+                                            <stop offset="1" style="stop-color:#B02DE9" />
+                                        </linearGradient>
+                                        <path id="mk_h7"
+                                            d="M48.5,2.7L37.3,59.6c-0.2,1.2,0.5,2.3,1.7,2.6l15.5,3.1c1.2,0.2,2.3-0.5,2.6-1.7L68.3,6.7 c0.2-1.2-0.5-2.3-1.7-2.6L51.1,1c-0.1,0-0.3,0-0.4,0C49.6,0.9,48.7,1.7,48.5,2.7" />
+                                        <linearGradient id="mk_h9" gradientUnits="userSpaceOnUse" x1="-395.77"
+                                            y1="-293.43" x2="-395.30" y2="-293.43"
+                                            gradientTransform="matrix(201.4815 -74.1707 74.1707 201.4815 101507.7188 29818.5098)">
+                                            <stop offset="0" style="stop-color:#FF00FF" />
+                                            <stop offset="1" style="stop-color:#6021C3" />
+                                        </linearGradient>
+                                        <clipPath id="mk_h2">
+                                            <use href="#mk_h1" style="overflow:visible;" />
+                                        </clipPath>
+                                        <clipPath id="mk_h5">
+                                            <use href="#mk_h4" style="overflow:visible;" />
+                                        </clipPath>
+                                        <clipPath id="mk_h8">
+                                            <use href="#mk_h7" style="overflow:visible;" />
+                                        </clipPath>
+                                    </defs>
+                                    <g style="clip-path:url(#mk_h2)">
+                                        <polygon points="50.3,9.3 88.4,-4.8 111.2,57 73.1,71"
+                                            style="fill:url(#mk_h3)" />
+                                    </g>
+                                    <g style="clip-path:url(#mk_h5)">
+                                        <polygon points="-23.6,11.4 37.9,-15.2 68.3,55.2 6.8,81.8"
+                                            style="fill:url(#mk_h6)" />
+                                    </g>
+                                    <g style="clip-path:url(#mk_h8)">
+                                        <polygon points="16.1,8.6 64.8,-9.3 89.4,57.8 40.8,75.7"
+                                            style="fill:url(#mk_h9)" />
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Icon 2: OpenAI -->
+                        <div class="orbit-item">
+                            <div
+                                class="bg-zinc-900/40 backdrop-blur border border-zinc-700/50 p-3 rounded-full shadow-[0_0_20px_rgba(16,163,127,0.1)] hover:scale-110 transition-transform cursor-pointer hover:border-[#10a37f]/50 group flex items-center justify-center w-full h-full">
+                                <svg viewBox="0 0 24 24" fill="none"
+                                    class="w-6 h-6 text-[#10a37f] group-hover:drop-shadow-[0_0_8px_rgba(16,163,127,0.8)] transition-all">
+                                    <path
+                                        d="M9.20509 8.76511V6.50545C9.20509 6.31513 9.27649 6.17234 9.44293 6.0773L13.9861 3.46088C14.6046 3.10413 15.342 2.93769 16.103 2.93769C18.9573 2.93769 20.7651 5.14983 20.7651 7.50454C20.7651 7.67098 20.7651 7.86129 20.7412 8.05161L16.0316 5.2924C15.7462 5.12596 15.4607 5.12596 15.1753 5.2924L9.20509 8.76511ZM19.8135 17.5659V12.1664C19.8135 11.8333 19.6708 11.5955 19.3854 11.429L13.4152 7.95633L15.3656 6.83833C15.5321 6.74328 15.6749 6.74328 15.8413 6.83833L20.3845 9.45474C21.6928 10.216 22.5728 11.8333 22.5728 13.4031C22.5728 15.2108 21.5025 16.8758 19.8135 17.5657V17.5659ZM7.80173 12.8088L5.8513 11.6671C5.68486 11.5721 5.61346 11.4293 5.61346 11.239V6.00613C5.61346 3.46111 7.56389 1.53433 10.2042 1.53433C11.2033 1.53433 12.1307 1.86743 12.9159 2.46202L8.2301 5.17371C7.94475 5.34015 7.80195 5.57798 7.80195 5.91109V12.809L7.80173 12.8088ZM12 15.2349L9.20509 13.6651V10.3351L12 8.76534L14.7947 10.3351V13.6651L12 15.2349ZM13.7958 22.4659C12.7967 22.4659 11.8693 22.1328 11.0841 21.5382L15.7699 18.8265C16.0553 18.6601 16.198 18.4222 16.198 18.0891V11.1912L18.1723 12.3329C18.3388 12.4279 18.4102 12.5707 18.4102 12.761V17.9939C18.4102 20.5389 16.4359 22.4657 13.7958 22.4657V22.4659ZM8.15848 17.1617L3.61528 14.5452C2.30696 13.784 1.42701 12.1667 1.42701 10.5969C1.42701 8.76534 2.52115 7.12414 4.20987 6.43428V11.8574C4.20987 12.1905 4.35266 12.4284 4.63802 12.5948L10.5846 16.0436L8.63415 17.1617C8.46771 17.2567 8.32492 17.2567 8.15848 17.1617ZM7.897 21.0625C5.20919 21.0625 3.23488 19.0407 3.23488 16.5432C3.23488 16.3529 3.25875 16.1626 3.2824 15.9723L7.96817 18.6839C8.25352 18.8504 8.53911 18.8504 8.82446 18.6839L14.7947 15.2351V17.4948C14.7947 17.6851 14.7233 17.8279 14.5568 17.9229L10.0136 20.5393C9.39518 20.8961 8.6578 21.0625 7.89677 21.0625H7.897ZM13.7958 23.8929C16.6739 23.8929 19.0762 21.8474 19.6235 19.1357C22.2874 18.4459 24 15.9484 24 13.4034C24 11.7383 23.2865 10.121 22.002 8.95542C22.121 8.45588 22.1924 7.95633 22.1924 7.45702C22.1924 4.0557 19.4331 1.51045 16.2458 1.51045C15.6037 1.51045 14.9852 1.60549 14.3668 1.81968C13.2963 0.773071 11.8215 0.107086 10.2042 0.107086C7.32606 0.107086 4.92383 2.15256 4.37653 4.86425C1.7126 5.55411 0 10.5966C0 12.2617 0.713506 13.879 1.99795 15.0446C1.87904 15.5441 1.80764 16.0436 1.80764 16.543C1.80764 19.9443 4.56685 22.4895 7.75421 22.4895C8.39632 22.4895 9.01478 22.3945 9.63324 22.1803C10.7035 23.2269 12.1783 23.8929 13.7958 23.8929Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- IDE Window -->
+                    <div class="w-full max-w-lg mx-auto bg-[#0d1117] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden relative z-10 top-10"
+                        style="box-shadow: 0 0 80px var(--accent-glow);">
+                        <!-- Window Header -->
+                        <div class="bg-zinc-900 px-4 py-3 border-b border-zinc-800 flex items-center justify-between">
+                            <div class="flex gap-2">
+                                <div class="w-2 h-2 rounded-full bg-[#ff5f56]"></div>
+                                <div class="w-2 h-2 rounded-full bg-[#ffbd2e]"></div>
+                                <div class="w-2 h-2 rounded-full bg-[#27c93f]"></div>
+                            </div>
+                            <div class="text-[10px] text-zinc-500 font-mono uppercase tracking-widest">
+                                Holded_Mapper.json</div>
+                            <div class="w-10"></div>
+                        </div>
+
+                        <!-- Window Body (Code) -->
+                        <div class="p-6 font-mono text-[10px] md:text-xs leading-relaxed text-zinc-300">
+                            <div class="code-line text-zinc-500">// Mapping Gmail context to Holded API payload</div>
+                            <div class="code-line">{</div>
+                            <div class="code-line"> <span class="text-purple-400">"contact"</span>: <span
+                                    class="text-amber-400">"{{1.fromEmail}}"</span>,</div>
+                            <div class="code-line"> <span class="text-purple-400">"invoiceNum"</span>: <span
+                                    class="text-amber-400">"{{1.subject.match(/\d+/g)}}"</span>,</div>
+                            <div class="code-line"> <span class="text-purple-400">"items"</span>: [</div>
+                            <div class="code-line"> {</div>
+                            <div class="code-line"> <span class="text-purple-400">"desc"</span>: <span
+                                    class="text-amber-400">"Extraction: "</span> + <span
+                                    class="text-amber-400">"{{1.snippet}}"</span>,</div>
+                            <div class="code-line"> <span class="text-purple-400">"value"</span>: <span
+                                    class="text-blue-400">parseNumber</span>(<span
+                                    class="text-amber-400">"{{1.total}}"</span>)</div>
+                            <div class="code-line"> }</div>
+                            <div class="code-line"> ],</div>
+                            <div class="code-line"> <span class="text-purple-400">"autoApprove"</span>: <span
+                                    class="text-blue-400">true</span> <span class="cursor-blink">&nbsp;</span></div>
+                            <div class="code-line">}</div>
+                        </div>
+
+                        <!-- Status Bar -->
+                        <div class="bg-zinc-900 px-4 py-2 border-t border-zinc-800 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse"></div>
+                                <span class="text-[8px] text-zinc-400 font-mono uppercase">Pipeline Active</span>
+                            </div>
+                            <div
+                                class="bg-zinc-800 px-2 py-1 rounded text-[8px] text-[var(--accent)] font-mono font-bold border border-zinc-700">
+                                200 OK
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             2. THE CORE PROBLEM
+             ============================================ -->
+        <section class="py-32 bg-zinc-950 border-y border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid md:grid-cols-12 gap-12">
+                    <div class="md:col-span-4 reveal-left">
+                        <span class="font-mono text-[var(--accent)] text-xs tracking-widest uppercase mb-4 block">01 /
+                            El Reto</span>
+                        <h2 class="text-3xl font-bold text-white mb-6">The Core Problem</h2>
+                    </div>
+                    <div class="md:col-span-8">
+                        <p class="reveal text-xl text-zinc-400 leading-relaxed mb-8">La gestión de facturería recibida
+                            vía email presentaba un <strong>cuello de botella operativo</strong> crítico: la
+                            intervención manual. La fricción se centraba en la descarga de adjuntos, extracción de
+                            metadatos y duplicidad de contactos.</p>
+
+                        <div class="space-y-8">
+                            <div
+                                class="reveal delay-1 border-l-2 border-[var(--accent)] pl-6 hover:bg-zinc-900/30 transition-colors duration-300 py-2 -ml-px">
+                                <h3 class="text-lg font-bold text-white mb-2">Cuello de Botella Operativo</h3>
+                                <p class="text-zinc-400 text-sm">Intervención manual en cada paso, desde la descarga
+                                    hasta el registro, consumiendo horas de gestión innecesarias.</p>
+                            </div>
+                            <div
+                                class="reveal delay-2 border-l-2 border-zinc-700 pl-6 hover:border-[var(--accent)] hover:bg-zinc-900/30 transition-all duration-300 py-2 -ml-px">
+                                <h3 class="text-lg font-bold text-white mb-2">Fricción en Data Entry</h3>
+                                <p class="text-zinc-400 text-sm">Extracción manual de metadatos (NIF, bases imponibles,
+                                    IRPF) con alta probabilidad de error humano.</p>
+                            </div>
+                            <div
+                                class="reveal delay-3 border-l-2 border-zinc-700 pl-6 hover:border-[var(--accent)] hover:bg-zinc-900/30 transition-all duration-300 py-2 -ml-px">
+                                <h3 class="text-lg font-bold text-white mb-2">Integridad Financiera</h3>
+                                <p class="text-zinc-400 text-sm">Tasa de error inaceptable en el registro de documentos
+                                    financieros, impactando directamente en la contabilidad real.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             3. ENGINEERING DEEP DIVE
+             ============================================ -->
+        <section class="py-32 bg-black border-y border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-12 items-start">
+                <div class="md:col-span-7 order-2 md:order-1">
+                    <span class="reveal font-mono text-[var(--accent)] text-xs tracking-widest uppercase mb-4 block">02
+                        / Engineering</span>
+                    <h2 class="reveal delay-1 text-3xl font-bold text-white mb-6">Engineering Deep Dive: La Arquitectura
+                    </h2>
+                    <p class="reveal delay-2 text-lg text-zinc-400 mb-8 leading-relaxed">Se diseñó un flujo de trabajo
+                        automatizado basado en eventos, orquestado en Make, que actúa como middleware inteligente entre
+                        Gmail y Holded.</p>
+
+                    <div class="space-y-6">
+                        <div
+                            class="reveal delay-2 bg-zinc-900/30 p-6 rounded-xl border border-zinc-900 hover:border-[var(--accent)]/30 transition-colors duration-300">
+                            <h3 class="text-white font-bold mb-2 flex items-center gap-2"><i data-lucide="radio"
+                                    class="w-4 h-4 text-[var(--accent)]"></i> Trigger & Watcher</h3>
+                            <p class="text-zinc-400 text-sm">Ingestión selectiva mediante la Gmail API filtrando por
+                                criterios de <code>subject</code> y <code>hasAttachment</code>.</p>
+                        </div>
+                        <div
+                            class="reveal delay-3 bg-zinc-900/30 p-6 rounded-xl border border-zinc-900 hover:border-[var(--accent)]/30 transition-colors duration-300">
+                            <h3 class="text-white font-bold mb-2 flex items-center gap-2"><i data-lucide="scan-text"
+                                    class="w-4 h-4 text-[var(--accent)]"></i> Buffer Management</h3>
+                            <p class="text-zinc-400 text-sm">Extracción del binario del PDF y conversión a texto
+                                mediante un <strong>AI Content Extractor</strong> especializado.</p>
+                        </div>
+                        <div
+                            class="reveal delay-4 bg-zinc-900/30 p-6 rounded-xl border border-zinc-900 hover:border-[var(--accent)]/30 transition-colors duration-300">
+                            <h3 class="text-white font-bold mb-2 flex items-center gap-2"><i data-lucide="git-branch"
+                                    class="w-4 h-4 text-[var(--accent)]"></i> Idempotencia & Lógica de Contactos</h3>
+                            <p class="text-zinc-400 text-sm">Un script en Node.js realiza un <em>lookup</em> en Holded;
+                                si el proveedor no existe, el sistema lo crea dinámicamente.</p>
+                        </div>
+                        <div
+                            class="reveal delay-5 bg-zinc-900/30 p-6 rounded-xl border border-zinc-900 hover:border-[var(--accent)]/30 transition-colors duration-300">
+                            <h3 class="text-white font-bold mb-2 flex items-center gap-2"><i data-lucide="database"
+                                    class="w-4 h-4 text-green-500"></i> Persistencia Dual</h3>
+                            <p class="text-zinc-400 text-sm">Generación del documento de compra vía POST y adjunto
+                                simultáneo del archivo original mediante flujo <code>multipart</code>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Engineering Flow Visual -->
+                <div class="md:col-span-5 order-1 md:order-2 reveal-right sticky top-32">
+                    <div
+                        class="w-full aspect-square bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden relative float-anim shadow-2xl flex flex-col items-center justify-center p-8 gap-0">
+                        <div class="pipeline-node">
+                            <i data-lucide="mail" class="w-5 h-5 text-zinc-500"></i>
+                            <span>GMAIL_WEBHOOK_RECEIVED</span>
+                        </div>
+                        <div class="pipeline-path"></div>
+                        <div class="pipeline-node border-purple-500/30">
+                            <i data-lucide="cpu" class="w-5 h-5 text-purple-500"></i>
+                            <span>LLM_DATA_EXTRACTION</span>
+                        </div>
+                        <div class="pipeline-path"></div>
+                        <div class="pipeline-node border-blue-500/30">
+                            <i data-lucide="database" class="w-5 h-5 text-blue-500"></i>
+                            <span>HOLDED_CONTACT_SYNC</span>
+                        </div>
+                        <div class="pipeline-path"></div>
+                        <div class="pipeline-node border-green-500/30" style="border-color: rgba(34, 197, 94, 0.4);">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+                            <span>INVOICE_LEDGER_COMMITTED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Snippet -->
+            <div class="max-w-7xl mx-auto px-6 mt-16">
+                <div
+                    class="reveal-scale bg-black border border-zinc-800 rounded-xl p-6 font-mono text-xs text-zinc-400 overflow-x-auto shadow-2xl max-w-3xl">
+                    <pre>
+<span class="text-zinc-500">// Lógica de normalización en Code Blocks de Make</span>
+<span class="text-purple-400">function</span> <span class="text-amber-400">normalize</span>(v) {
+  <span class="text-purple-400">return</span> (v || <span class="text-green-400">''</span>).toString().trim();
+}
+
+<span class="text-zinc-500">// Cálculo dinámico de retenciones IRPF</span>
+<span class="text-purple-400">let</span> retencionCode = input.IRPF === <span class="text-green-400">'15%'</span>
+  ? <span class="text-green-400">'s_ret_15'</span>
+  : <span class="text-green-400">'s_ret_7'</span>;
+
+<span class="text-zinc-500">// Sanitización post-inferencia LLM</span>
+<span class="text-purple-400">let</span> clean = rawOutput
+  .replace(<span class="text-amber-400">/```json\n?/g</span>, <span class="text-green-400">''</span>)
+  .replace(<span class="text-amber-400">/```\n?/g</span>, <span class="text-green-400">''</span>)
+  .trim();
+<span class="text-purple-400">const</span> invoice = <span class="text-amber-400">JSON</span>.parse(clean);</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             4. THE BRAIN: AI & LLMs
+             ============================================ -->
+        <section class="py-32 bg-zinc-950 border-y border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-12">
+                <div class="md:col-span-5 order-last md:order-first flex justify-center reveal-left">
+                    <div id="ai-chat-card"
+                        class="w-full max-w-sm bg-zinc-900 border border-zinc-800 rounded-xl p-6 relative overflow-hidden shadow-2xl hover:shadow-[0_0_40px_var(--accent-glow)] transition-shadow duration-500">
+                        <div
+                            class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--accent)] via-orange-400 to-[var(--accent)]">
+                        </div>
+
+                        <!-- User Message -->
+                        <div id="chat-user-msg" class="mb-4 flex justify-end opacity-0 translate-y-4"
+                            style="transition: opacity 0.5s, transform 0.5s;">
+                            <div
+                                class="bg-[var(--accent)]/15 p-4 rounded-2xl rounded-tr-none text-sm text-zinc-200 border border-[var(--accent)]/20 max-w-[85%]">
+                                Procesa esta factura de Adobe Creative Cloud
+                            </div>
+                        </div>
+
+                        <!-- AI Typing Indicator -->
+                        <div id="chat-typing" class="mb-4 flex gap-3 opacity-0" style="transition: opacity 0.4s;">
+                            <div
+                                class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700">
+                                <i data-lucide="bot" class="w-4 h-4 text-white"></i>
+                            </div>
+                            <div
+                                class="bg-zinc-800/50 px-4 py-3 rounded-2xl rounded-tl-none border border-zinc-700/50 flex items-center gap-1">
+                                <span class="w-2 h-2 bg-zinc-500 rounded-full animate-bounce"
+                                    style="animation-delay:0ms;"></span>
+                                <span class="w-2 h-2 bg-zinc-500 rounded-full animate-bounce"
+                                    style="animation-delay:150ms;"></span>
+                                <span class="w-2 h-2 bg-zinc-500 rounded-full animate-bounce"
+                                    style="animation-delay:300ms;"></span>
+                            </div>
+                        </div>
+
+                        <!-- AI Response -->
+                        <div id="chat-ai-msg" class="mb-6 flex gap-3 opacity-0" style="transition: opacity 0.4s;">
+                            <div
+                                class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700">
+                                <i data-lucide="bot" class="w-4 h-4 text-white"></i>
+                            </div>
+                            <div
+                                class="bg-zinc-800/50 p-4 rounded-2xl rounded-tl-none text-sm text-zinc-300 border border-zinc-700/50 leading-relaxed">
+                                <span id="chat-ai-text"></span><span id="chat-cursor"
+                                    class="inline-block w-0.5 h-4 bg-[var(--accent)] ml-0.5 align-middle"
+                                    style="animation: blink 0.8s step-end infinite;"></span>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div id="chat-actions" class="space-y-2 opacity-0 translate-y-3"
+                            style="transition: opacity 0.5s, transform 0.5s;">
+                            <div
+                                class="w-full bg-[var(--accent)]/10 p-3 rounded-lg text-xs text-[var(--accent)] font-bold text-center border border-[var(--accent)]/20 hover:bg-[var(--accent)]/20 cursor-pointer transition-colors">
+                                ✓ Contacto creado · Factura #INV-2024-087 registrada
+                            </div>
+                            <div
+                                class="w-full bg-zinc-800 p-3 rounded-lg text-xs text-zinc-500 font-bold text-center hover:bg-zinc-700 cursor-pointer transition-colors">
+                                Ver en Holded
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:col-span-7">
+                    <span class="reveal font-mono text-[var(--accent)] text-xs tracking-widest uppercase mb-4 block">03
+                        / Intelligence</span>
+                    <h2 class="reveal delay-1 text-3xl font-bold text-white mb-6">The Brain: GPT-4o como Motor de Parseo
+                        Semántico</h2>
+                    <p class="reveal delay-2 text-xl text-zinc-400 mb-8 leading-relaxed">El núcleo del sistema utiliza
+                        GPT-4o con un <em>System Prompt</em> de ingeniería de precisión. El modelo no solo extrae texto,
+                        sino que ejecuta lógica de negocio:</p>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div
+                            class="reveal delay-3 bg-zinc-900/30 p-6 rounded-xl border border-zinc-900 hover:border-[var(--accent)]/30 transition-colors duration-300">
+                            <h3 class="text-white font-bold mb-3 flex items-center gap-2"><i data-lucide="braces"
+                                    class="w-4 h-4 text-[var(--accent)]"></i> Normalización de Taxonomías</h3>
+                            <p class="text-zinc-400 text-sm">Identifica si una factura requiere retención de
+                                <strong>IRPF (7%, 15%)</strong> o <strong>IVA (21%)</strong> basándose en el análisis
+                                del contenido.
+                            </p>
+                        </div>
+                        <div
+                            class="reveal delay-4 bg-zinc-900/30 p-6 rounded-xl border border-zinc-900 hover:border-purple-500/30 transition-colors duration-300">
+                            <h3 class="text-white font-bold mb-3 flex items-center gap-2"><i data-lucide="terminal"
+                                    class="w-4 h-4 text-purple-500"></i> Data Sanitization</h3>
+                            <p class="text-zinc-400 text-sm">Limpia NIFs, normaliza subtotales y convierte fechas
+                                heterogéneas a <strong>Unix Timestamps</strong> antes de enviar el Payload.</p>
+                        </div>
+                        <div
+                            class="reveal delay-5 bg-zinc-900/30 p-6 rounded-xl border border-zinc-900 hover:border-amber-500/30 transition-colors duration-300 col-span-2">
+                            <h3 class="text-white font-bold mb-3 flex items-center gap-2"><i data-lucide="shield-check"
+                                    class="w-4 h-4 text-amber-500"></i> JSON Schema Enforcement</h3>
+                            <p class="text-zinc-400 text-sm">Cero margen de error: el sistema rechaza cualquier salida
+                                que no cumpla con la estructura de datos requerida para Holded.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             5. UX CRAFT: Invisible Interface
+             ============================================ -->
+        <section class="py-32 bg-black border-y border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-12 gap-12 items-center">
+                <div class="md:col-span-7">
+                    <span class="reveal font-mono text-[var(--accent)] text-xs tracking-widest uppercase mb-4 block">04
+                        / UX Craft</span>
+                    <h2 class="reveal delay-1 text-3xl font-bold text-white mb-6">La Mejor Interfaz es la que No Existe
+                    </h2>
+                    <p class="reveal delay-2 text-lg text-zinc-400 mb-8 leading-relaxed">La interfaz es "invisible" pero
+                        altamente informativa a través de un sistema de <strong>Labeling Dinámico</strong> en Gmail:</p>
+
+                    <div class="space-y-8">
+                        <div
+                            class="reveal delay-2 border-l-2 border-[var(--accent)] pl-6 hover:bg-zinc-900/30 transition-colors duration-300 py-2 -ml-px">
+                            <h3 class="text-lg font-bold text-white mb-2">Feedback en Tiempo Real</h3>
+                            <p class="text-zinc-400 text-sm">Marcado automático con etiquetas: <span
+                                    class="text-green-400 font-mono text-xs">Facturas Procesadas</span> para registros
+                                correctos o <span class="text-red-400 font-mono text-xs">Facturas NO procesadas</span>
+                                para excepciones.</p>
+                        </div>
+                        <div
+                            class="reveal delay-3 border-l-2 border-zinc-700 pl-6 hover:border-[var(--accent)] hover:bg-zinc-900/30 transition-all duration-300 py-2 -ml-px">
+                            <h3 class="text-lg font-bold text-white mb-2">Error Handling Proactive</h3>
+                            <p class="text-zinc-400 text-sm">Si falla cualquier nodo (OpenAI, Holded o script), el
+                                sistema dispara una notificación técnica detallada evitando que ninguna factura quede en
+                                el olvido.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Gmail Mockup Visual -->
+                <div class="md:col-span-5 reveal-right">
+                    <div
+                        class="w-full bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden relative float-anim shadow-2xl p-6">
+                        <div class="gmail-mockup">
+                            <div class="flex items-center gap-2 mb-4 border-b border-zinc-800 pb-2">
+                                <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                                <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                <span class="text-[8px] text-zinc-500 font-mono ml-2 uppercase">Inbox — Search:
+                                    label:facturas</span>
+                            </div>
+                            <div class="gmail-row">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] font-bold text-zinc-600">
+                                    A</div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-[10px] font-bold text-zinc-300">Adobe Systems</span>
+                                        <span class="text-[8px] text-zinc-600">14:22</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="gmail-label-pill label-processed">Factura Procesada</span>
+                                        <span class="text-[9px] text-zinc-500 truncate max-w-[120px]">Your monthly
+                                            billing...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gmail-row">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] font-bold text-zinc-600">
+                                    S</div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-[10px] font-bold text-zinc-300">Stripe Invoicing</span>
+                                        <span class="text-[8px] text-zinc-600">12:05</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="gmail-label-pill label-processed">Factura Procesada</span>
+                                        <span class="text-[9px] text-zinc-500 truncate max-w-[120px]">Invoice
+                                            #INV-2024-001...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gmail-row opacity-60">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-[10px] font-bold text-zinc-600">
+                                    U</div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-[10px] font-bold text-zinc-300">Uber Business</span>
+                                        <span class="text-[8px] text-zinc-600">Yesterday</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="gmail-label-pill border border-zinc-700 text-zinc-600">Manual
+                                            Check</span>
+                                        <span class="text-[9px] text-zinc-500 truncate max-w-[120px]">Receipt for your
+                                            trip...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             6. OPERATIONAL METRICS & STACK
+             ============================================ -->
+        <section class="py-24 bg-zinc-950 border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6">
+                <h2 class="reveal text-3xl font-bold text-white mb-4">Operational Metrics & Stack</h2>
+                <p class="reveal delay-1 text-zinc-400 mb-12 max-w-2xl">El diseño aquí se mide en milisegundos y
+                    fiabilidad, no en píxeles.</p>
+
+                <div class="grid md:grid-cols-2 gap-16">
+                    <!-- Tech Table -->
+                    <div class="reveal-scale bg-black rounded-xl overflow-hidden border border-zinc-900">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-zinc-900/50 text-zinc-500 uppercase font-mono text-xs">
+                                <tr>
+                                    <th class="px-6 py-4">Tecnología</th>
+                                    <th class="px-6 py-4">Rol en el Pipeline</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-900 text-zinc-400">
+                                <tr class="hover:bg-zinc-900/30 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-white">Make (Integromat)</td>
+                                    <td class="px-6 py-4">Orquestador del flujo. Event-driven middleware.</td>
+                                </tr>
+                                <tr class="hover:bg-zinc-900/30 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-white">OpenAI GPT-4o</td>
+                                    <td class="px-6 py-4">Motor de parseo semántico. Extracción de datos fiscales.</td>
+                                </tr>
+                                <tr class="hover:bg-zinc-900/30 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-white">JavaScript (ES6)</td>
+                                    <td class="px-6 py-4">Lógica de normalización, sanitización y cálculos fiscales.
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-zinc-900/30 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-white">Holded API</td>
+                                    <td class="px-6 py-4">CRM + ERP. Creación de contactos y documentos de compra.</td>
+                                </tr>
+                                <tr class="hover:bg-zinc-900/30 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-white">Gmail API</td>
+                                    <td class="px-6 py-4">Trigger, extracción de adjuntos y feedback labels.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div class="space-y-6">
+                        <h3 class="reveal font-mono text-zinc-500 text-xs uppercase tracking-widest mb-4">Resultados de
+                            Producción</h3>
+                        <div class="space-y-4">
+                            <div
+                                class="reveal delay-1 bg-zinc-900/30 border border-zinc-800 p-6 rounded-xl flex items-center justify-between hover:border-[var(--accent)]/30 transition-colors duration-300">
+                                <span class="text-zinc-400">Tiempo de Procesamiento</span>
+                                <span class="text-2xl font-mono font-bold text-[var(--accent)]">
+                                    < <span class="counter-value" data-target="15" data-suffix="s">15s
+                                </span></span>
+                            </div>
+                            <div
+                                class="reveal delay-2 bg-zinc-900/30 border border-zinc-800 p-6 rounded-xl flex items-center justify-between hover:border-[var(--accent)]/30 transition-colors duration-300">
+                                <span class="text-zinc-400">Fiabilidad (Reliability)</span>
+                                <span class="text-2xl font-mono font-bold text-green-400 counter-value" data-target="99"
+                                    data-suffix="%">99%</span>
+                            </div>
+                            <div
+                                class="reveal delay-3 bg-zinc-900/30 border border-zinc-800 p-6 rounded-xl flex items-center justify-between hover:border-[var(--accent)]/30 transition-colors duration-300">
+                                <span class="text-zinc-400">Escalabilidad</span>
+                                <span class="text-2xl font-mono font-bold text-white uppercase"
+                                    style="font-size: 1.25rem;">Coste manual cero</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             7. CTA — ABOUT & CONTACT SPLIT (Same as home)
+             ============================================ -->
+        <section id="contact-split" class="py-32 bg-zinc-950 border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+
+                <!-- Left Column: About (El Artesano Rebelde) -->
+                <div class="reveal">
+                    <div
+                        class="w-24 h-24 bg-zinc-800 rounded-full mb-8 overflow-hidden grayscale hover:grayscale-0 transition-all border-2 border-zinc-800 hover:border-acid">
+                        <img src="jordi/jordi_exposito.png" alt="Jordi Expósito" class="w-full h-full object-cover">
+                    </div>
+                    <h2 class="text-4xl font-extrabold text-white-off mb-6">Deja de validar con diapositivas.</h2>
+                    <p class="text-xl text-zinc-400 leading-relaxed mb-8 max-w-lg">
+                        Tienes la visión. Te falta la ejecución técnica. Saltémonos la burocracia de las agencias y
+                        hablemos
+                        directamente de cómo llevar tu idea a producción.
+                    </p>
+                    <div class="p-6 bg-zinc-900 border border-zinc-800 inline-block rounded-sm mb-8">
+                        <h3 class="font-mono text-acid text-sm mb-2 uppercase">DISPONIBILIDAD</h3>
+                        <p class="text-white-off font-bold text-2xl">Q2 2026: 2 Plazas abiertas</p>
+                    </div>
+                    <p class="text-zinc-500 text-sm font-mono flex items-center gap-2">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-acid"></i> Base en Barcelona |
+                        <i data-lucide="globe" class="w-4 h-4 text-acid"></i> Remote Native
+                    </p>
+                </div>
+
+                <!-- Right Column: Lead Capture Form (Quick Signal) -->
+                <div>
+                    <div
+                        class="bg-zinc-900 border border-zinc-800 p-8 md:p-12 rounded h-full flex flex-col shadow-2xl hover:border-acid/30 transition-colors duration-500">
+                        <h2 class="text-acid font-mono text-sm font-bold uppercase tracking-widest mb-12">OPCIÓN B:
+                            QUICK SIGNAL (Formulario)</h2>
+
+                        <form action="#" class="space-y-8 flex-1" id="contact-form" novalidate>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <!-- Name -->
+                                <div class="group">
+                                    <label for="name" class="label-tech">[Nombre / Organización]:</label>
+                                    <input type="text" id="name" name="name" required placeholder="IDENTITY_INPUT"
+                                        class="input-tech">
+                                </div>
+
+                                <!-- Email -->
+                                <div class="group">
+                                    <label for="email" class="label-tech">[Email Corporativo]:</label>
+                                    <input type="email" id="email" name="email" required placeholder="COMM_PROTOCOL"
+                                        class="input-tech">
+                                </div>
+                            </div>
+
+                            <!-- Project Type (Custom Dropdown) -->
+                            <div class="custom-select-container">
+                                <label class="select-label">[Tipo de Proyecto]:</label>
+                                <select id="type" name="type" required class="custom-select">
+                                    <option value="" disabled selected>SELECCIONAR_MODALIDAD</option>
+                                    <option value="ux_ui_design">Diseño de Producto (UX/UI)</option>
+                                    <option value="mvp_prototype">MVP / Prototipo Funcional</option>
+                                    <option value="design_engineering">Design Engineering</option>
+                                    <option value="consultancy">Consultoría de Producto</option>
+                                </select>
+                            </div>
+
+                            <!-- Message (Payload) -->
+                            <div class="group">
+                                <label for="message" class="label-tech">[El Problema a Resolver (Payload)]:</label>
+                                <textarea id="message" name="message" rows="5" required
+                                    placeholder="Describe aquí el reto. Sé breve. Sé técnico."
+                                    class="input-tech resize-none"></textarea>
+                            </div>
+
+                            <!-- Privacy Policy -->
+                            <label class="custom-checkbox">
+                                <input type="checkbox" name="privacy" required>
+                                <span class="checkmark"></span>
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Acepto las
+                                    <a href="aviso-legal.html" target="_blank"
+                                        class="text-acid hover:underline">condiciones legales</a> y la
+                                    <a href="privacidad.html" target="_blank" class="text-acid hover:underline">Política
+                                        de Privacidad</a></span>
+                            </label>
+
+                            <!-- Submit Button -->
+                            <button type="submit"
+                                class="btn-hyperion w-full py-4 flex items-center justify-center gap-2 group mt-6">
+                                <span class="font-bold tracking-wider">ENVIAR_SEÑAL</span>
+                                <i data-lucide="arrow-right"
+                                    class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================
+             8. NEXT PROJECT
+             ============================================ -->
+        <section class="py-24 bg-black border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 text-center reveal">
+                <span class="text-zinc-500 font-mono text-xs uppercase tracking-widest block mb-4">Siguiente
+                    Proyecto</span>
+                <a href="sync-engine.html"
+                    class="inline-block text-4xl md:text-6xl font-extrabold text-white hover:text-acid transition-colors group">
+                    Motor de Sincronización
+                    <span class="inline-block transition-transform group-hover:translate-x-4">→</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-zinc-800 bg-zinc-950 pt-12 pb-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-zinc-500 text-xs font-mono uppercase tracking-widest">
+                © 2026 Jordi Expósito. All rights reserved.
+            </div>
+            <div class="flex gap-6">
+                <a href="https://www.linkedin.com/in/jordi-expósito-lozano/" target="_blank" rel="noopener noreferrer"
+                    class="text-zinc-500 hover:text-acid transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-linkedin">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                        <rect width="4" height="12" x="2" y="9" />
+                        <circle cx="4" cy="4" r="2" />
+                    </svg>
+                </a>
+            </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <!-- SCRIPTS -->
+    <script src="https://unpkg.com/lucide@0.468.0"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // --- Header Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('glass', 'py-4', 'border-zinc-800');
+                    navbar.classList.remove('py-6', 'border-transparent');
+                } else {
+                    navbar.classList.remove('glass', 'py-4', 'border-zinc-800');
+                    navbar.classList.add('py-6', 'border-transparent');
+                }
+            });
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                if (!mobileMenu) return;
+                const isClosed = mobileMenu.classList.contains('translate-x-full');
+                if (isClosed) {
+                    mobileMenu.classList.remove('translate-x-full');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    mobileMenu.classList.add('translate-x-full');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMenu);
+            if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+            // --- Intersection Observer (Reveal on Scroll) ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+
+            // --- AI Chat Animation ---
+            (function () {
+                const card = document.getElementById('ai-chat-card');
+                if (!card) return;
+
+                const userMsg = document.getElementById('chat-user-msg');
+                const typing = document.getElementById('chat-typing');
+                const aiMsg = document.getElementById('chat-ai-msg');
+                const aiText = document.getElementById('chat-ai-text');
+                const cursor = document.getElementById('chat-cursor');
+                const actions = document.getElementById('chat-actions');
+                const fullText = 'Factura detectada: Adobe Inc. · NIF: IE6364613V · Base: €54.99 · IVA 21%: €11.55 · Total: €66.54 · Categoría: Software / Digital · Contacto verificado en Holded ✓';
+                let isPlaying = false;
+
+                function resetChat() {
+                    if (!userMsg || !typing || !aiMsg || !aiText || !cursor || !actions) return;
+                    userMsg.style.opacity = '0'; userMsg.style.transform = 'translateY(16px)';
+                    typing.style.opacity = '0'; aiMsg.style.opacity = '0'; aiText.textContent = '';
+                    cursor.style.display = 'inline-block';
+                    actions.style.opacity = '0'; actions.style.transform = 'translateY(12px)';
+                }
+                function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+                async function typeText(text, el, speed) {
+                    if (!el) return;
+                    for (let i = 0; i < text.length; i++) { el.textContent += text[i]; await sleep(speed); }
+                }
+
+                async function playConversation() {
+                    if (isPlaying) return;
+                    isPlaying = true; resetChat(); await sleep(4000); // Start delay
+                    if (userMsg) { userMsg.style.opacity = '1'; userMsg.style.transform = 'translateY(0)'; } await sleep(1200);
+                    if (typing) { typing.style.opacity = '1'; } await sleep(1800);
+                    if (typing) { typing.style.opacity = '0'; } await sleep(300);
+                    if (aiMsg) { aiMsg.style.opacity = '1'; }
+                    await typeText(fullText, aiText, 18); await sleep(200);
+                    if (cursor) { cursor.style.display = 'none'; } await sleep(300);
+                    if (actions) { actions.style.opacity = '1'; actions.style.transform = 'translateY(0)'; }
+                    await sleep(5000); isPlaying = false; playConversation();
+                }
+
+                const chatObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => { if (entry.isIntersecting && !isPlaying) playConversation(); });
+                }, { threshold: 0.3 });
+                chatObserver.observe(card);
+            })();
+
+            // --- Custom Select Logic ---
+            const customSelects = document.getElementsByClassName("custom-select-container");
+            for (let i = 0; i < customSelects.length; i++) {
+                const selElmnt = customSelects[i].getElementsByTagName("select")[0];
+                const a = document.createElement("DIV");
+                a.setAttribute("class", "select-selected");
+                a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                customSelects[i].appendChild(a);
+
+                const b = document.createElement("DIV");
+                b.setAttribute("class", "select-items select-hide");
+                for (let j = 1; j < selElmnt.length; j++) {
+                    const c = document.createElement("DIV");
+                    c.innerHTML = selElmnt.options[j].innerHTML;
+                    c.addEventListener("click", function (e) {
+                        const y = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                        const h = this.parentNode.previousSibling;
+                        for (let k = 0; k < y.length; k++) {
+                            if (y.options[k].innerHTML == this.innerHTML) {
+                                y.selectedIndex = k;
+                                h.innerHTML = this.innerHTML;
+                                const sameSelected = this.parentNode.getElementsByClassName("same-as-selected");
+                                for (let l = 0; l < sameSelected.length; l++) {
+                                    sameSelected[l].removeAttribute("class");
+                                }
+                                this.setAttribute("class", "same-as-selected");
+                                break;
+                            }
+                        }
+                        h.click();
+                    });
+                    b.appendChild(c);
+                }
+                customSelects[i].appendChild(b);
+                a.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    closeAllSelect(this);
+                    this.nextSibling.classList.toggle("select-hide");
+                    this.classList.toggle("select-arrow-active");
+                });
+            }
+
+            function closeAllSelect(elmnt) {
+                const x = document.getElementsByClassName("select-items");
+                const y = document.getElementsByClassName("select-selected");
+                const arrNo = [];
+                for (let i = 0; i < y.length; i++) {
+                    if (elmnt == y[i]) {
+                        arrNo.push(i)
+                    } else {
+                        y[i].classList.remove("select-arrow-active");
+                    }
+                }
+                for (let i = 0; i < x.length; i++) {
+                    if (arrNo.indexOf(i)) {
+                        x[i].classList.add("select-hide");
+                    }
+                }
+            }
+            document.addEventListener("click", closeAllSelect);
+        });
+    </script>
+    <script src="https://unpkg.com/lucide@0.468.0"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <!-- Mobile Menu (Moved to Body Root for Stacking Context) -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-zinc-950 z-40 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center gap-8">
+        <a href="index.html" class="block hover:opacity-80 transition-opacity">
+            <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
+        </a>
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <a href="work.html"
+            class="text-2xl font-bold text-white-off hover:text-[var(--accent)] transition-colors mobile-link">Work
+            / Lab</a>
+        <a href="workflow.html"
+            class="text-2xl font-bold text-white-off hover:text-[var(--accent)] transition-colors mobile-link">Workflow</a>
+        <a href="about.html"
+            class="text-2xl font-bold text-white-off hover:text-[var(--accent)] transition-colors mobile-link">About</a>
+        <a href="contacto.html"
+            class="link--io text-2xl font-bold text-white-off uppercase tracking-widest mt-4 mobile-link">¿Hablamos?</a>
+    </div>
+
+    <!-- Custom Cursor Elements -->
+    <div class="cursor"></div>
+    <div class="cursor2"></div>
+    <script src="contact-form.js" defer></script>
+    <script src="cursor.js" defer></script>
+</body>
+
+</html>

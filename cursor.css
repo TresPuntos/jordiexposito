@@ -1,0 +1,81 @@
+/* Ocultar el cursor nativo solo en desktop */
+@media (min-width: 768px) {
+  * {
+    cursor: none !important;
+  }
+
+  /* Cursor exterior (Anillo) */
+  .cursor {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    border: 1px solid #CCFF00;
+    /* Acid Lime */
+    transition: all 200ms ease-out;
+    position: fixed;
+    pointer-events: none;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+    z-index: 2147483647;
+    /* Max z-index */
+    mix-blend-mode: difference;
+    /* Ensure visibility on light/dark backgrounds */
+    display: block;
+    /* Show on desktop */
+  }
+
+  /* Cursor interior (Dot) */
+  .cursor2 {
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background-color: #CCFF00;
+    /* Acid Lime */
+    opacity: 1;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    left: 0;
+    top: 0;
+    transition: width 0.3s, height 0.3s, opacity 0.3s;
+    z-index: 2147483647;
+    /* Max z-index */
+    mix-blend-mode: difference;
+    display: block;
+    /* Show on desktop */
+  }
+}
+
+/* Hide custom cursor elements on mobile */
+@media (max-width: 767px) {
+
+  .cursor,
+  .cursor2 {
+    display: none !important;
+  }
+
+  * {
+    cursor: auto !important;
+  }
+}
+
+/* Estado al pasar por encima de un enlace */
+.cursor-hover {
+  transform: translate(-50%, -50%) scale(1.5);
+  background-color: rgba(204, 255, 0, 0.1);
+  /* Acid Lime Dimmed */
+  border: 1px solid #CCFF00;
+}
+
+.cursor-inner-hover {
+  width: 30px;
+  height: 30px;
+  opacity: 0.3;
+}
+
+/* Efecto al hacer click */
+.cursor-click {
+  transform: translate(-50%, -50%) scale(0.8);
+  background-color: #CCFF00;
+}

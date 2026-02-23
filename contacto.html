@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto — Jordi Expósito | Design Engineer Freelance Barcelona</title>
+    <meta name="description"
+        content="¿Tienes un proyecto técnico que merece la pena? Contacta con Jordi Expósito, Design Engineer freelance en Barcelona. Respuesta en menos de 24h.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://jordiexposito.com/contacto.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jordiexposito.com/contacto.html">
+    <meta property="og:title" content="Contacto — Jordi Expósito | Design Engineer Freelance Barcelona">
+    <meta property="og:description"
+        content="¿Tienes un proyecto técnico? Contacta con Jordi Expósito. Respuesta en menos de 24h.">
+    <meta property="og:image" content="https://jordiexposito.com/og-image.png">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Jordi Expósito">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Contacto — Jordi Expósito | Design Engineer Freelance">
+    <meta name="twitter:description"
+        content="¿Tienes un proyecto técnico? Contacta conmigo. Respuesta en menos de 24h.">
+    <meta name="twitter:image" content="https://jordiexposito.com/og-image.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "ContactPage",
+          "@id": "https://jordiexposito.com/contacto.html",
+          "url": "https://jordiexposito.com/contacto.html",
+          "name": "Contacto — Jordi Expósito",
+          "description": "Contacta con Jordi Expósito, Design Engineer freelance en Barcelona.",
+          "isPartOf": {"@id": "https://jordiexposito.com/#website"},
+          "inLanguage": "es"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordiexposito.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Contacto", "item": "https://jordiexposito.com/contacto.html"}
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS (CDN) -->
+    <link rel="stylesheet" href="dist.css">
+    <style>
+        body {
+            background-color: #09090B;
+            color: #EDEDED;
+            overflow-x: hidden;
+            cursor: none;
+            /* Hide default cursor */
+        }
+
+        ::selection {
+            background-color: #CCFF00;
+            color: #000000;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #09090B;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #27272A;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3F3F46;
+        }
+
+        /* Custom Input Styles */
+        .input-tech {
+            background-color: transparent;
+            border-bottom: 1px solid #27272A;
+            font-family: 'JetBrains Mono', monospace;
+            color: #EDEDED;
+            padding: 0.75rem 0;
+            width: 100%;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+
+        .input-tech:focus {
+            outline: none;
+            border-bottom-color: #CCFF00;
+            box-shadow: 0 1px 0 0 #CCFF00;
+        }
+
+        .input-tech::placeholder {
+            color: #52525B;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+
+        /* Select Reset */
+        select.input-tech {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2352525B' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0 center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+
+        /* Label Styles */
+        .label-tech {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #A1A1AA;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Requirement Item */
+        .req-item {
+            border-left: 1px solid #27272A;
+            padding-left: 1.5rem;
+            position: relative;
+            transition: border-color 0.3s;
+        }
+
+        .req-item:hover {
+            border-left-color: #CCFF00;
+        }
+
+        .req-item::before {
+            content: '';
+            position: absolute;
+            left: -1px;
+            top: 0;
+            height: 0;
+            width: 1px;
+            background: #CCFF00;
+            transition: height 0.3s;
+        }
+
+        .req-item:hover::before {
+            height: 100%;
+        }
+
+        /* Blinking Cursor */
+        .blink {
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Codrops Button (Hyperion) - Same as Index */
+        .btn-hyperion {
+            pointer-events: auto;
+            cursor: pointer;
+            background: #CCFF00;
+            border: 1px solid #000;
+            padding: 1rem 2rem;
+            font-family: inherit;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s, border-color 0.3s;
+            width: 100%;
+        }
+
+        .btn-hyperion span {
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn-hyperion::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+            z-index: 1;
+        }
+
+        .btn-hyperion:hover::before {
+            transform: scale3d(1, 1, 1);
+            transform-origin: 0% 50%;
+        }
+
+        .btn-hyperion:hover {
+            color: #CCFF00;
+            border-color: #CCFF00;
+        }
+
+        /* Link IO Style */
+        .link--io {
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            color: inherit;
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        .link--io::before,
+        .link--io::after {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: currentColor;
+            top: 100%;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .link--io::before {
+            content: '';
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+        }
+
+        .link--io:hover::before {
+            transform-origin: 0% 50%;
+            transform: scale3d(1, 1, 1);
+            transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+        }
+
+        .link--io::after {
+            content: '';
+            top: calc(100% + 4px);
+            transform-origin: 0% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+        }
+
+        .link--io:hover::after {
+            transform-origin: 100% 50%;
+            transform: scale3d(1, 1, 1);
+            transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+        }
+
+        /* ============================================
+           PROJECT ACCENT COLOR & GLOW
+           ============================================ */
+        :root {
+            --accent: #CCFF00;
+            --accent-glow: rgba(204, 255, 0, 0.15);
+        }
+
+        /* --- Reveal System (Staggered) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal.delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .reveal.delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal.delay-3 {
+            transition-delay: 0.3s;
+        }
+    </style>
+    <link rel="stylesheet" href="device.css">
+    <link rel="stylesheet" href="cursor.css">
+    <style>
+        /* Custom Select Styling */
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select {
+            display: none;
+        }
+
+        .select-selected {
+            background-color: transparent;
+            border-bottom: 1px solid #27272a;
+            border-radius: 0;
+            color: #ededed;
+            padding: 0.75rem 0;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+        }
+
+        .select-selected:after {
+            position: absolute;
+            content: "";
+            top: 50%;
+            right: 0px;
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-color: #52525b transparent transparent transparent;
+            transform: translateY(-25%);
+        }
+
+        .select-selected.select-arrow-active:after {
+            border-color: transparent transparent #52525b transparent;
+            transform: translateY(-75%);
+        }
+
+        .select-selected.select-arrow-active,
+        .select-selected:hover {
+            border-bottom-color: #ccff00;
+            box-shadow: 0 1px 0 0 #ccff00;
+        }
+
+        .select-items div {
+            color: #ededed;
+            padding: 12px 16px;
+            border: 1px solid transparent;
+            border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+            cursor: pointer;
+            user-select: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+
+        .select-items {
+            position: absolute;
+            background-color: #09090b;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            border: 1px solid #27272a;
+            border-radius: 0;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            margin-top: 1px;
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .select-hide {
+            display: none;
+        }
+
+        .select-items div:hover,
+        .same-as-selected {
+            background-color: #18181b;
+            color: #ccff00;
+        }
+
+        .select-label {
+            position: relative;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #A1A1AA;
+            display: block;
+            margin-bottom: 0px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Checkbox Styling */
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+            color: #a1a1aa;
+            font-size: 0.875rem;
+            margin-top: 24px;
+        }
+
+        .custom-checkbox input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #27272a;
+            background: #09090b;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .custom-checkbox:hover .checkmark {
+            border-color: #ccff0080;
+        }
+
+        .custom-checkbox input:checked+.checkmark {
+            background: #ccff00;
+            border-color: #ccff00;
+        }
+
+        .custom-checkbox input:checked+.checkmark:after {
+            content: "";
+            width: 5px;
+            height: 10px;
+            border: solid #09090b;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            margin-bottom: 2px;
+        }
+
+        /* Mobile Menu Animations */
+        #mobile-menu {
+            transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        /* Staggered link animation */
+        #mobile-menu nav a {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #mobile-menu:not(.translate-x-full) nav a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Transition Delays */
+        #mobile-menu:not(.translate-x-full) nav a:nth-child(1) {
+            transition-delay: 0.3s;
+        }
+
+        #mobile-menu:not(.translate-x-full) nav a:nth-child(2) {
+            transition-delay: 0.4s;
+        }
+
+        #mobile-menu:not(.translate-x-full) nav a:nth-child(3) {
+            transition-delay: 0.5s;
+        }
+
+        #mobile-menu:not(.translate-x-full) nav a:nth-child(4) {
+            transition-delay: 0.6s;
+        }
+
+        #mobile-menu:not(.translate-x-full) nav a:nth-child(5) {
+            transition-delay: 0.7s;
+        }
+
+        /* Hamburger Animation */
+        .menu-icon line {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+
+        .menu-active .line-1 {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .menu-active .line-2 {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .menu-active .line-3 {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Custom Cursor Elements -->
+    <div class="cursor"></div>
+    <div class="cursor2"></div>
+
+    <!-- NAVBAR -->
+    <header id="navbar"
+        class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800/50">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="block hover:opacity-80 transition-opacity">
+                <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
+            </a>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="work.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Work /
+                    Lab</a>
+                <a href="workflow.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Workflow</a>
+                <a href="about.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">About</a>
+                <a href="contacto.html"
+                    class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4 text-acid">¿Hablamos?</a>
+            </nav>
+            <!-- Mobile Menu Button (Hamburger) -->
+            <button id="mobile-menu-btn" class="md:hidden text-white-off focus:outline-none z-50">
+                <svg class="menu-icon w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="6" x2="20" y2="6" class="line-1"></line>
+                    <line x1="4" y1="12" x2="20" y2="12" class="line-2"></line>
+                    <line x1="4" y1="18" x2="20" y2="18" class="line-3"></line>
+                </svg>
+            </button>
+        </div>
+
+    </header>
+
+    <!-- Mobile Menu (Moved to Body Root for Stacking Context) -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-zinc-950 z-[60] transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center gap-8">
+        <a href="index.html" class="block hover:opacity-80 transition-opacity">
+            <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
+        </a>
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <a href="work.html" class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Work
+            / Lab</a>
+        <a href="workflow.html"
+            class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Workflow</a>
+        <a href="about.html"
+            class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">About</a>
+        <a href="contacto.html"
+            class="link--io text-2xl font-bold text-acid uppercase tracking-widest mt-4 mobile-link">¿Hablamos?</a>
+    </div>
+
+    <main class="min-h-screen pt-32 pb-20 relative">
+        <!-- Background Grid -->
+        <div class="absolute inset-0 bg-grid-pattern bg-[length:40px_40px] opacity-10 pointer-events-none fixed"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+
+            <!-- 00. HEADER / STATUS -->
+            <div class="mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-acid/20 bg-acid/5 mb-6">
+                    <span class="w-1.5 h-1.5 rounded-full bg-acid animate-pulse"></span>
+                    <span class="text-acid font-mono text-[10px] font-bold tracking-wider uppercase">Actualmente
+                        aceptando nuevos proyectos para Q3/Q4 2026</span>
+                </div>
+
+                <h1 class="text-5xl md:text-7xl font-extrabold text-white-off tracking-tighter uppercase leading-[0.9]">
+                    CONTACTO:<br>
+                    HABLEMOS<span class="text-acid blink">|</span>
+                </h1>
+
+                <div class="mt-6 text-zinc-400 max-w-2xl text-lg leading-relaxed space-y-4">
+                    <h2 class="text-white-off font-bold text-xl">¿Listo para desplegar?</h2>
+                    <p>
+                        No busco llenar mi calendario; busco retos técnicos y de diseño que merezcan la pena. Si valoras
+                        la arquitectura limpia, la velocidad de ejecución y el diseño sin fricción, hablemos.
+                    </p>
+                    <ul class="font-mono text-sm text-zinc-500 space-y-1 mt-4">
+                        <li><strong class="text-zinc-300">Latency:</strong> Tiempo de respuesta estimado < 24h.</li>
+                        <li><strong class="text-zinc-300">Location:</strong> Barcelona (HQ) / Remote (Global).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- GRID LAYOUT -->
+            <div class="grid lg:grid-cols-12 gap-6 lg:gap-12">
+
+                <!-- LEFT COLUMN: BRIEF & DIRECT LINK -->
+                <div class="lg:col-span-5 space-y-6">
+
+                    <!-- 01. THE BRIEF (GUIDELINES) BOX -->
+                    <div
+                        class="bg-zinc-900/50 border border-zinc-800 p-8 rounded min-h-[500px] flex flex-col relative overflow-hidden group">
+                        <!-- Decorative Icon Top Right -->
+                        <div class="absolute top-6 right-6 text-zinc-800 group-hover:text-zinc-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" x2="8" y1="13" y2="13" />
+                                <line x1="16" x2="8" y1="17" y2="17" />
+                                <line x1="10" x2="8" y1="9" y2="9" />
+                            </svg>
+                        </div>
+
+                        <h2 class="text-acid font-mono text-sm font-bold uppercase tracking-widest mb-4">02. THE BRIEF
+                            (Guidelines)</h2>
+                        <p class="text-zinc-500 text-xs mb-8">Antes de escribir: Para darte una respuesta precisa y
+                            evitar cadenas de emails interminables, necesito inputs claros. Cuanto más técnico y directo
+                            seas, más rápido podremos iterar.</p>
+
+                        <div class="space-y-8 flex-1">
+
+                            <div class="req-item">
+                                <span class="text-[10px] font-mono uppercase text-zinc-500 block mb-1">1.</span>
+                                <h3 class="text-white-off font-bold text-xl italic">SCOPE</h3>
+                                <p class="text-zinc-400 text-sm mt-1">¿Qué estamos construyendo? (MVP, Rediseño, Sistema
+                                    Completo).</p>
+                            </div>
+
+                            <div class="req-item">
+                                <span class="text-[10px] font-mono uppercase text-zinc-500 block mb-1">2.</span>
+                                <h3 class="text-white-off font-bold text-xl italic">TIMELINE</h3>
+                                <p class="text-zinc-400 text-sm mt-1">¿Cuándo necesitas el Deploy en producción?</p>
+                            </div>
+
+                            <div class="req-item">
+                                <span class="text-[10px] font-mono uppercase text-zinc-500 block mb-1">3.</span>
+                                <h3 class="text-white-off font-bold text-xl italic">BUDGET</h3>
+                                <p class="text-zinc-400 text-sm mt-1">Rango de inversión disponible. (La calidad técnica
+                                    requiere recursos).</p>
+                            </div>
+
+                            <div class="req-item">
+                                <span class="text-[10px] font-mono uppercase text-zinc-500 block mb-1">4.</span>
+                                <h3 class="text-white-off font-bold text-xl italic">TECH STACK</h3>
+                                <p class="text-zinc-400 text-sm mt-1">¿Hay tecnología legacy o empezamos desde cero
+                                    (Greenfield)?</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- DIRECT LINK BOX -->
+                    <div class="bg-zinc-900/50 border border-zinc-800 p-8 rounded relative overflow-hidden">
+                        <h3 class="text-acid font-mono text-sm font-bold uppercase tracking-widest mb-4">OPCIÓN A:
+                            DIRECT LINK (Email)</h3>
+                        <p class="text-zinc-500 text-xs mb-4">Si prefieres saltarte los formularios y adjuntar
+                            documentación técnica:</p>
+
+                        <a href="mailto:jordi@exposito.engineering"
+                            class="text-xl md:text-2xl font-bold text-white-off hover:text-acid transition-colors break-all">
+                            jordi@exposito.engineering
+                        </a>
+                        <div class="flex items-center gap-2 mt-4 text-zinc-500 text-xs font-mono">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                            <span>(Encriptado PGP disponible bajo petición)</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT COLUMN: FORM -->
+                <div class="lg:col-span-7">
+                    <div
+                        class="bg-zinc-900 p-8 md:p-10 rounded-xl border border-zinc-800 shadow-2xl relative overflow-hidden hover:border-acid/30 transition-colors duration-500 h-full">
+                        <!-- Glow Effect -->
+                        <div class="absolute top-0 right-0 w-64 h-64 rounded-full filter blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"
+                            style="background: var(--accent-glow);"></div>
+
+                        <h2 class="text-3xl font-extrabold text-white-off mb-2">
+                            Quick Signal<span class="text-acid">.</span>
+                        </h2>
+                        <p class="text-zinc-400 text-sm mb-8">
+                            Envíame un mensaje directo. Respuestas en menos de 24h.
+                        </p>
+
+                        <form action="#" class="space-y-8 flex-1" id="contact-form" novalidate>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <!-- Name -->
+                                <div class="group">
+                                    <label for="name" class="label-tech">[Nombre / Organización]:</label>
+                                    <input type="text" id="name" name="name" required placeholder="IDENTITY_INPUT"
+                                        class="input-tech">
+                                </div>
+
+                                <!-- Email -->
+                                <div class="group">
+                                    <label for="email" class="label-tech">[Email Corporativo]:</label>
+                                    <input type="email" id="email" name="email" required placeholder="COMM_PROTOCOL"
+                                        class="input-tech">
+                                </div>
+                            </div>
+
+                            <!-- Project Type (Custom Dropdown) -->
+                            <div class="custom-select-container">
+                                <label class="select-label">[Tipo de Proyecto]:</label>
+                                <select id="type" name="type" required class="custom-select">
+                                    <option value="" disabled selected>SELECCIONAR_MODALIDAD</option>
+                                    <option value="ux_ui_design">Diseño de Producto (UX/UI)</option>
+                                    <option value="mvp_prototype">MVP / Prototipo Funcional</option>
+                                    <option value="design_engineering">Design Engineering</option>
+                                    <option value="consultancy">Consultoría de Producto</option>
+                                </select>
+                            </div>
+
+                            <!-- Message (Payload) -->
+                            <div class="group">
+                                <label for="message" class="label-tech">[El Problema a Resolver (Payload)]:</label>
+                                <textarea id="message" name="message" rows="5" required
+                                    placeholder="Describe aquí el reto. Sé breve. Sé técnico."
+                                    class="input-tech resize-none"></textarea>
+                            </div>
+
+                            <!-- Privacy Policy -->
+                            <label class="custom-checkbox">
+                                <input type="checkbox" name="privacy" required>
+                                <span class="checkmark"></span>
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Acepto las
+                                    <a href="aviso-legal.html" target="_blank"
+                                        class="text-acid hover:underline">condiciones legales</a> y la
+                                    <a href="privacidad.html" target="_blank" class="text-acid hover:underline">Política
+                                        de Privacidad</a></span>
+                            </label>
+
+                            <!-- Submit Button -->
+                            <button type="submit"
+                                class="btn-hyperion w-full py-4 flex items-center justify-center gap-2 group mt-6">
+                                <span class="font-bold tracking-wider">ENVIAR_SEÑAL</span>
+                                <i data-lucide="arrow-right"
+                                    class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <footer class="border-t border-zinc-800 bg-zinc-950 pt-12 pb-12">
+                <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div class="text-zinc-500 text-xs font-mono uppercase tracking-widest">
+                        © 2026 Jordi Expósito. All rights reserved.
+                    </div>
+                    <div class="flex gap-6">
+                        <a href="https://www.linkedin.com/in/jordi-expósito-lozano/" target="_blank"
+                            rel="noopener noreferrer" class="text-zinc-500 hover:text-acid transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-linkedin">
+                                <path
+                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                <rect width="4" height="12" x="2" y="9" />
+                                <circle cx="4" cy="4" r="2" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </main>
+
+
+    <!-- Custom Cursor Elements -->
+    <div class="cursor"></div>
+    <div class="cursor2"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@0.468.0"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // --- Header Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('glass', 'py-4', 'border-zinc-800');
+                    navbar.classList.remove('py-6', 'border-transparent');
+                } else {
+                    navbar.classList.remove('glass', 'py-4', 'border-zinc-800');
+                    navbar.classList.add('py-6', 'border-transparent');
+                }
+            });
+
+            // --- Mobile Menu Toggle ---
+            // Mobile Menu Logic
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                if (!mobileMenu) return;
+                const isClosed = mobileMenu.classList.contains('translate-x-full');
+                if (isClosed) {
+                    mobileMenu.classList.remove('translate-x-full');
+                    document.body.style.overflow = 'hidden';
+                    if (mobileMenuBtn) mobileMenuBtn.classList.add('menu-active');
+                } else {
+                    mobileMenu.classList.add('translate-x-full');
+                    document.body.style.overflow = '';
+                    if (mobileMenuBtn) mobileMenuBtn.classList.remove('menu-active');
+                }
+            }
+
+            if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMenu);
+            if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+            // --- Reveal on Scroll ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+            // --- Custom Select Logic ---
+            const customSelects = document.getElementsByClassName("custom-select-container");
+            for (let i = 0; i < customSelects.length; i++) {
+                const selElmnt = customSelects[i].getElementsByTagName("select")[0];
+                const a = document.createElement("DIV");
+                a.setAttribute("class", "select-selected");
+                a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                customSelects[i].appendChild(a);
+
+                const b = document.createElement("DIV");
+                b.setAttribute("class", "select-items select-hide");
+                for (let j = 1; j < selElmnt.length; j++) {
+                    const c = document.createElement("DIV");
+                    c.innerHTML = selElmnt.options[j].innerHTML;
+                    c.addEventListener("click", function (e) {
+                        const y = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                        const h = this.parentNode.previousSibling;
+                        for (let k = 0; k < y.length; k++) {
+                            if (y.options[k].innerHTML == this.innerHTML) {
+                                y.selectedIndex = k;
+                                h.innerHTML = this.innerHTML;
+                                const sameSelected = this.parentNode.getElementsByClassName("same-as-selected");
+                                for (let l = 0; l < sameSelected.length; l++) {
+                                    sameSelected[l].removeAttribute("class");
+                                }
+                                this.setAttribute("class", "same-as-selected");
+                                break;
+                            }
+                        }
+                        h.click();
+                    });
+                    b.appendChild(c);
+                }
+                customSelects[i].appendChild(b);
+                a.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    closeAllSelect(this);
+                    this.nextSibling.classList.toggle("select-hide");
+                    this.classList.toggle("select-arrow-active");
+                });
+            }
+
+            function closeAllSelect(elmnt) {
+                const x = document.getElementsByClassName("select-items");
+                const y = document.getElementsByClassName("select-selected");
+                const arrNo = [];
+                for (let i = 0; i < y.length; i++) {
+                    if (elmnt == y[i]) {
+                        arrNo.push(i)
+                    } else {
+                        y[i].classList.remove("select-arrow-active");
+                    }
+                }
+                for (let i = 0; i < x.length; i++) {
+                    if (arrNo.indexOf(i)) {
+                        x[i].classList.add("select-hide");
+                    }
+                }
+            }
+            document.addEventListener("click", closeAllSelect);
+        });
+    </script>
+    <script src="contact-form.js" defer></script>
+    <script src="cursor.js" defer></script>
+</body>
+
+</html>

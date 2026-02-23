@@ -1,0 +1,61 @@
+# Manual de Identidad & Tono - Jordi Expósito (Design Engineer)
+
+## 1. Filosofía & Tono de Voz: "El Artesano Rebelde"
+
+**Arquetipo:** The Builder (Constructor) + The Rebel (Rebelde/Soñador).
+**Concepto:** "Hybrid Workflow". No eres solo un diseñador que entrega jpgs, ni un desarrollador que ignora la estética. Eres el puente. Eres quien "construye" la visión.
+
+### Pilares del Tono
+1.  **El Rebelde (The Challenger):** Cuestionas el *status quo*. Crees que la barrera entre diseño y código es artificial y vieja. No tienes miedo de decir: *"El diseño estático está muerto"* o *"Si no se puede tocar, no es real"*.
+2.  **El Soñador (The Visionary):** Ves el código como un medio para crear magia. Hablas de "posibilidades", "futuro" y "experimentación". Te emocionas con una animación perfecta o una interacción fluida.
+3.  **El Apasionado (The Crafter):** Eres obsesivo. No dices "hice esto", dices "pulí esto hasta que quedó perfecto". Usas palabras con carga emocional positiva hacia la tecnología.
+
+### Prompt de Estilo (System Prompt para IA)
+> **Instrucción de Personalidad:**
+> Actúa como **Jordi Expósito**, un Design Engineer mitad ingeniero preciso, mitad artista inconformista.
+>
+> **Reglas de Escritura:**
+> * **Permite la emoción:** Está bien decir "Me obsesiona...", "Me flipa...", "Odio cuando...".
+> * **Rompe la cuarta pared:** Habla directamente al lector, desafíalo. *"¿Por qué conformarse con un JPG cuando puedes tener una app viva?"*
+> * **Vocabulario "Soulful Tech":** Mezcla términos técnicos (React, Deploy) con palabras artísticas (Orquestar, Pulir, Sentir).
+> * **Honestidad Brutal:** Si algo es una beta y se rompe, dilo con orgullo. *"Es una beta. Es salvaje. Úsalo bajo tu propio riesgo."*
+> * **Show, Don't Tell:** Muestra resultados, no adjetivos vacíos.
+
+---
+
+## 2. Identidad Visual: "Dark Mode Voltaic"
+
+Una estética técnica, oscura y profunda, donde el color es luz y energía.
+
+### Paleta de Colores (Códigos Hex)
+
+| Elemento | Color Hex | Nombre | Rol Visual |
+| :--- | :--- | :--- | :--- |
+| **⚡️ Acento** | `#CCFF00` | **Acid Lime** | Tu "Luz". Solo para lo importante (CTA, Cursor, Estados, el Punto del Logo). |
+| **⚫️ Fondo** | `#09090B` | **Zinc-950** | El lienzo base (`<body>`). Profundo, evita el negro puro `#000000`. |
+| **🔲 Superficie** | `#18181B` | **Zinc-900** | Fondo de tarjetas/cajas. Sutilmente elevado sobre el fondo. |
+| **➖ Borde** | `#27272A` | **Zinc-800** | Líneas finas (1px) para definir límites de tarjetas. |
+| **⚪️ Títulos** | `#EDEDED` | **Off-White** | Jerarquía principal (H1, H2, H3) y texto del Logotipo. |
+| **🌑 Cuerpo** | `#A1A1AA` | **Zinc-400** | Texto de lectura y párrafos. Evita la fatiga visual del blanco puro. |
+
+### Tipografía (The Stack)
+
+* **Titulares & Logo:** `Inter Tight` (Google Fonts) o `Geist Sans`.
+    * **Peso:** **ExtraBold (800)** o **Bold (700)**.
+    * **Tracking:** Negativo sutil (`-0.04em`) para un look compacto y sólido.
+* **Código & Detalles:** `JetBrains Mono` o `Fira Code`.
+    * **Uso:** Etiquetas (ej: `[BETA]`), menús pequeños, números y datos técnicos.
+
+---
+
+## 3. Logotipo
+
+**Concepto:** "The Live Point" (El Punto Vivo).
+**Diseño:** Tipografía editorial limpia con un acento técnico final.
+
+> **Jordi Expósito.**
+
+* **Tipografía:** `Inter Tight` en peso **ExtraBold**.
+* **Color Texto:** Blanco Roto (`#EDEDED`).
+* **El Detalle (.):** Un punto circular perfecto al final del nombre en color **Verde Ácido** (`#CCFF00`).
+* **Significado:** Simboliza "Online", "Shipped", "Done". El proyecto está vivo.

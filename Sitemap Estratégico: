@@ -1,0 +1,106 @@
+# Sitemap Estratégico: Jordi Expósito - Design Engineer
+**Enfoque:** Local SEO (Barcelona/España) + Nicho Técnico (Design Engineering).
+**Idioma Principal sugerido:** Español (para conectar localmente) con terminología técnica en Inglés (estándar del sector).
+
+---
+
+## 1. Estructura Global (Navegación)
+
+* **Home** (`/`)
+* **Proyectos / Lab** (`/work`)
+    * *Proyecto: Gym Tracker App* (`/work/gym-tracker-beta`)
+    * *Proyecto: Figma to CSS Tool* (`/work/figma-css-automation`)
+* **Workflow** (`/metodologia`)
+* **Sobre Mí** (`/bio`)
+* **Contacto** (`/contacto`)
+
+---
+
+## 2. Desglose Detallado por Página
+
+### 🏠 1. Homepage (`/`)
+**Objetivo:** Filtrar y Convertir. Que el cliente entienda en 3 segundos que no eres una agencia tradicional, sino un perfil híbrido de alto valor que construye rápido.
+* **H1 (Título Principal):** Jordi Expósito — Design Engineer & Product Builder en Barcelona.
+* **H2 (Subtítulo Rebelde):** "Rompiendo la barrera entre Diseño y Código. De Figma a Producción, sin intermediarios."
+* **Secciones Clave:**
+    * **Hero:** Propuesta de valor + Botón CTA ("Ver Proyectos" o "Book Intro").
+    * **The Gap:** Pequeño diagrama visual: *Diseño Tradicional (Lento)* vs *Mi Workflow con IA (Rápido)*.
+    * **Current Stack (Tech):** Logos minimalistas (React, Tailwind, Cursor, Figma, Vercel).
+    * **Selected Work:** Preview rápida de la App del Gym y la Herramienta Figma (Gifs animados).
+    * **Local Trust:** "Base en Barcelona, trabajando para el mundo."
+* **SEO Keywords (Spain/BCN):**
+    * *Design Engineer Barcelona*
+    * *Experto Figma y React España*
+    * *Desarrollador Frontend Freelance*
+    * *Prototipado rápido de Apps*
+
+---
+
+### 🧪 2. Proyectos / Lab (`/work`)
+**Objetivo:** Demostrar capacidad de ejecución ("Show, don't tell"). Mezclar proyectos terminados con betas "vivas".
+* **Intro:** "No solo diseño jpgs. Construyo software que funciona. Bienvenido a mi laboratorio."
+* **Estructura del Grid:**
+    * **Card 1: Gym Tracker (Beta):** Etiqueta "LIVE APP".
+    * **Card 2: Figma Token Engine:** Etiqueta "OPEN SOURCE" o "TOOL INTERNA".
+* **Detalle de Ficha de Proyecto (Template):**
+    * **Reto:** ¿Qué problema resuelve? (Ej: "Las apps de gym son lentas y feas").
+    * **Stack:** ¿Qué usé? (Next.js, Tailwind, Supabase).
+    * **Proceso Híbrido:** Video mostrando el diseño en Figma y el código en Cursor al lado.
+    * **Resultado:** Enlace a la demo real.
+* **SEO Keywords:**
+    * *Desarrollo de Apps React Native*
+    * *Sistemas de Diseño Automatizados*
+    * *Creación de MVP en Barcelona*
+
+---
+
+### ⚙️ 3. Workflow (`/metodologia`)
+**Objetivo:** Educación. Explicar por qué tu tarifa vale más que la de un diseñador normal. Vender la eficiencia de la IA.
+* **H1:** El Método Híbrido.
+* **Contenido:**
+    * **Filosofía:** "Por qué los equipos de producto fallan en el *hand-off*".
+    * **Herramientas:** Explicación técnica de cómo usas **Cursor + Antigravity** para acelerar el desarrollo un 40%.
+    * **Beneficio Cliente:** "Menos reuniones, más producto enviado (Shipping)."
+* **SEO Keywords:**
+    * *Consultoría de Producto Digital*
+    * *Diseño de Interfaces y Desarrollo*
+    * *Optimización de Workflow Figma*
+
+---
+
+### 👤 4. Sobre Mí (`/bio`)
+**Objetivo:** Conexión emocional y Autoridad. El tono "Rebelde/Soñador".
+* **H1:** Jordi Expósito.
+* **Story:** "Fui diseñador. Me cansé de que mis diseños no se construyeran igual que los imaginaba. Aprendí ingeniería para tener el control total."
+* **Contexto Local:** Menciona tu conexión con Barcelona (eventos tech locales, cultura de diseño de la ciudad).
+* **Manifiesto:** "Creo en el software artesanal, en las betas rápidas y en romper cosas."
+* **SEO Keywords:**
+    * *Perfil Jordi Expósito Lozano*
+    * *Product Designer Barcelona*
+    * *Founder Tres Puntos*
+
+---
+
+### 📞 5. Contacto (`/contacto`)
+**Objetivo:** Cero fricción. Conversión directa.
+* **Layout:**
+    * **Izquierda:** "Hablemos de tu proyecto. Sin comerciales, directo con el builder."
+    * **Derecha:** Widget de **Cal.com** o **Calendly** incrustado.
+* **Footer:** Email con efecto hover en Verde Ácido. Enlaces a LinkedIn y GitHub/Twitter.
+* **SEO Keywords:**
+    * *Contratar Design Engineer*
+    * *Presupuesto App React Barcelona*
+
+---
+
+## 3. Estrategia Técnica SEO (Schema Markup)
+
+Para que Google entienda tu perfil híbrido en Barcelona, implementaremos estos datos estructurados (JSON-LD) en el código:
+
+1.  **LocalBusiness / ProfessionalService:**
+    * `"name": "Jordi Expósito - Design Engineer"`
+    * `"areaServed": "Barcelona, Spain"`
+    * `"knowsAbout": ["Product Design", "React Development", "Figma", "Design Systems"]`
+2.  **Person:**
+    * `"jobTitle": "Design Engineer"`
+    * `"worksFor": "Tres Puntos"`

@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Protocolo — Metodología de Trabajo | Jordi Expósito Design Engineer</title>
+    <meta name="description"
+        content="Mi metodología de ingeniería de diseño: del diagnóstico a producción sin cajas negras. Figma, React, IA y transparencia radical en cada fase del proyecto.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://jordiexposito.com/workflow.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jordiexposito.com/workflow.html">
+    <meta property="og:title" content="El Protocolo — Metodología de Trabajo | Jordi Expósito">
+    <meta property="og:description"
+        content="Ingeniería de diseño sin cajas negras. Del diagnóstico a producción con transparencia radical.">
+    <meta property="og:image" content="https://jordiexposito.com/og-image.png">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Jordi Expósito">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="El Protocolo — Metodología de Trabajo | Jordi Expósito">
+    <meta name="twitter:description"
+        content="Ingeniería de diseño sin cajas negras. Del diagnóstico a producción con transparencia radical.">
+    <meta name="twitter:image" content="https://jordiexposito.com/og-image.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://jordiexposito.com/workflow.html",
+          "url": "https://jordiexposito.com/workflow.html",
+          "name": "El Protocolo — Metodología de Trabajo",
+          "description": "Metodología de ingeniería de diseño: del diagnóstico a producción sin cajas negras.",
+          "isPartOf": {"@id": "https://jordiexposito.com/#website"},
+          "author": {"@id": "https://jordiexposito.com/#person"},
+          "inLanguage": "es"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordiexposito.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Workflow", "item": "https://jordiexposito.com/workflow.html"}
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS (compiled) -->
+    <link rel="stylesheet" href="dist.css">
+    <style>
+        /* --- Standardized Contact Form Styles --- */
+        .label-tech {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #52525B;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-tech {
+            background-color: transparent;
+            border-bottom: 1px solid #27272A;
+            font-family: 'JetBrains Mono', monospace;
+            color: #EDEDED;
+            padding: 0.75rem 0;
+            width: 100%;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+
+        .input-tech:focus {
+            outline: none;
+            border-bottom-color: #CCFF00;
+            box-shadow: 0 1px 0 0 #CCFF00;
+        }
+
+        .input-tech::placeholder {
+            color: #3F3F46;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+
+        /* Custom Checkbox */
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .custom-checkbox input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #27272A;
+            background: #09090B;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .custom-checkbox:hover.checkmark {
+            border-color: #CCFF00;
+        }
+
+        .custom-checkbox input:checked+.checkmark {
+            background: #CCFF00;
+            border-color: #CCFF00;
+        }
+
+        .custom-checkbox input:checked+.checkmark::after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid #000;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Custom Select */
+        .custom-select-container {
+            position: relative;
+            font-family: 'JetBrains Mono', monospace;
+            border-bottom: 1px solid #27272A;
+        }
+
+        .select-label {
+            display: block;
+            font-size: 10px;
+            color: #52525B;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .custom-select {
+            display: none;
+        }
+
+        .select-selected {
+            color: #EDEDED;
+            padding: 12px 0;
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .select-selected:after {
+            content: "↓";
+            font-size: 12px;
+            color: #CCFF00;
+            transition: transform 0.3s;
+        }
+
+        .select-arrow-active:after {
+            transform: rotate(180deg);
+        }
+
+        .select-items {
+            position: absolute;
+            background-color: #18181B;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            border: 1px solid #27272A;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .select-items div {
+            color: #A1A1AA;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+
+        .select-items div:hover {
+            background-color: #27272A;
+            color: #CCFF00;
+        }
+
+        .same-as-selected {
+            background-color: rgba(204, 255, 0, 0.1);
+            color: #CCFF00 !important;
+        }
+
+        .select-hide {
+            display: none;
+        }
+
+        body {
+            background-color: #09090B;
+            color: #EDEDED;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background-color: #CCFF00;
+            color: #000000;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #09090B;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #27272A;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3F3F46;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Timeline Connector Line */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: #27272A;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        /* Phase Number Styling */
+        .phase-number {
+            font-family: 'JetBrains Mono', monospace;
+            color: #CCFF00;
+            text-shadow: 0 0 10px rgba(204, 255, 0, 0.4);
+        }
+
+        /* Card Hover Effects */
+        .workflow-card:hover.card-visual {
+            transform: scale(1.02);
+            transition: transform 0.4s ease;
+        }
+
+        /* ___ ANIMATIONS ___ */
+
+        /* 01.Typing Effect */
+        .typing-line {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 0;
+            animation: typing 0.8s steps(30, end) forwards;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        /* 02.Data Flow */
+        .data-packet {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #CCFF00;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 8px #CCFF00;
+            opacity: 0;
+        }
+
+        .flowing.data-packet {
+            animation: movePacket 2s infinite linear;
+        }
+
+        @keyframes movePacket {
+            0% {
+                left: 0%;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* 03.Pulse (Handled by Tailwind config above, or custom class here) */
+        .pulse-token {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        /* 04.Bezier Ball */
+        .bezier-ball {
+            offset-path: path('M10,90 C50,90 50,10 190,10');
+            animation: followPath 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes followPath {
+            0% {
+                offset-distance: 0%;
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            10% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            90% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                offset-distance: 100%;
+                opacity: 0;
+                transform: scale(0.5);
+            }
+        }
+
+        /* 05.Code Cursor */
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* 06.Circle Progress */
+        .score-circle {
+            transition: stroke-dasharray 2s ease-out;
+            stroke-dasharray: 0, 100;
+        }
+
+        /* Button Styles */
+        .btn-hyperion {
+            pointer-events: auto;
+            cursor: pointer;
+            background: #CCFF00;
+            border: 1px solid #000;
+            padding: 1rem 2rem;
+            margin: 0;
+            font-family: inherit;
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .btn-hyperion span {
+            display: block;
+            position: relative;
+        }
+
+        .btn-hyperion>span {
+            overflow: hidden;
+        }
+
+        .btn-hyperion>span>span {
+            overflow: hidden;
+            mix-blend-mode: normal;
+        }
+
+        .btn-hyperion:hover>span>span {
+            animation: MoveUpInitial 0.2s forwards, MoveUpEnd 0.2s forwards 0.2s;
+        }
+
+        @keyframes MoveUpInitial {
+            to {
+                transform: translate3d(0, -105%, 0);
+            }
+        }
+
+        @keyframes MoveUpEnd {
+            from {
+                transform: translate3d(0, 100%, 0);
+            }
+
+            to {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .btn-hyperion::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+        }
+
+        .btn-hyperion:hover::before {
+            transform: scale3d(1, 1, 1);
+            transform-origin: 0% 50%;
+        }
+
+        .btn-hyperion:hover {
+            color: #CCFF00;
+            border-color: #CCFF00;
+        }
+
+        /* Codrops Line Hover Style 02 (link--io) */
+        .link--io {
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            color: inherit;
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        .link--io::before,
+        .link--io::after {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: currentColor;
+            top: 100%;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .link--io::before {
+            content: '';
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+        }
+
+        .link--io:hover::before {
+            transform-origin: 0% 50%;
+            transform: scale3d(1, 1, 1);
+            transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+        }
+
+        .link--io::after {
+            content: '';
+            top: calc(100%+4px);
+            transform-origin: 0% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+        }
+
+        .link--io:hover::after {
+            transform-origin: 100% 50%;
+            transform: scale3d(1, 1, 1);
+            transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+        }
+
+        /* Mobile Menu Animations */
+        #mobile-menu {
+            transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        /* Staggered link animation */
+        #mobile-menu nav a {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #mobile-menu:not(.translate-x-full) nav a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Transition Delays */
+        #mobile-menu:not(.translate-x-full) nav a:nth-child(1) {
+            transition-delay: 0.3s;
+        }
+
+        #mobile-menu:not(.translate-x-full) nav a:nth-child(2) {
+            transition-delay: 0.4s;
+        }
+
+        #mobile-menu:not(.translate-x-full) nav a:nth-child(3) {
+            transition-delay: 0.5s;
+        }
+
+        #mobile-menu:not(.translate-x-full) nav a:nth-child(4) {
+            transition-delay: 0.6s;
+        }
+
+        #mobile-menu:not(.translate-x-full) nav a:nth-child(5) {
+            transition-delay: 0.7s;
+        }
+
+        /* Hamburger Animation */
+        .menu-icon line {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+
+        .menu-active.line-1 {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .menu-active.line-2 {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .menu-active.line-3 {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+
+    <!-- NAVBAR -->
+    <header id="navbar"
+        class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 border-b border-transparent bg-zinc-950/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="block hover:opacity-80 transition-opacity">
+                <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
+            </a>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="work.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Work /
+                    Lab</a>
+                <a href="workflow.html" class="text-acid text-sm font-bold transition-colors">Workflow</a>
+                <a href="about.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">About</a>
+                <a href="contacto.html"
+                    class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4">¿Hablamos?</a>
+            </nav>
+            <button id="mobile-menu-btn" class="md:hidden text-white-off focus:outline-none z-50">
+                <svg class="menu-icon w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="6" x2="20" y2="6" class="line-1"></line>
+                    <line x1="4" y1="12" x2="20" y2="12" class="line-2"></line>
+                    <line x1="4" y1="18" x2="20" y2="18" class="line-3"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-20">
+        <!-- Hero Section -->
+        <section class="relative py-20 overflow-hidden">
+            <div class="absolute inset-0 bg-grid-pattern bg-[length:40px_40px] opacity-10 pointer-events-none"></div>
+            <div class="max-w-7xl mx-auto px-6 text-center space-y-6 reveal active relative z-10">
+                <div class="inline-block px-3 py-1 rounded-full border border-acid/20 bg-acid/5 mb-4">
+                    <span
+                        class="text-acid font-mono text-xs font-bold tracking-wider uppercase flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-acid animate-pulse"></span>
+                        METODOLOGÍA v2.4.0
+                    </span>
+                </div>
+                <h1 class="text-5xl md:text-8xl font-black text-white-off uppercase tracking-tighter">
+                    EL <span class="text-acid italic">PROTOCOLO</span>
+                </h1>
+                <p class="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+                    De la abstracción a la producción. <br>
+                    Un flujo de ingeniería de diseño sin cajas negras.
+                </p>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="relative py-20 timeline-line">
+            <div class="max-w-6xl mx-auto px-6 relative z-10 space-y-32">
+
+                <!-- PHASE 01: DIAGNOSTICS -->
+                <div class="grid md:grid-cols-2 gap-12 items-center reveal group workflow-card" id="phase-01">
+                    <!-- Text (Left) -->
+                    <div class="text-right md:pr-12 order-1">
+                        <div class="text-acid font-mono text-sm mb-2 phase-number">FASE_01</div>
+                        <h2 class="text-3xl font-bold text-white-off mb-4">DIAGNÓSTICO</h2>
+                        <h3 class="text-zinc-500 font-mono text-xs uppercase tracking-widest mb-6">Kick-off /
+                            Restricciones / Viabilidad</h3>
+                        <p class="text-zinc-400 leading-relaxed mb-6">
+                            Antes de escribir código o dibujar, auditamos requisitos. Diseccionamos el problema de
+                            negocio y establecemos las reglas del juego técnicas. Si es inviable, lo detectamos ahora.
+                        </p>
+                        <ul class="text-sm text-zinc-500 space-y-2 inline-block text-right">
+                            <li>› KPIs & Métricas de Éxito</li>
+                            <li>› Análisis del Stack Tecnológico</li>
+                            <li>› Benchmarking de UX</li>
+                        </ul>
+                    </div>
+                    <!-- Visual (Right) -->
+                    <div class="order-2 relative card-visual">
+                        <div
+                            class="bg-[#0d1117] border border-zinc-800 rounded-lg p-4 font-mono text-xs shadow-2xl h-56 overflow-hidden">
+                            <div class="flex gap-2 mb-4 border-b border-zinc-800 pb-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <div class="space-y-2" id="terminal-content">
+                                <!-- JS will insert lines here -->
+                                <div class="text-green-400 opacity-50">➜ ~ init_audit --verbose</div>
+                            </div>
+                        </div>
+                        <div
+                            class="absolute top-1/2-left-4 md:-left-[3.75rem] -translate-y-1/2 w-10 h-10 bg-zinc-950 border border-acid text-acid rounded flex items-center justify-center font-bold z-20">
+                            01
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PHASE 02: ARCHITECTURE -->
+                <div class="grid md:grid-cols-2 gap-12 items-center reveal group workflow-card" id="phase-02">
+                    <!-- Visual (Left) -->
+                    <div class="order-2 md:order-1 relative card-visual">
+                        <div
+                            class="bg-zinc-900 border border-zinc-800 rounded-lg p-6 h-64 relative overflow-hidden flex items-center justify-center shadow-2xl">
+                            <!-- Data Flow Animation Container -->
+                            <div class="flex gap-8 items-center relative z-10 w-full justify-center">
+                                <div
+                                    class="w-20 h-12 border border-zinc-600 bg-zinc-900 rounded flex items-center justify-center text-[10px] text-zinc-400 z-10">
+                                    DB</div>
+
+                                <!-- Connection Line 1 -->
+                                <div class="w-12 md:w-20 h-[1px] bg-zinc-700 relative overflow-visible">
+                                    <div class="data-packet"></div>
+                                </div>
+
+                                <div
+                                    class="w-20 h-12 border border-acid bg-zinc-900 rounded flex items-center justify-center text-[10px] text-acid font-bold bg-acid/10 z-10">
+                                    API</div>
+
+                                <!-- Connection Line 2 -->
+                                <div class="w-12 md:w-20 h-[1px] bg-zinc-700 relative overflow-visible">
+                                    <div class="data-packet" style="animation-delay: 1s;"></div>
+                                </div>
+
+                                <div
+                                    class="w-20 h-12 border border-zinc-600 bg-zinc-900 rounded flex items-center justify-center text-[10px] text-zinc-400 z-10">
+                                    CLIENT</div>
+                            </div>
+                            <div class="absolute bottom-2 right-4 text-[10px] font-mono text-zinc-600">VISTA ESQUEMÁTICA
+                            </div>
+                        </div>
+                        <div
+                            class="absolute top-1/2-left-4 md:left-auto md:-right-[3.75rem] -translate-y-1/2 w-10 h-10 bg-zinc-950 border border-zinc-700 text-zinc-400 group-hover:border-acid group-hover:text-acid transition-colors rounded flex items-center justify-center font-bold z-20">
+                            02
+                        </div>
+                    </div>
+                    <!-- Text (Right) -->
+                    <div class="order-1 md:order-2 md:pl-12">
+                        <div class="text-acid font-mono text-sm mb-2 phase-number">FASE_02</div>
+                        <h2 class="text-3xl font-bold text-white-off mb-4">ARQUITECTURA DE SISTEMA</h2>
+                        <h3 class="text-zinc-500 font-mono text-xs uppercase tracking-widest mb-6">Wireframes / Flujos
+                            de
+                            Datos / Lógica</h3>
+                        <p class="text-zinc-400 leading-relaxed mb-6">
+                            El diseño visual sin lógica es decoración. Mapeamos flujos de usuario y estructura de
+                            datos. Definimos cómo viaja la información desde la base de datos hasta la interfaz.
+                        </p>
+                        <ul class="text-sm text-zinc-500 space-y-2">
+                            <li>› User Journeys & Flujos</li>
+                            <li>› Arquitectura del Sitemap</li>
+                            <li>› Modelos de Datos (Schema)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- PHASE 03: INTERFACE -->
+                <div class="grid md:grid-cols-2 gap-12 items-center reveal group workflow-card" id="phase-03">
+                    <!-- Text (Left) -->
+                    <div class="text-right md:pr-12 order-1">
+                        <div class="text-acid font-mono text-sm mb-2 phase-number">FASE_03</div>
+                        <h2 class="text-3xl font-bold text-white-off mb-4">INGENIERÍA DE INTERFAZ</h2>
+                        <h3 class="text-zinc-500 font-mono text-xs uppercase tracking-widest mb-6">Figma / Sistemas /
+                            Atomic Design</h3>
+                        <p class="text-zinc-400 leading-relaxed mb-6">
+                            Construyo Sistemas de Diseño, no pantallas sueltas. Uso Auto-layout y Tokens que replican
+                            CSS. Lo que apruebas en diseño es 100% construible en código.
+                        </p>
+                        <ul class="text-sm text-zinc-500 space-y-2 inline-block text-right">
+                            <li>› UI Kit Escalable</li>
+                            <li>› Pantallas High-Fidelity</li>
+                            <li>› Estética Dark Mode</li>
+                        </ul>
+                    </div>
+                    <!-- Visual (Right) -->
+                    <div class="order-2 relative card-visual">
+                        <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-2xl">
+                            <div class="flex gap-4 mb-6">
+                                <div class="w-12 h-12 rounded bg-acid pulse-token"></div>
+                                <div class="w-12 h-12 rounded bg-zinc-950 border border-zinc-700"></div>
+                                <div class="w-12 h-12 rounded bg-zinc-800"></div>
+                                <div class="w-12 h-12 rounded bg-white"></div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="h-2 w-3/4 bg-zinc-800 rounded"></div>
+                                <div class="h-2 w-1/2 bg-zinc-800 rounded"></div>
+                            </div>
+                            <div class="mt-6 flex gap-2">
+                                <span
+                                    class="text-[10px] bg-zinc-800 px-2 py-1 rounded text-acid border border-acid/20">Token:
+                                    primary-500</span>
+                                <span class="text-[10px] bg-zinc-800 px-2 py-1 rounded text-zinc-400">Atom:
+                                    Button</span>
+                            </div>
+                        </div>
+                        <div
+                            class="absolute top-1/2-left-4 md:-left-[3.75rem] -translate-y-1/2 w-10 h-10 bg-zinc-950 border border-zinc-700 text-zinc-400 group-hover:border-acid group-hover:text-acid transition-colors rounded flex items-center justify-center font-bold z-20">
+                            03
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PHASE 04: PROTOTYPING -->
+                <div class="grid md:grid-cols-2 gap-12 items-center reveal group workflow-card" id="phase-04">
+                    <!-- Visual (Left) -->
+                    <div class="order-2 md:order-1 relative card-visual">
+                        <div
+                            class="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-2xl flex items-center justify-center h-48">
+                            <!-- Animation Curve Visual -->
+                            <div class="w-full h-full relative" id="bezier-container">
+                                <svg viewBox="0 0 200 100" class="w-full h-full text-acid overflow-visible">
+                                    <path d="M10,90 C50,90 50,10 190,10" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-dasharray="5,5" class="opacity-30" />
+                                    <!-- Animated Path -->
+                                    <path d="M10,90 C50,90 50,10 190,10" fill="none" stroke="currentColor"
+                                        stroke-width="2" />
+                                    <!-- Ball -->
+                                    <circle r="6" fill="#CCFF00" class="bezier-ball" />
+                                </svg>
+                                <div
+                                    class="absolute bottom-2 left-1/2-translate-x-1/2 text-[10px] text-zinc-500 font-mono">
+                                    bezier(0.4, 0, 0.2, 1)</div>
+                            </div>
+                        </div>
+                        <div
+                            class="absolute top-1/2-left-4 md:left-auto md:-right-[3.75rem] -translate-y-1/2 w-10 h-10 bg-zinc-950 border border-zinc-700 text-zinc-400 group-hover:border-acid group-hover:text-acid transition-colors rounded flex items-center justify-center font-bold z-20">
+                            04
+                        </div>
+                    </div>
+                    <!-- Text (Right) -->
+                    <div class="order-1 md:order-2 md:pl-12">
+                        <div class="text-acid font-mono text-sm mb-2 phase-number">FASE_04</div>
+                        <h2 class="text-3xl font-bold text-white-off mb-4">PROTOTIPADO DE INTERACCIÓN</h2>
+                        <h3 class="text-zinc-500 font-mono text-xs uppercase tracking-widest mb-6">Física / Feedback /
+                            "Feel"</h3>
+                        <p class="text-zinc-400 leading-relaxed mb-6">
+                            Validamos la navegación y la velocidad de percepción.Ajustamos curvas de animación para una
+                            experiencia "Buttery smooth".Si se siente lento aquí, se sentirá lento en producción.
+                        </p>
+                        <ul class="text-sm text-zinc-500 space-y-2">
+                            <li>› Prototipado Interactivo</li>
+                            <li>› Test de Usabilidad</li>
+                            <li>› Ajuste de Curvas de Animación</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- PHASE 05: PRODUCTION -->
+                <div class="grid md:grid-cols-2 gap-12 items-center reveal group workflow-card" id="phase-05">
+                    <!-- Text (Left) -->
+                    <div class="text-right md:pr-12 order-1">
+                        <div class="text-acid font-mono text-sm mb-2 phase-number">FASE_05</div>
+                        <h2 class="text-3xl font-bold text-white-off mb-4">DESARROLLO EN PRODUCCIÓN</h2>
+                        <h3 class="text-zinc-500 font-mono text-xs uppercase tracking-widest mb-6">Next.js / TypeScript
+                            / Live Coding</h3>
+                        <p class="text-zinc-400 leading-relaxed mb-6">
+                            Transparencia radical.Entramos en fase de construcción con visibilidad total.Código
+                            limpio, tipado y modular.Priorizo rendimiento en cada commit.
+                        </p>
+                        <ul class="text-sm text-zinc-500 space-y-2 inline-block text-right">
+                            <li>› Desarrollo Component-Driven</li>
+                            <li>› Previsualizaciones en Staging</li>
+                            <li>› Git Flow Profesional</li>
+                        </ul>
+                    </div>
+                    <!-- Visual (Right) -->
+                    <div class="order-2 relative card-visual">
+                        <div
+                            class="bg-[#1e1e1e] border border-zinc-800 rounded-lg p-4 font-mono text-xs shadow-2xl text-blue-300">
+                            <div class="flex justify-between text-zinc-500 mb-2 text-[10px]">
+                                <span>ProductionLayout.tsx</span>
+                                <span>TSX</span>
+                            </div>
+                            <div id="code-typer" class="min-h-[140px] flex flex-col justify-center">
+                                <!-- Code will be typed here by JS -->
+                            </div>
+                        </div>
+                        <div
+                            class="absolute top-1/2-left-[3.25rem] md:-left-[3.75rem] -translate-y-1/2 w-10 h-10 bg-zinc-950 border border-zinc-700 text-zinc-400 group-hover:border-acid group-hover:text-acid transition-colors rounded flex items-center justify-center font-bold z-20">
+                            05
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PHASE 06: DEPLOY -->
+                <div class="grid md:grid-cols-2 gap-12 items-center reveal group workflow-card" id="phase-06">
+                    <!-- Visual (Left) -->
+                    <div class="order-2 md:order-1 relative card-visual">
+                        <div
+                            class="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-2xl flex justify-between items-center px-8 h-40">
+                            <!-- Lighthouse Circles -->
+                            <div class="text-center">
+                                <div class="relative w-16 h-16 flex items-center justify-center mb-2">
+                                    <svg class="absolute inset-0 w-full h-full-rotate-90" viewBox="0 0 36 36">
+                                        <path class="text-zinc-800"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0-31.831"
+                                            fill="none" stroke="currentColor" stroke-width="4" />
+                                        <path class="text-green-500 score-circle" stroke-dasharray="0, 100"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0-31.831"
+                                            fill="none" stroke="currentColor" stroke-width="4" />
+                                    </svg>
+                                    <span class="text-green-500 font-bold text-xl score-number">0</span>
+                                </div>
+                                <div class="text-[10px] text-zinc-500 uppercase">Perfor.</div>
+                            </div>
+
+                            <div class="text-center">
+                                <div class="relative w-16 h-16 flex items-center justify-center mb-2">
+                                    <svg class="absolute inset-0 w-full h-full-rotate-90" viewBox="0 0 36 36">
+                                        <path class="text-zinc-800"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0-31.831"
+                                            fill="none" stroke="currentColor" stroke-width="4" />
+                                        <path class="text-green-500 score-circle" stroke-dasharray="0, 100"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0-31.831"
+                                            fill="none" stroke="currentColor" stroke-width="4" />
+                                    </svg>
+                                    <span class="text-green-500 font-bold text-xl score-number">0</span>
+                                </div>
+                                <div class="text-[10px] text-zinc-500 uppercase">Access</div>
+                            </div>
+
+                            <div class="text-center">
+                                <div class="relative w-16 h-16 flex items-center justify-center mb-2">
+                                    <svg class="absolute inset-0 w-full h-full-rotate-90" viewBox="0 0 36 36">
+                                        <path class="text-zinc-800"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0-31.831"
+                                            fill="none" stroke="currentColor" stroke-width="4" />
+                                        <path class="text-green-500 score-circle" stroke-dasharray="0, 100"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0-31.831"
+                                            fill="none" stroke="currentColor" stroke-width="4" />
+                                    </svg>
+                                    <span class="text-green-500 font-bold text-xl score-number">0</span>
+                                </div>
+                                <div class="text-[10px] text-zinc-500 uppercase">SEO</div>
+                            </div>
+                        </div>
+                        <div
+                            class="absolute top-1/2-left-[3.25rem] md:left-auto md:-right-[3.75rem] -translate-y-1/2 w-10 h-10 bg-green-900/20 border border-green-500 text-green-500 rounded flex items-center justify-center font-bold z-20">
+                            06
+                        </div>
+                    </div>
+                    <!-- Text (Right) -->
+                    <div class="order-1 md:order-2 md:pl-12">
+                        <div class="text-green-500 font-mono text-sm mb-2 phase-number">FASE_06</div>
+                        <h2 class="text-3xl font-bold text-white-off mb-4">DESPLIEGUE & ENTREGA</h2>
+                        <h3 class="text-zinc-500 font-mono text-xs uppercase tracking-widest mb-6">Lanzamiento / QA /
+                            Optimización</h3>
+                        <p class="text-zinc-400 leading-relaxed mb-6">
+                            El lanzamiento es el día uno.Pruebas de estrés, auditorías lighthouse y cross-browser
+                            checking.Te entrego un producto que vuela.Sin deuda técnica.
+                        </p>
+                        <ul class="text-sm text-zinc-500 space-y-2">
+                            <li>› Auditoría Lighthouse Performance</li>
+                            <li>› Testing Cross-Browser</li>
+                            <li>› Documentación Técnica</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CTA Section (Standardized) -->
+        <section id="contact-split" class="py-32 bg-zinc-950 border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+
+                <!-- Left Column: About (El Artesano Rebelde) -->
+                <div class="reveal">
+                    <div
+                        class="w-24 h-24 bg-zinc-800 rounded-full mb-8 overflow-hidden grayscale hover:grayscale-0 transition-all border-2 border-zinc-800 hover:border-acid">
+                        <img src="jordi/jordi_exposito.png" alt="Jordi Expósito" class="w-full h-full object-cover">
+                    </div>
+                    <h2 class="text-4xl font-extrabold text-white-off mb-6">Deja de validar con diapositivas.</h2>
+                    <p class="text-xl text-zinc-400 leading-relaxed mb-8 max-w-lg">
+                        Tienes la visión.Te falta la ejecución técnica.Saltémonos la burocracia de las agencias y
+                        hablemos
+                        directamente de cómo llevar tu idea a producción.
+                    </p>
+                    <div class="p-6 bg-zinc-900 border border-zinc-800 inline-block rounded-sm mb-8">
+                        <h3 class="font-mono text-acid text-sm mb-2 uppercase">DISPONIBILIDAD</h3>
+                        <p class="text-white-off font-bold text-2xl">Q2 2026: 2 Plazas abiertas</p>
+                    </div>
+                    <p class="text-zinc-500 text-sm font-mono flex items-center gap-2">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-acid"></i> Base en Barcelona |
+                        <i data-lucide="globe" class="w-4 h-4 text-acid"></i> Remote Native
+                    </p>
+                </div>
+
+                <!-- Right Column: Lead Capture Form (Quick Signal) -->
+                <div>
+                    <div class="bg-zinc-900/50 border border-zinc-800 p-8 md:p-12 rounded h-full flex flex-col">
+                        <h2 class="text-acid font-mono text-sm font-bold uppercase tracking-widest mb-12">OPCIÓN B:
+                            QUICK SIGNAL (Formulario)</h2>
+
+                        <form action="#" class="space-y-8 flex-1" id="contact-form" novalidate>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <!-- Name -->
+                                <div class="group">
+                                    <label for="name" class="label-tech">[Nombre / Organización]:</label>
+                                    <input type="text" id="name" name="name" required placeholder="IDENTITY_INPUT"
+                                        class="input-tech">
+                                </div>
+
+                                <!-- Email -->
+                                <div class="group">
+                                    <label for="email" class="label-tech">[Email Corporativo]:</label>
+                                    <input type="email" id="email" name="email" required placeholder="COMM_PROTOCOL"
+                                        class="input-tech">
+                                </div>
+                            </div>
+
+                            <!-- Project Type (Custom Dropdown) -->
+                            <div class="custom-select-container">
+                                <label class="select-label">[Tipo de Proyecto]:</label>
+                                <select id="type" name="type" required class="custom-select">
+                                    <option value="" disabled selected>SELECCIONAR_MODALIDAD</option>
+                                    <option value="ux_ui_design">Diseño de Producto (UX/UI)</option>
+                                    <option value="mvp_prototype">MVP / Prototipo Funcional</option>
+                                    <option value="design_engineering">Design Engineering</option>
+                                    <option value="consultancy">Consultoría de Producto</option>
+                                </select>
+                            </div>
+
+                            <!-- Message (Payload) -->
+                            <div class="group">
+                                <label for="message" class="label-tech">[El Problema a Resolver (Payload)]:</label>
+                                <textarea id="message" name="message" rows="5" required
+                                    placeholder="Describe aquí el reto.Sé breve.Sé técnico."
+                                    class="input-tech resize-none"></textarea>
+                            </div>
+
+                            <!-- Privacy Policy -->
+                            <label class="custom-checkbox">
+                                <input type="checkbox" name="privacy" required>
+                                <span class="checkmark"></span>
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Acepto las
+                                    <a href="aviso-legal.html" target="_blank"
+                                        class="text-acid hover:underline">condiciones legales</a> y la
+                                    <a href="privacidad.html" target="_blank" class="text-acid hover:underline">Política
+                                        de Privacidad</a></span>
+                            </label>
+
+                            <!-- Submit Button -->
+                            <button type="submit"
+                                class="btn-hyperion w-full py-4 flex items-center justify-center gap-2 group mt-6">
+                                <span class="font-bold tracking-wider">ENVIAR_SEÑAL</span>
+                                <i data-lucide="arrow-right"
+                                    class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-zinc-800 bg-zinc-950/50 pt-12 pb-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-zinc-500 text-xs font-mono uppercase tracking-widest">
+                © 2026 Jordi Expósito.All rights reserved.
+            </div>
+            <div class="flex gap-6">
+                <a href="https://www.linkedin.com/in/jordi-expósito-lozano/" target="_blank" rel="noopener noreferrer"
+                    class="text-zinc-500 hover:text-acid transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-linkedin">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                        <rect width="4" height="12" x="2" y="9" />
+                        <circle cx="4" cy="4" r="2" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu (Moved to Body Root for Stacking Context) -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-zinc-950 z-[60] transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center gap-8">
+        <a href="index.html" class="block hover:opacity-80 transition-opacity">
+            <img src="jordi/logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
+        </a>
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <a href="work.html" class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Work
+            / Lab</a>
+        <a href="workflow.html"
+            class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Workflow</a>
+        <a href="about.html"
+            class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">About</a>
+        <a href="contacto.html"
+            class="link--io text-2xl font-bold text-white-off uppercase tracking-widest mt-4 mobile-link">¿Hablamos?</a>
+    </div>
+
+    <!-- Custom Cursor Elements -->
+    <div class="cursor"></div>
+    <div class="cursor2"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@0.468.0"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // --- Header Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('glass', 'py-4', 'border-zinc-800');
+                    navbar.classList.remove('py-6', 'border-transparent');
+                } else {
+                    navbar.classList.remove('glass', 'py-4', 'border-zinc-800');
+                    navbar.classList.add('py-6', 'border-transparent');
+                }
+            });
+
+            // Intersection Observer for Reveal on Scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Trigger specialized animation if it's a workflow card
+                        if (entry.target.classList.contains('workflow-card')) {
+                            triggerCardAnimation(entry.target.id);
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.15
+            });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+            function triggerCardAnimation(phaseId) {
+                // Phase 01: Terminal Typing
+                if (phaseId === 'phase-01') {
+                    const terminalLines = [
+                        { text: '➜ ~ init_audit --verbose', color: 'text-green-400' },
+                        { text: 'Target: Business Logic...', color: 'text-zinc-500' },
+                        { text: '[OK] Visión Detectada', color: 'text-zinc-300' },
+                        { text: '[WARN] Cuello de Botella en UX', color: 'text-yellow-400' },
+                        { text: 'Generando Informe...', color: 'text-blue-400' },
+                        { text: 'Done (0.42s)', color: 'text-green-400' }
+                    ];
+                    const container = document.getElementById('terminal-content');
+
+                    // Clear initial placeholder if JS runs
+                    container.innerHTML = '';
+
+                    let delay = 0;
+                    terminalLines.forEach((line, index) => {
+                        setTimeout(() => {
+                            const div = document.createElement('div');
+                            div.className = `${line.color} typing-line`;
+                            div.textContent = line.text;
+                            container.appendChild(div);
+                        }, delay);
+                        // Add delay for next line
+                        delay += 800;
+                    });
+                }
+
+                // Phase 02: Data Flow
+                // CSS handles infinite loop, we just ensure class is there
+                if (phaseId === 'phase-02') {
+                    const packets = document.querySelectorAll('#phase-02 .data-packet');
+                    packets.forEach(p => p.classList.add('flowing'));
+                }
+
+                // Phase 04: Animation Curve
+                if (phaseId === 'phase-04') {
+                    const ball = document.querySelector('.bezier-ball');
+                    if (ball) ball.style.animation = 'moveBall 2s infinite ease-in-out';
+                }
+
+                // Phase 05: Typewriter Code
+                if (phaseId === 'phase-05') {
+                    const codeLines = [
+                        '<span class="text-zinc-500">const</span> protocol = {',
+                        '  strategy: <span class="text-white">"radical"</span>,',
+                        '  testing: <span class="text-white">true</span>,',
+                        '  ship: <span class="text-zinc-500">() =></span> <span class="text-acid">"success"</span>',
+                        '};'
+                    ];
+                    const codeContainer = document.getElementById('code-typer');
+                    if (!codeContainer) return;
+                    codeContainer.innerHTML = '';
+
+                    let codeDelay = 0;
+                    codeLines.forEach(line => {
+                        setTimeout(() => {
+                            const div = document.createElement('div');
+                            div.innerHTML = line;
+                            div.className = 'typing-line overflow-hidden whitespace-nowrap w-0';
+                            div.style.animation = 'typing 0.5s steps(40, end) forwards';
+                            codeContainer.appendChild(div);
+                        }, codeDelay);
+                        codeDelay += 500;
+                    });
+                }
+
+                // Phase 06: Count Up
+                if (phaseId === 'phase-06') {
+                    const numbers = document.querySelectorAll('.score-number');
+                    const circles = document.querySelectorAll('.score-circle');
+
+                    numbers.forEach((num, index) => {
+                        let start = 0;
+                        const end = 100;
+                        const duration = 2000;
+
+                        const timer = setInterval(() => {
+                            start += 2;
+                            if (start >= end) {
+                                num.textContent = end;
+                                clearInterval(timer);
+                            } else {
+                                num.textContent = start;
+                            }
+                        }, 40);
+
+                        if (circles[index]) {
+                            setTimeout(() => {
+                                circles[index].style.strokeDasharray = '100, 100';
+                            }, 100);
+                        }
+                    });
+                }
+            }
+
+            // Mobile Menu Logic
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                if (!mobileMenu) return;
+                const isClosed = mobileMenu.classList.contains('translate-x-full');
+                if (isClosed) {
+                    mobileMenu.classList.remove('translate-x-full');
+                    document.body.style.overflow = 'hidden';
+                    if (mobileMenuBtn) mobileMenuBtn.classList.add('menu-active');
+                } else {
+                    mobileMenu.classList.add('translate-x-full');
+                    document.body.style.overflow = '';
+                    if (mobileMenuBtn) mobileMenuBtn.classList.remove('menu-active');
+                }
+            }
+
+            if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMenu);
+            if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+            // --- Custom Select Logic ---
+            const customSelects = document.getElementsByClassName("custom-select-container");
+            for (let i = 0; i < customSelects.length; i++) {
+                const selElmnt = customSelects[i].getElementsByTagName("select")[0];
+                const a = document.createElement("DIV");
+                a.setAttribute("class", "select-selected");
+                a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                customSelects[i].appendChild(a);
+
+                const b = document.createElement("DIV");
+                b.setAttribute("class", "select-items select-hide");
+                for (let j = 1; j < selElmnt.length; j++) {
+                    const c = document.createElement("DIV");
+                    c.innerHTML = selElmnt.options[j].innerHTML;
+                    c.addEventListener("click", function (e) {
+                        const y = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                        const h = this.parentNode.previousSibling;
+                        for (let k = 0; k < y.length; k++) {
+                            if (y.options[k].innerHTML == this.innerHTML) {
+                                y.selectedIndex = k;
+                                h.innerHTML = this.innerHTML;
+                                const sameSelected = this.parentNode.getElementsByClassName("same-as-selected");
+                                for (let l = 0; l < sameSelected.length; l++) { sameSelected[l].removeAttribute("class"); }
+                                this.setAttribute("class", "same-as-selected");
+                                break;
+                            }
+                        }
+                        h.click();
+                    });
+                    b.appendChild(c);
+                }
+                customSelects[i].appendChild(b);
+                a.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    closeAllSelect(this);
+                    this.nextSibling.classList.toggle("select-hide");
+                    this.classList.toggle("select-arrow-active");
+                });
+            }
+
+            function closeAllSelect(elmnt) {
+                const x = document.getElementsByClassName("select-items");
+                const y = document.getElementsByClassName("select-selected");
+                const arrNo = [];
+                for (let i = 0; i < y.length; i++) {
+                    if (elmnt == y[i]) { arrNo.push(i) } else { y[i].classList.remove("select-arrow-active"); }
+                }
+                for (let i = 0; i < x.length; i++) {
+                    if (arrNo.indexOf(i)) { x[i].classList.add("select-hide"); }
+                }
+            }
+            document.addEventListener("click", closeAllSelect);
+
+            // Form Submit Logic
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const btn = contactForm.querySelector('button');
+                    const span = btn.querySelector('span');
+                    const originalText = span.textContent;
+
+                    span.textContent = 'ENVIANDO...';
+                    btn.style.opacity = '0.7';
+                    btn.style.pointerEvents = 'none';
+
+                    setTimeout(() => {
+                        span.textContent = 'SEÑAL ENVIADA';
+                        btn.style.backgroundColor = '#CCFF00';
+                        btn.style.color = '#000';
+                        contactForm.reset();
+
+                        setTimeout(() => {
+                            span.textContent = originalText;
+                            btn.style.opacity = '1';
+                            btn.style.pointerEvents = 'auto';
+                        }, 3000);
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+    <script src="contact-form.js" defer></script>
+    <script src="cursor.js" defer></script>
+</body>
+
+</html>

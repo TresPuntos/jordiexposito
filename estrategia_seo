@@ -1,0 +1,109 @@
+# 🚀 Estrategia SEO & Content Blueprint: Jordi Expósito
+
+**Objetivo:** Posicionar a Jordi Expósito como el referente en "Design Engineering" y construcción de productos digitales en Barcelona/España.
+**Mercado:** Startups, PYMES tecnológicas, Fundadores que necesitan MVPs.
+**Tono:** "El Artesano Rebelde" (Directo, Técnico, Builder).
+
+---
+
+## 1. Estudio de Palabras Clave (Keywords Research)
+
+Hemos dividido las keywords en 3 niveles de intención de búsqueda para capturar todo el embudo.
+
+### 🟢 Nivel 1: Intención Local & Contratación (High Conversion)
+*Estas son las que traen clientes que pagan.*
+* `Design Engineer Barcelona` / `Design Engineer España`
+* `Freelance Product Designer Barcelona`
+* `Desarrollador React Freelance Barcelona`
+* `Experto Figma a Código`
+* `Contratar desarrollador MVP`
+
+### 🟡 Nivel 2: Intención Técnica & Nicho (Authority)
+*Estas te posicionan como experto ante CTOs y Founders.*
+* `Sistemas de Diseño React` / `Design Systems Engineering`
+* `Migrar Figma a React`
+* `Desarrollo web con IA` (Cursor/Antigravity)
+* `Optimización rendimiento web Next.js`
+
+### 🔴 Nivel 3: Long Tail & Problemas (Educational)
+*Estas atraen tráfico que busca soluciones.*
+* `Cómo acelerar el desarrollo de software`
+* `Diferencia entre diseñador y design engineer`
+* `Prototipado rápido de aplicaciones`
+
+---
+
+## 2. Estructura de Encabezados (H-Tags Blueprint)
+
+*Instrucción para la IA: Usa esta estructura rígida. Los H1 y H2 deben contener las keywords marcadas en negrita.*
+
+### 🏠 Página: HOME (`/`)
+**Objetivo:** Filtrar curiosos y convencer a clientes potenciales en <30 segundos.
+
+* **H1 (Principal):** Jordi Expósito — **Design Engineer** & Product Builder en **Barcelona**.
+* **H2 (Hero Subtitle):** De Figma a Producción. Construyo **productos digitales** sin intermediarios.
+* **H2 (Propuesta de Valor):** El problema del **Hand-off** tradicional vs. Mi Workflow Híbrido.
+* **H2 (Portfolio Preview):** Proyectos Recientes & **Experimentos**.
+    * **H3:** **App de Gimnasio** Personalizada (React Native).
+    * **H3:** Herramienta de Automatización **Figma a CSS**.
+* **H2 (Tech Stack):** Mi Stack Tecnológico: **React**, **Next.js**, **Tailwind** y **AI**.
+* **H2 (Local Trust):** Base en **Barcelona**, construyendo para el mundo.
+
+### 🧪 Página: WORK / LAB (`/work`)
+**Objetivo:** Demostrar capacidad técnica y sensibilidad de diseño.
+
+* **H1:** Mis Proyectos: **Ingeniería de Diseño** aplicada.
+* **H2:** Productos Vivos (**Live Apps**).
+    * **H3:** [Nombre Proyecto] — Desarrollo Full Stack.
+* **H2:** Herramientas y **Open Source**.
+    * **H3:** Plugins y Automatizaciones.
+* **H2:** **Conceptos & Betas** (Playground).
+
+### ⚙️ Página: WORKFLOW (`/metodologia`)
+**Objetivo:** Justificar tarifas altas explicando la eficiencia del proceso.
+
+* **H1:** Mi Metodología: El **Workflow Híbrido** con IA.
+* **H2:** Por qué el modelo tradicional de **Diseño Web** es lento.
+* **H2:** Cómo uso **Cursor** y **Antigravity** para programar más rápido.
+* **H2:** Sistemas de Diseño (**Design Systems**) escalables.
+* **H2:** Del **Prototipo en Figma** al Deploy en Vercel en días.
+
+### 👤 Página: ABOUT (`/bio`)
+**Objetivo:** Conexión personal y autoridad.
+
+* **H1:** Hola, soy Jordi. **Product Builder** y Fundador de Tres Puntos.
+* **H2:** Mi transición: De Diseñador Gráfico a **Design Engineer**.
+* **H2:** La filosofía del "Builder": **Construir en público**.
+* **H3:** Conexión con **Barcelona** y el ecosistema Startup.
+
+### 📞 Página: CONTACTO (`/contacto`)
+**Objetivo:** Conversión directa (Lead Generation).
+
+* **H1:** Hablemos de tu Proyecto.
+* **H2:** Reserva una sesión de **Consultoría de Producto**.
+* **H2:** ¿Buscas un **Freelance Design Engineer**?
+
+---
+
+## 3. Prompt para Antigravity / Generación de Textos
+
+Copia y pega esto en tu herramienta para generar el contenido de la HOME basándote en la estrategia anterior.
+
+> **Rol:** Eres el redactor de contenidos de Jordi Expósito, un Design Engineer rebelde y técnico.
+> **Tarea:** Redactar el contenido para la página **HOME** siguiendo la estructura SEO definida arriba.
+>
+> **Inputs de Estilo (Tone of Voice):**
+> * Usa el tono "Artesano Rebelde": Directo, sin relleno, técnico pero con alma.
+> * Usa palabras como: *Shipped, Deploy, Craft, Pixel-perfect, Lógica, Sistema.*
+> * **PROHIBIDO:** "Soluciones integrales", "Llevar al siguiente nivel", "Experiencias inmersivas".
+>
+> **Requisitos SEO (Strict):**
+> * Incluye la palabra clave "**Design Engineer**" en el primer párrafo.
+> * Menciona "**Barcelona**" al menos dos veces de forma natural (ej: "Desde mi estudio en Barcelona...").
+> * Asegúrate de que los textos de los H2 ataquen problemas reales (lentitud, mala comunicación dev-design).
+>
+> **Estructura del Contenido a Generar:**
+> 1.  **Hero:** Título impactante + Subtítulo de 2 líneas que explique qué hago.
+> 2.  **Sección "The Gap":** 3 puntos de dolor de por qué contratar diseñador y dev por separado es caro.
+> 3.  **Sección Stack:** Breve descripción de por qué uso Next.js y Tailwind (velocidad y escalabilidad).
+> 4.  **CTA Final:** Una frase de cierre que incite a agendar llamada.

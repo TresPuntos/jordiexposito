@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sincronización Figma ↔ CSS — Case Study Design Engineering | Jordi Expósito</title>
+    <meta name="description"
+        content="Case Study Design Engineering: motor de sincronización Figma ↔ CSS por Jordi Expósito, Design Engineer en Barcelona. Elimina la brecha entre variables de diseño y código en producción." />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://jordiexposito.com/sync-engine.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jordiexposito.com/sync-engine.html">
+    <meta property="og:title" content="Motor de Sincronización Figma ↔ CSS — Case Study por Jordi Expósito">
+    <meta property="og:description"
+        content="Middleware para sincronizar Variables de Diseño en Figma con CSS en Producción.">
+    <meta property="og:image" content="https://jordiexposito.com/og-image.png">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Jordi Expósito">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Motor de Sincronización Figma ↔ CSS — Case Study">
+    <meta name="twitter:description"
+        content="Middleware para sincronizar Variables de Diseño en Figma con CSS en Producción.">
+    <meta name="twitter:image" content="https://jordiexposito.com/og-image.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CreativeWork",
+          "@id": "https://jordiexposito.com/sync-engine.html",
+          "url": "https://jordiexposito.com/sync-engine.html",
+          "name": "Motor de Sincronización: Figma & CSS",
+          "description": "Middleware para garantizar la integridad visual entre Variables de Diseño en Figma y Código CSS en Producción.",
+          "author": {"@id": "https://jordiexposito.com/#person"},
+          "inLanguage": "es",
+          "keywords": ["Figma", "CSS", "Design Tokens", "Sincronización", "Middleware", "Design System"]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordiexposito.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Work / Lab", "item": "https://jordiexposito.com/work.html"},
+            {"@type": "ListItem", "position": 3, "name": "Sync Engine", "item": "https://jordiexposito.com/sync-engine.html"}
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="dist.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --accent: #CCFF00;
+            --accent-glow: rgba(204, 255, 0, 0.15);
+        }
+
+        body {
+            background-color: #000000;
+            color: #f4f4f5;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* ANIMATIONS */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Delays */
+        .reveal.delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .reveal.delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal.delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .reveal.delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Codrops Line Hover Style 02 (link--io) */
+        .link--io {
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            color: inherit;
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        .link--io::before,
+        .link--io::after {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: currentColor;
+            top: 100%;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .link--io::before {
+            content: '';
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+        }
+
+        .link--io:hover::before {
+            transform-origin: 0% 50%;
+            transform: scale3d(1, 1, 1);
+            transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+        }
+
+        .link--io::after {
+            content: '';
+            top: calc(100% + 4px);
+            transform-origin: 0% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+        }
+
+        .link--io:hover::after {
+            transform-origin: 100% 50%;
+            transform: scale3d(1, 1, 1);
+            transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+        }
+
+        /* ORBIT ANIMATION */
+        @keyframes orbit {
+            from {
+                transform: rotate(0deg) translateX(280px) rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg) translateX(280px) rotate(-360deg);
+            }
+        }
+
+        .orbit-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .orbit-item {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            margin-left: -30px;
+            margin-top: -30px;
+            animation: orbit 30s linear infinite;
+        }
+
+        .orbit-item:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .orbit-item:nth-child(2) {
+            animation-delay: -5s;
+        }
+
+        .orbit-item:nth-child(3) {
+            animation-delay: -10s;
+        }
+
+        .orbit-item:nth-child(4) {
+            animation-delay: -15s;
+        }
+
+        .orbit-item:nth-child(5) {
+            animation-delay: -20s;
+        }
+
+        .orbit-item:nth-child(6) {
+            animation-delay: -25s;
+        }
+
+        @keyframes glow-pulse {
+
+
+            0%,
+            100% {
+                box-shadow: 0 0 15px var(--accent-glow), 0 0 30px transparent;
+            }
+
+            50% {
+                box-shadow: 0 0 25px var(--accent-glow), 0 0 50px var(--accent-glow);
+            }
+        }
+
+        .glow-ring {
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        /* BROWSER WINDOW STYLES */
+        .browser-mockup {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        .browser-header {
+            background: #2d2d2d;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid #333;
+        }
+
+        .browser-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .control-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .browser-address {
+            flex: 1;
+            background: #1e1e1e;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-preview {
+            padding: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            color: #d4d4d4;
+        }
+
+        .keyword {
+            color: #c586c0;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .function {
+            color: #dcdcaa;
+        }
+
+        .type {
+            color: #4ec9b0;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .variable {
+            color: #9cdcfe;
+        }
+
+        /* FLOW ANIMATION */
+        .flow-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flow-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.5;
+            z-index: 20;
+        }
+
+        .flow-icon {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes flow-horizontal {
+            0% {
+                transform: translateX(-50px);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(300px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse-dashboard {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 rgba(204, 255, 0, 0);
+                border-color: #333;
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(204, 255, 0, 0.1);
+                border-color: rgba(204, 255, 0, 0.3);
+            }
+        }
+
+        .dashboard-img {
+            transition: all 0.5s ease;
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+        }
+
+        .browser-mockup:hover .dashboard-img {
+            transform: scale(1.02);
+        }
+
+        /* Existing Animations */
+        @keyframes float-subtle {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .float-anim {
+            animation: float-subtle 4s ease-in-out infinite;
+        }
+
+        /* NEW DASHBOARD ANIMATIONS */
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes packet-left {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+                scale: 0.5;
+            }
+
+            10% {
+                opacity: 1;
+                scale: 1;
+            }
+
+            40% {
+                transform: translate(calc(100% + 2rem), 0);
+                opacity: 1;
+            }
+
+            60% {
+                transform: translate(calc(200% + 4.5rem), 0);
+                opacity: 1;
+            }
+
+            70% {
+                transform: translate(calc(200% + 4.5rem), 0);
+                scale: 1.5;
+                opacity: 1;
+            }
+
+            80% {
+                transform: translate(calc(200% + 4.5rem), 0);
+                scale: 1;
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate(calc(200% + 4.5rem), 0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes packet-center {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+                scale: 0.5;
+            }
+
+            10% {
+                opacity: 0;
+            }
+
+            30% {
+                transform: translate(0, 0);
+                opacity: 1;
+                scale: 1;
+            }
+
+            60% {
+                transform: translate(calc(100% + 2.25rem), 0);
+                opacity: 1;
+            }
+
+            70% {
+                transform: translate(calc(100% + 2.25rem), 0);
+                scale: 1.5;
+                opacity: 1;
+            }
+
+            80% {
+                transform: translate(calc(100% + 2.25rem), 0);
+                scale: 1;
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate(calc(100% + 2.25rem), 0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes packet-out {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+
+            75% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+
+            80% {
+                transform: translate(0, 10px);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(0, 150px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes process-glow {
+
+            0%,
+            65%,
+            85%,
+            100% {
+                box-shadow: 0 0 0 rgba(59, 130, 146, 0);
+            }
+
+            70%,
+            80% {
+                box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+            }
+        }
+
+        /* CONTACT FORM STYLES */
+        .btn-hyperion {
+            pointer-events: auto;
+            cursor: pointer;
+            background: #CCFF00;
+            border: 1px solid #000;
+            padding: 1rem 2rem;
+            margin: 0;
+            font-family: inherit;
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .btn-hyperion span {
+            display: block;
+            position: relative;
+        }
+
+        .btn-hyperion>span {
+            overflow: hidden;
+            mix-blend-mode: normal;
+        }
+
+        .btn-hyperion>span>span {
+            overflow: hidden;
+            mix-blend-mode: normal;
+        }
+
+        .btn-hyperion:hover>span>span {
+            animation: MoveUpInitial 0.2s forwards, MoveUpEnd 0.2s forwards 0.2s;
+        }
+
+        @keyframes MoveUpInitial {
+            to {
+                transform: translate3d(0, -105%, 0);
+            }
+        }
+
+        @keyframes MoveUpEnd {
+            from {
+                transform: translate3d(0, 100%, 0);
+            }
+
+            to {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .btn-hyperion::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+        }
+
+        .btn-hyperion:hover::before {
+            transform: scale3d(1, 1, 1);
+            transform-origin: 0% 50%;
+        }
+
+        .btn-hyperion:hover {
+            color: #CCFF00;
+            border-color: #CCFF00;
+        }
+
+        .input-tech {
+            background-color: transparent;
+            border-bottom: 1px solid #52525B;
+            /* Zinc-600 para visibilidad */
+            font-family: 'JetBrains Mono', monospace;
+            color: #ffffff;
+            padding: 0.75rem 0;
+            width: 100%;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+
+        .input-tech:focus {
+            outline: none;
+            border-bottom-color: #CCFF00;
+            /* Acid Lime */
+            box-shadow: 0 1px 0 0 #CCFF00;
+        }
+
+        .input-tech::placeholder {
+            color: #71717A;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+
+        .label-tech {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #A1A1AA;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select {
+            display: none;
+        }
+
+        .select-selected {
+            background-color: transparent;
+            border-bottom: 1px solid #52525B;
+            border-radius: 0;
+            color: #ffffff;
+            padding: 0.75rem 0;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+        }
+
+        .select-selected:after {
+            position: absolute;
+            content: "";
+            top: 50%;
+            right: 0px;
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-color: #71717A transparent transparent transparent;
+            transform: translateY(-25%);
+        }
+
+        .select-selected.select-arrow-active:after {
+            border-color: transparent transparent #CCFF00 transparent;
+            transform: translateY(-75%);
+        }
+
+        .select-selected.select-arrow-active,
+        .select-selected:hover {
+            border-bottom-color: #CCFF00;
+            box-shadow: 0 1px 0 0 #CCFF00;
+        }
+
+        .select-items div,
+        .select-selected {
+            color: #ffffff;
+            padding: 12px 16px;
+            border: 1px solid transparent;
+            border-color: transparent transparent rgba(255, 255, 255, 0.05) transparent;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .select-items div {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+
+        .select-items {
+            position: absolute;
+            background-color: #09090b;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            border: 1px solid #52525B;
+            border-radius: 0;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            margin-top: 1px;
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .select-hide {
+            display: none;
+        }
+
+        .select-items div:hover,
+        .same-as-selected {
+            background-color: #18181b;
+            color: #CCFF00;
+        }
+
+        .select-label {
+            position: relative;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #A1A1AA;
+            display: block;
+            margin-bottom: 0px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+            color: #a1a1aa;
+            font-size: 0.875rem;
+            margin-top: 24px;
+        }
+
+        .custom-checkbox input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #52525B;
+            background: #09090b;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .custom-checkbox:hover .checkmark {
+            border-color: #ccff0080;
+        }
+
+        .custom-checkbox input:checked+.checkmark {
+            background: #CCFF00;
+            border-color: #CCFF00;
+        }
+
+        .custom-checkbox input:checked+.checkmark:after {
+            content: "";
+            width: 5px;
+            height: 10px;
+            border: solid #000;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            margin-bottom: 2px;
+        }
+    </style>
+    <link rel="stylesheet" href="cursor.css">
+</head>
+
+<body class="antialiased">
+
+    <!-- NAVIGATION -->
+    <header id="navbar"
+        class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 border-b border-transparent">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="block hover:opacity-80 transition-opacity">
+                <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
+            </a>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="work.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Work /
+                    Lab</a>
+                <a href="workflow.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Workflow</a>
+                <a href="about.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">About</a>
+                <a href="contacto.html"
+                    class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4">¿Hablamos?</a>
+            </nav>
+            <button id="mobile-menu-btn" class="md:hidden text-white-off focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-zinc-950 z-40 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center gap-8">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <a href="work.html" class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Work
+            / Lab</a>
+        <a href="workflow.html"
+            class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Workflow</a>
+        <a href="about.html"
+            class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">About</a>
+        <a href="contacto.html"
+            class="link--io text-2xl font-bold text-white-off uppercase tracking-widest mt-4 mobile-link">¿Hablamos?</a>
+    </div>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section class="min-h-screen pt-32 pb-20 flex items-center relative overflow-hidden">
+            <div
+                class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-zinc-800/20 via-black to-black -z-10">
+            </div>
+
+            <div class="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Text -->
+                <div>
+                    <div
+                        class="reveal inline-flex items-center gap-2 border border-zinc-800 bg-zinc-900/50 rounded-full px-3 py-1 mb-8 backdrop-blur-sm glow-ring">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse"></span>
+                        <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider">Implementado (Producción
+                            Interna)</span>
+                    </div>
+                    <h1
+                        class="reveal delay-1 text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight leading-[1.1]">
+                        Sistema de sincronización Figma con Css<span class="text-[var(--accent)]">.</span>
+                    </h1>
+                    <p class="reveal delay-2 text-xl text-zinc-300 font-medium mb-6 leading-tight">
+                        Infraestructura de sincronización de tokens con arquitectura de persistencia híbrida
+                        (Local/Cloud) y protocolo MCP para agentes de IA.
+                    </p>
+
+                    <!-- Tech Grid -->
+                    <div class="reveal delay-4 grid grid-cols-2 gap-4 max-w-md">
+                        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4">
+                            <span
+                                class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest block mb-1">Rol</span>
+                            <span class="text-white font-bold text-sm">Full Stack Engineer / DevOps Architect</span>
+                        </div>
+                        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4">
+                            <span
+                                class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest block mb-1">Estado</span>
+                            <span class="text-[var(--accent)] font-bold text-sm flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Production (Vercel)
+                            </span>
+                        </div>
+                        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 col-span-2">
+                            <span
+                                class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest block mb-1">Stack</span>
+                            <span class="text-zinc-300 text-xs">Node.js (Express) · React + Vite · Vercel Postgres · MCP
+                                (Model Context Protocol)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Browser + Orbit -->
+                <div class="reveal-right block relative perspective-1000 group h-[400px] lg:h-[500px]">
+                    <!-- Orbits Container -->
+                    <!-- Orbits Container -->
+                    <div class="orbit-container">
+                        <!-- Icon 1: Figma -->
+                        <div class="orbit-item">
+                            <div
+                                class="bg-[#1e1e1e] border border-[#2c2c2c] p-3 rounded-2xl shadow-lg flex items-center justify-center w-full h-full hover:scale-110 transition-transform">
+                                <img src="logos/Figma_Symbol_0.svg" alt="Figma" class="w-8 h-8 object-contain">
+                            </div>
+                        </div>
+
+                        <!-- Icon 2: CSS -->
+                        <div class="orbit-item">
+                            <div
+                                class="bg-[#1e1e1e] border border-[#2c2c2c] p-3 rounded-2xl shadow-lg flex items-center justify-center w-full h-full hover:scale-110 transition-transform">
+                                <img src="logos/css-3.svg" alt="CSS" class="w-8 h-8 object-contain">
+                            </div>
+                        </div>
+
+                        <!-- Icon 3: React -->
+                        <div class="orbit-item">
+                            <div
+                                class="bg-[#1e1e1e] border border-[#2c2c2c] p-3 rounded-2xl shadow-lg flex items-center justify-center w-full h-full hover:scale-110 transition-transform">
+                                <img src="logos/React-icon.svg" alt="React" class="w-8 h-8 object-contain">
+                            </div>
+                        </div>
+
+                        <!-- Icon 4: Antigravity -->
+                        <div class="orbit-item">
+                            <div
+                                class="bg-[#1e1e1e] border border-[#2c2c2c] p-3 rounded-2xl shadow-lg flex items-center justify-center w-full h-full hover:scale-110 transition-transform">
+                                <img src="logos/Google_Antigravity-logo_brandlogos.net_e23c83.svg" alt="Antigravity"
+                                    class="w-8 h-8 object-contain">
+                            </div>
+                        </div>
+
+                        <!-- Icon 5: ChatGPT -->
+                        <div class="orbit-item">
+                            <div
+                                class="bg-[#1e1e1e] border border-[#2c2c2c] p-3 rounded-2xl shadow-lg flex items-center justify-center w-full h-full hover:scale-110 transition-transform">
+                                <img src="logos/ChatGPT_Logo_0.svg" alt="ChatGPT" class="w-8 h-8 object-contain invert">
+                                <!-- Added invert for ChatGPT if it's black, checking... usually it's black/white. If it's standard logo it might be black on transparent, so invert for dark mode. -->
+                            </div>
+                        </div>
+                        <!-- Icon 6: Vercel -->
+                        <div class="orbit-item">
+                            <div
+                                class="bg-[#1e1e1e] border border-[#2c2c2c] p-3 rounded-2xl shadow-lg flex items-center justify-center w-full h-full hover:scale-110 transition-transform">
+                                <img src="logos/vercel.svg" alt="Vercel" class="w-8 h-8 object-contain">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Browser Window -->
+                    <div class="browser-mockup w-full max-w-lg mx-auto relative z-10 top-10 float-anim">
+                        <div class="browser-header">
+                            <div class="browser-controls">
+                                <div class="control-dot bg-[#ff5f56]"></div>
+                                <div class="control-dot bg-[#ffbd2e]"></div>
+                                <div class="control-dot bg-[#27c93f]"></div>
+                            </div>
+                            <div class="browser-address">
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                                <span>localhost:3000/sync-engine</span>
+                            </div>
+                        </div>
+                        <div class="code-preview bg-[#1e1e1e] min-h-[300px] p-4 font-mono text-xs">
+                            <!-- Mock UI for the Tool -->
+                            <div class="flex border-b border-[#333] mb-4 pb-2 gap-4">
+                                <div class="px-2 py-1 text-white border-b-2 border-[var(--accent)]">Tokens</div>
+                                <div class="px-2 py-1 text-zinc-500">Diff History</div>
+                                <div class="px-2 py-1 text-zinc-500">Settings</div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <div
+                                    class="flex items-center justify-between bg-[#111] p-2 rounded border border-red-500/30 group hover:border-red-500/60 transition-colors">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 rounded bg-[#FF5500]"></div>
+                                        <span class="text-zinc-400">color.primary.500</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-zinc-600 line-through decoration-red-500/50">#FF0000</span>
+                                        <span class="text-white">#FF5500</span>
+                                        <span
+                                            class="text-[10px] bg-red-500/10 text-red-500 px-1.5 py-0.5 rounded border border-red-500/20">CHANGED</span>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="flex items-center justify-between bg-[#111] p-2 rounded border border-[var(--accent)]/20 group hover:border-[var(--accent)]/50 transition-colors">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 rounded bg-[#10B981]"></div>
+                                        <span class="text-zinc-400">color.success.400</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-white">#10B981</span>
+                                        <span
+                                            class="text-[10px] bg-[var(--accent)]/10 text-[var(--accent)] px-1.5 py-0.5 rounded border border-[var(--accent)]/20">NEW</span>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="flex items-center justify-between bg-[#111] p-2 rounded border border-zinc-800 opacity-50">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 rounded bg-[#3B82F6]"></div>
+                                        <span class="text-zinc-500">color.blue.500</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-zinc-500">#3B82F6</span>
+                                        <span
+                                            class="text-[10px] bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded">SYNCED</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-3 border-t border-[#333]">
+                                    <div class="flex justify-between items-center text-[10px] text-zinc-500 mb-2">
+                                        <span>TERMINAL OUTPUT</span>
+                                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                    </div>
+                                    <div class="text-green-400/80">> Detected 2 changes in 'Primitives/Colors'</div>
+                                    <div class="text-[var(--accent)]/80">> Generating CSS variables... Done (42ms)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD SHOWCASE SECTION -->
+        <section class="py-20 bg-zinc-950 relative overflow-hidden border-b border-zinc-900">
+            <!-- Background Grid -->
+            <div
+                class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20">
+            </div>
+
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="text-center mb-12 reveal">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1e1e1e] border border-zinc-800 text-[10px] uppercase tracking-widest text-zinc-400 mb-4">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        System Online
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold text-white">Central de Sincronización</h2>
+                    <p class="text-zinc-500 mt-4 max-w-2xl mx-auto">Visibilidad total sobre el estado de tus tokens de
+                        diseño.</p>
+                </div>
+
+                <!-- Interactive Dashboard Mockup -->
+                <div
+                    class="relative rounded-xl overflow-hidden shadow-2xl border border-zinc-800 bg-[#0F1115] reveal delay-1 group min-h-[500px] flex flex-col font-sans">
+                    <!-- Top Navigation Bar -->
+                    <div class="bg-[#14161a] border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center border border-blue-500/30">
+                                <span class="text-blue-400 font-bold text-xl">U</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-bold text-sm tracking-tight flex items-center gap-2">
+                                    TokenSync <span
+                                        class="px-1.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[8px] border border-blue-500/20">BETA</span>
+                                </div>
+                                <div class="text-zinc-600 text-[10px]">By TresPuntos Lab</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-8 h-8 rounded-full border-2 border-zinc-800 flex items-center justify-center text-zinc-600">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-zinc-500 text-[8px] uppercase tracking-wider">Figma Sync Status
+                                    </div>
+                                    <div class="text-zinc-300 text-[10px] font-medium">Updated 24 days ago</div>
+                                </div>
+                            </div>
+                            <button
+                                class="bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 text-[10px] font-bold px-3 py-1.5 rounded border border-blue-500/30 transition-all">Sync
+                                Now</button>
+                        </div>
+                    </div>
+
+                    <!-- Main Application Area -->
+                    <div class="p-8 grid md:grid-cols-3 gap-6 flex-1 bg-[#0F1115] relative">
+                        <!-- Data Packets Layer -->
+                        <div class="absolute inset-0 pointer-events-none z-30">
+                            <!-- CSS Packet -->
+                            <div
+                                class="absolute top-1/2 left-[16%] -translate-y-1/2 w-3 h-3 bg-blue-400 rounded-sm shadow-[0_0_10px_rgba(96,165,250,0.8)] animate-[packet-left_8s_infinite] flex items-center justify-center">
+                                <span class="text-[6px] text-white font-bold">C</span>
+                            </div>
+                            <!-- JSON Packet -->
+                            <div
+                                class="absolute top-1/2 left-[50%] -translate-y-1/2 w-3 h-3 bg-orange-400 rounded-sm shadow-[0_0_10px_rgba(251,146,60,0.8)] animate-[packet-center_8s_infinite] flex items-center justify-center">
+                                <span class="text-[6px] text-white font-bold">J</span>
+                            </div>
+                            <!-- Output Packet -->
+                            <div
+                                class="absolute top-1/2 left-[83%] -translate-y-1/2 w-4 h-4 bg-acid rounded-sm shadow-[0_0_15px_rgba(204,255,0,0.8)] animate-[packet-out_8s_infinite] flex items-center justify-center z-40">
+                                <span class="text-[6px] text-black font-bold">CSS</span>
+                            </div>
+                        </div>
+
+                        <!-- Scan Line Animation Layer -->
+                        <div class="absolute inset-0 pointer-events-none overflow-hidden z-10">
+                            <div
+                                class="absolute w-full h-[150px] bg-gradient-to-b from-[var(--accent)]/5 to-transparent -top-full left-0 animate-[scan_6s_linear_infinite] opacity-30">
+                            </div>
+                        </div>
+
+                        <!-- Panel 1: Añadir CSS -->
+                        <div
+                            class="bg-[#14161a] border border-zinc-800 rounded-xl p-6 flex flex-col items-center justify-center gap-4 relative hover:border-blue-500/40 transition-colors group/panel">
+                            <div class="absolute top-3 left-4 flex items-center gap-2">
+                                <span
+                                    class="w-4 h-4 rounded-full bg-zinc-800 text-[10px] text-zinc-500 flex items-center justify-center font-bold">1</span>
+                                <span class="text-xs font-bold text-zinc-400">Añadir CSS</span>
+                            </div>
+                            <div
+                                class="w-16 h-16 rounded-full bg-blue-500/5 border border-dashed border-blue-500/30 flex items-center justify-center text-blue-400 group-hover/panel:scale-110 transition-transform">
+                                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-white text-sm font-bold">Arrastra CSS</div>
+                                <div class="text-zinc-600 text-[10px] mt-1">O haz clic para seleccionar</div>
+                            </div>
+                            <div
+                                class="bg-blue-500/10 border border-blue-500/20 px-3 py-2 rounded flex items-center gap-2 opacity-60">
+                                <svg class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                                </svg>
+                                <span class="text-blue-400 text-[10px] font-mono">tokens.css support</span>
+                            </div>
+                        </div>
+
+                        <!-- Panel 2: Fuente de Variables -->
+                        <div
+                            class="bg-[#14161a] border border-zinc-800 rounded-xl p-6 flex flex-col gap-4 relative hover:border-[var(--accent)]/40 transition-colors group/panel">
+                            <div class="absolute top-3 left-4 flex items-center gap-2">
+                                <span
+                                    class="w-4 h-4 rounded-full bg-zinc-800 text-[10px] text-zinc-500 flex items-center justify-center font-bold">2</span>
+                                <span class="text-xs font-bold text-zinc-400">Fuente de Variables</span>
+                            </div>
+                            <div class="flex bg-[#0a0c0e] p-1 rounded-lg border border-zinc-800 mt-6">
+                                <button
+                                    class="flex-1 py-1.5 text-[10px] font-bold text-white bg-blue-600 rounded-md shadow-lg">Subir
+                                    Archivos</button>
+                                <button
+                                    class="flex-1 py-1.5 text-[10px] font-bold text-zinc-600 hover:text-zinc-400 transition-colors">Usar
+                                    Historial</button>
+                            </div>
+                            <div
+                                class="flex-1 border-2 border-dashed border-zinc-800 rounded-xl flex flex-col items-center justify-center group-hover/panel:border-[var(--accent)]/30 transition-colors bg-black/20">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-[var(--accent)]/5 flex items-center justify-center text-[var(--accent)] mb-3">
+                                    <img src="logos/Figma_Symbol_0.svg" class="w-6 h-6 animate-pulse">
+                                </div>
+                                <div class="text-white text-xs font-bold">Arrastra JSONs</div>
+                                <div class="text-zinc-600 text-[9px] mt-1">Figma Collections support</div>
+                            </div>
+                        </div>
+
+                        <!-- Panel 3: Procesar -->
+                        <div
+                            class="bg-[#14161a] border border-zinc-800 rounded-xl p-6 flex flex-col gap-4 relative hover:border-purple-500/40 transition-colors animate-[process-glow_8s_infinite]">
+                            <div class="absolute top-3 left-4 flex items-center gap-2">
+                                <span
+                                    class="w-4 h-4 rounded-full bg-zinc-800 text-[10px] text-zinc-500 flex items-center justify-center font-bold">3</span>
+                                <span class="text-xs font-bold text-zinc-400">Procesamiento</span>
+                            </div>
+                            <p class="text-[10px] text-zinc-500 leading-relaxed mt-6">Compara automáticamente las
+                                variables actuales con la fuente de verdad y genera el parche de sincronización.</p>
+
+                            <div class="space-y-3 mt-4">
+                                <button
+                                    class="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all relative overflow-hidden group/btn shadow-[0_0_20px_rgba(37,99,235,0.2)]">
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]">
+                                    </div>
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                    Comprobar
+                                </button>
+                                <button
+                                    class="w-full bg-[#1e2025] hover:bg-[#252830] text-zinc-300 text-xs font-bold py-3 rounded-lg border border-zinc-700 flex items-center justify-center gap-2 transition-all group/btn">
+                                    <svg class="w-4 h-4 text-zinc-500 group-hover/btn:text-white transition-colors"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    Descargar Parche
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Tabs Area -->
+                    <div class="bg-[#14161a] border-t border-zinc-800 px-8 py-0 flex items-center gap-8">
+                        <button class="py-4 text-[10px] font-bold text-blue-400 border-b-2 border-blue-600">Visor
+                            (Diff)</button>
+                        <button
+                            class="py-4 text-[10px] font-bold text-zinc-500 hover:text-zinc-300 transition-colors">Cambios
+                            Detectados (12)</button>
+                        <button
+                            class="py-4 text-[10px] font-bold text-zinc-500 hover:text-zinc-300 transition-colors">Historial
+                            de Versiones</button>
+                    </div>
+
+                    <!-- Console/Simulation Area -->
+                    <div
+                        class="bg-[#0a0c0e] p-6 min-h-[120px] font-mono text-[10px] text-zinc-500 relative group-hover:text-zinc-400 transition-colors overflow-hidden">
+
+                        <!-- Animated Log Scroller (Simulated) -->
+                        <div class="absolute right-4 bottom-4 w-48 h-24 opacity-10 pointer-events-none">
+                            <div class="space-y-1 animate-[pulse-dashboard_4s_infinite]">
+                                <div class="h-1 bg-zinc-800 rounded w-full"></div>
+                                <div class="h-1 bg-zinc-800 rounded w-3/4"></div>
+                                <div class="h-1 bg-zinc-800 rounded w-5/6"></div>
+                                <div class="h-1 bg-zinc-800 rounded w-full"></div>
+                                <div class="h-1 bg-zinc-800 rounded w-2/3"></div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                            <span>LOGS DE SISTEMA</span>
+                        </div>
+                        <div class="space-y-1 relative">
+                            <div class="text-blue-500/80">[Storage] Hybrid adapter selected: Vercel Postgres</div>
+                            <div class="text-green-500/80">[Sync] Analyzing 'design-tokens.json' ... integridad 100%
+                            </div>
+                            <div class="text-[var(--accent)]/80">[MCP] Agent connected: Claude Code Engine v2.4</div>
+                            <div class="flex items-center gap-1 group-hover:text-white transition-colors">
+                                <span class="animate-pulse">_</span> <span id="dynamic-log">Esperando paquetes de
+                                    datos...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        // Tiny script to simulate logs changing with animation
+                        const logElement = document.getElementById('dynamic-log');
+                        const messages = [
+                            "Esperando paquetes de datos...",
+                            "Recibiendo tokens.css...",
+                            "Recibiendo variables.json...",
+                            "Comparando versiones...",
+                            "Generando parche atómico...",
+                            "Sincronización completada."
+                        ];
+                        let msgIndex = 0;
+                        setInterval(() => {
+                            logElement.textContent = messages[msgIndex];
+                            msgIndex = (msgIndex + 1) % messages.length;
+                        }, 1333); // Cycle through messages roughly matching the 8s loop
+                    </script>
+                </div>
+            </div>
+        </section>
+
+        <!-- CORE PROBLEM (El Reto) -->
+        <section class="py-32 bg-zinc-950 border-y border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid md:grid-cols-12 gap-12">
+                    <div class="md:col-span-4 reveal-left">
+                        <span class="font-mono text-[var(--accent)] text-xs tracking-widest uppercase mb-4 block">01 /
+                            El Reto</span>
+                        <h2 class="text-3xl font-bold text-white mb-6">La Entropía del Diseño</h2>
+                    </div>
+                    <div class="md:col-span-8">
+                        <p class="reveal text-xl text-zinc-400 leading-relaxed mb-12">
+                            La fragmentación entre diseño y desarrollo. Un CRM de alta densidad con un Sistema de Diseño
+                            complejo genera miles de tokens (variables). La gestión manual provocaba discrepancias
+                            visuales graves entre las definiciones de Figma y el CSS final. El coste de mantenimiento
+                            era exponencial, generando deuda técnica y ralentizando los tiempos de entrega por la
+                            necesidad de una validación manual constante de estilos estáticos (*hardcoded*).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISUAL BREAK -->
+        <section class="py-20 bg-black overflow-hidden relative">
+            <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+            <div class="max-w-7xl mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-12 reveal">"Source of Truth" Unificada</h2>
+
+                <div
+                    class="relative max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 reveal delay-1">
+                    <!-- Step 1 -->
+                    <div
+                        class="relative z-10 bg-black border border-zinc-800 p-6 rounded-xl hover:border-zinc-600 transition-colors w-full md:w-auto text-center md:text-left">
+                        <div class="text-[10px] uppercase tracking-widest text-[#F24E1E] mb-2 font-mono">Input</div>
+                        <div class="text-xl font-bold text-white">Figma Variables</div>
+                        <div class="text-zinc-500 text-xs mt-1 font-mono">REST API v1</div>
+                    </div>
+
+                    <!-- Arrow/Line -->
+                    <div class="hidden md:block flex-1 h-[1px] bg-gradient-to-r from-zinc-800 via-zinc-500 to-zinc-800">
+                    </div>
+                    <div class="md:hidden w-[1px] h-12 bg-gradient-to-b from-zinc-800 via-zinc-500 to-zinc-800"></div>
+
+                    <!-- Step 2 -->
+                    <div
+                        class="relative z-10 bg-black border border-zinc-800 p-6 rounded-xl hover:border-[var(--accent)] transition-colors w-full md:w-auto text-center md:text-left shadow-[0_0_30px_rgba(204,255,0,0.05)]">
+                        <div class="text-[10px] uppercase tracking-widest text-[var(--accent)] mb-2 font-mono">Engine
+                        </div>
+                        <div class="text-xl font-bold text-white">JSON Transformer</div>
+                        <div class="text-zinc-500 text-xs mt-1 font-mono">Processing AST</div>
+                    </div>
+
+                    <!-- Arrow/Line -->
+                    <div class="hidden md:block flex-1 h-[1px] bg-gradient-to-r from-zinc-800 via-zinc-500 to-zinc-800">
+                    </div>
+                    <div class="md:hidden w-[1px] h-12 bg-gradient-to-b from-zinc-800 via-zinc-500 to-zinc-800"></div>
+
+                    <!-- Step 3 -->
+                    <div
+                        class="relative z-10 bg-black border border-zinc-800 p-6 rounded-xl hover:border-blue-500 transition-colors w-full md:w-auto text-center md:text-left">
+                        <div class="text-[10px] uppercase tracking-widest text-blue-500 mb-2 font-mono">Output</div>
+                        <div class="text-xl font-bold text-white">Production CSS</div>
+                        <div class="text-zinc-500 text-xs mt-1 font-mono">Automated PR</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SOLUTION (Engineering Deep Dive) -->
+        <section class="py-32 bg-zinc-950">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid md:grid-cols-12 gap-12">
+                    <div class="md:col-span-4 reveal-left">
+                        <span class="font-mono text-[var(--accent)] text-xs tracking-widest uppercase mb-4 block">02 /
+                            La Solución</span>
+                        <h2 class="text-3xl font-bold text-white mb-6">Engineering Deep Dive</h2>
+                    </div>
+                    <div class="md:col-span-8">
+                        <p class="reveal text-xl text-zinc-400 leading-relaxed mb-12">
+                            Construcción de <strong>TokenSync</strong>, un orquestador de diseño que implementa una
+                            estrategia de persistencia adaptativa y versionado atómico.
+                        </p>
+
+                        <!-- HYBRID ARCHITECTURE DIAGRAM -->
+                        <div
+                            class="reveal mb-16 p-8 bg-zinc-900/40 rounded-2xl border border-zinc-800 relative group overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5">
+                            </div>
+                            <div class="relative z-10 grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
+                                <!-- Local Dev -->
+                                <div
+                                    class="col-span-5 flex flex-col items-center gap-4 p-6 bg-black/40 rounded-xl border border-zinc-700/50 group-hover:border-blue-500/30 transition-all">
+                                    <div
+                                        class="w-12 h-12 rounded bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/30">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                                        </svg>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-white font-bold text-sm">Local Dev</div>
+                                        <div class="text-zinc-500 text-[10px] font-mono mt-1">local-db.json (Low
+                                            Latency)</div>
+                                    </div>
+                                </div>
+
+                                <!-- The Switch -->
+                                <div class="col-span-1 flex flex-col items-center justify-center gap-2">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-zinc-800 border-2 border-zinc-700 flex items-center justify-center relative">
+                                        <img src="https://img.icons8.com/color/48/000000/nodejs.png"
+                                            class="w-6 h-6 grayscale group-hover:grayscale-0 transition-all">
+                                        <!-- Animated Line Connectors -->
+                                        <div class="absolute left-full w-4 h-[2px] bg-zinc-800"></div>
+                                        <div class="absolute right-full w-4 h-[2px] bg-zinc-800"></div>
+                                    </div>
+                                    <div class="text-[8px] font-mono text-zinc-600 uppercase tracking-tighter">NODE_ENV
+                                    </div>
+                                </div>
+
+                                <!-- Cloud Prod -->
+                                <div
+                                    class="col-span-5 flex flex-col items-center gap-4 p-6 bg-black/40 rounded-xl border border-zinc-700/50 group-hover:border-purple-500/30 transition-all">
+                                    <div
+                                        class="w-12 h-12 rounded bg-purple-500/10 flex items-center justify-center text-purple-400 border border-purple-500/30">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                d="M12 3c-4.97 0-9 1.12-9 2.5S7.03 8 12 8s9-1.12 9-2.5S16.97 3 12 3zm0 10c-4.97 0-9-1.12-9-2.5V13c0 1.38 4.03 2.5 9 2.5s9-1.12 9-2.5v-2.5c0 1.38-4.03 2.5-9 2.5zm0 5c-4.97 0-9-1.12-9-2.5V18c0 1.38 4.03 2.5 9 2.5s9-1.12 9-2.5v-2.5c0 1.38-4.03 2.5-9 2.5z" />
+                                        </svg>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-white font-bold text-sm">Vercel Prod</div>
+                                        <div class="text-zinc-500 text-[10px] font-mono mt-1">Vercel Postgres (ACID)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-12">
+                            <!-- Ingestión -->
+                            <div class="reveal delay-1 flex gap-6 group">
+                                <div
+                                    class="w-12 h-12 flex-shrink-0 bg-black rounded-lg flex items-center justify-center border border-zinc-800 group-hover:border-blue-500/50 transition-colors shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+                                    <span class="font-mono text-blue-400 font-bold group-hover:text-blue-300">01</span>
+                                </div>
+                                <div>
+                                    <h3
+                                        class="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
+                                        Ingestión de Datos</h3>
+                                    <p class="text-zinc-400 text-sm leading-relaxed mb-4">
+                                        El sistema consume las Colecciones Primitivas y Variables Semánticas de Figma
+                                        vía API.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Parsing -->
+                            <div class="reveal delay-2 flex gap-6 group">
+                                <div
+                                    class="w-12 h-12 flex-shrink-0 bg-black rounded-lg flex items-center justify-center border border-zinc-800 group-hover:border-purple-500/50 transition-colors shadow-[0_0_15px_rgba(168,85,247,0.1)]">
+                                    <span
+                                        class="font-mono text-purple-400 font-bold group-hover:text-purple-300">02</span>
+                                </div>
+                                <div>
+                                    <h3
+                                        class="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">
+                                        Análisis de CSS (Parsing)</h3>
+                                    <p class="text-zinc-400 text-sm leading-relaxed mb-4">
+                                        El desarrollador sube su archivo de estilos. El sistema procesa el código
+                                        utilizando un Árbol de Sintaxis Abstracta (AST).
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Comparison -->
+                            <div class="reveal delay-3 flex gap-6 group">
+                                <div
+                                    class="w-12 h-12 flex-shrink-0 bg-black rounded-lg flex items-center justify-center border border-zinc-800 group-hover:border-green-500/50 transition-colors shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                                    <span
+                                        class="font-mono text-green-400 font-bold group-hover:text-green-300">03</span>
+                                </div>
+                                <div>
+                                    <h3
+                                        class="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">
+                                        Motor de Comparación</h3>
+                                    <p class="text-zinc-400 text-sm leading-relaxed">
+                                        Un algoritmo cruza los valores del CSS actual contra la definición "viva" en
+                                        Figma.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Regeneration -->
+                            <div class="reveal delay-4 flex gap-6 group">
+                                <div
+                                    class="w-12 h-12 flex-shrink-0 bg-black rounded-lg flex items-center justify-center border border-zinc-800 group-hover:border-[var(--accent)]/50 transition-colors shadow-[0_0_15px_rgba(204,255,0,0.1)]">
+                                    <span class="font-mono text-[var(--accent)] font-bold">04</span>
+                                </div>
+                                <div>
+                                    <h3
+                                        class="text-xl font-bold text-white mb-2 group-hover:text-[var(--accent)] transition-colors">
+                                        Regeneración</h3>
+                                    <p class="text-zinc-400 text-sm leading-relaxed">
+                                        Si se detectan anomalías, el sistema compila automáticamente un nuevo archivo
+                                        CSS con los tokens corregidos.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Code Block -->
+                        <div class="mt-16 reveal delay-5">
+                            <div
+                                class="bg-black border border-zinc-800 rounded-xl p-6 font-mono text-xs text-zinc-400 overflow-x-auto shadow-2xl">
+                                <pre><span class="text-purple-400">class</span> <span class="type">StorageFactory</span> {
+  <span class="text-purple-400">static</span> <span class="function">getAdapter</span>() {
+    <span class="text-purple-400">if</span> (process.env.NODE_ENV === <span class="string">'production'</span>) {
+      <span class="comment">// Postgres Adapter para persistencia robusta en Vercel</span>
+      <span class="text-purple-400">return new</span> <span class="type">PostgresAdapter</span>(process.env.POSTGRES_URL);
+    }
+    <span class="comment">// FileSystem Adapter para desarrollo local rápido</span>
+    <span class="text-purple-400">return new</span> <span class="type">JSONFileAdapter</span>(<span class="string">'./data/local-db.json'</span>);
+  }
+}
+
+<span class="comment">// Implementación de Rollback Atómico</span>
+<span class="text-purple-400">async function</span> <span class="function">restoreVersion</span>(versionId: <span class="text-blue-400">string</span>) {
+  <span class="text-purple-400">const</span> db = <span class="type">StorageFactory</span>.<span class="function">getAdapter</span>();
+  <span class="text-purple-400">const</span> snapshot = <span class="text-purple-400">await</span> db.<span class="function">getSnapshot</span>(versionId);
+  <span class="text-purple-400">await</span> <span class="type">FileSystem</span>.<span class="function">writeCSS</span>(snapshot.tokens); <span class="comment">// Reversión física del archivo</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE BRAIN (Lógica y Control) -->
+        <section class="py-32 bg-black border-y border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid md:grid-cols-12 gap-12">
+                    <div class="md:col-span-4 reveal-left">
+                        <span class="font-mono text-[var(--accent)] text-xs tracking-widest uppercase mb-4 block">03 /
+                            The Brain</span>
+                        <h2 class="text-3xl font-bold text-white mb-6">MCP & Agentic Logic</h2>
+                    </div>
+                    <div class="md:col-span-8">
+                        <div class="space-y-8">
+                            <div>
+                                <h3 class="text-[var(--accent)] font-mono text-sm uppercase tracking-wider mb-2">
+                                    AI-Ready Interface</h3>
+                                <p class="reveal text-xl text-zinc-400 leading-relaxed">
+                                    TokenSync expone sus endpoints bajo el estándar <strong>MCP (Model Context
+                                        Protocol)</strong>. Esto permite que agentes externos (como Claude) consulten el
+                                    estado de los tokens, analicen Diffs o ejecuten sincronizaciones sin interfaz
+                                    gráfica.
+                                </p>
+                            </div>
+                            <div>
+                                <h3 class="text-[var(--accent)] font-mono text-sm uppercase tracking-wider mb-2">Smart
+                                    Versioning</h3>
+                                <p class="reveal text-xl text-zinc-400 leading-relaxed">
+                                    Cada sincronización genera un Snapshot inmutable. El sistema permite Rollbacks
+                                    instantáneos a cualquier punto de la historia, actuando como una "máquina del
+                                    tiempo" para el sistema de diseño.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UX CRAFT (Experiencia de Desarrollo - DX) -->
+        <section class="py-32 bg-zinc-950">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid md:grid-cols-12 gap-12">
+                    <div class="md:col-span-4 reveal-left">
+                        <span class="font-mono text-[var(--accent)] text-xs tracking-widest uppercase mb-4 block">04 /
+                            UX Craft</span>
+                        <h2 class="text-3xl font-bold text-white mb-6">Experiencia de Desarrollo (DX)</h2>
+                    </div>
+                    <div class="md:col-span-8">
+                        <p class="reveal text-xl text-zinc-400 leading-relaxed mb-12">
+                            La interfaz (React + Vite) está diseñada para la <strong>Seguridad Psicológica</strong> del
+                            ingeniero.
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div
+                                class="group relative bg-[#0F1115] p-8 rounded-xl border border-zinc-800 hover:border-zinc-700 transition-colors overflow-hidden">
+                                <h3 class="relative text-lg font-bold text-white mb-3 flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-[var(--accent)] rounded-sm"></span> Pre-flight Checks
+                                </h3>
+                                <p class="relative text-zinc-400 text-sm leading-relaxed">
+                                    Un visualizador de Diffs muestra exactamente qué líneas de CSS/Tailwind van a
+                                    cambiar antes de tocar el disco.
+                                </p>
+                            </div>
+                            <div
+                                class="group relative bg-[#0F1115] p-8 rounded-xl border border-zinc-800 hover:border-zinc-700 transition-colors overflow-hidden">
+                                <h3 class="relative text-lg font-bold text-white mb-3 flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-blue-500 rounded-sm"></span> DropZone UI
+                                </h3>
+                                <p class="relative text-zinc-400 text-sm leading-relaxed">
+                                    Carga de archivos CSS y JSON mediante arrastrar y soltar, con validación de esquema
+                                    en el cliente.
+                                </p>
+                            </div>
+                            <div
+                                class="group relative bg-[#0F1115] p-8 rounded-xl border border-zinc-800 hover:border-zinc-700 transition-colors overflow-hidden col-span-2">
+                                <h3 class="relative text-lg font-bold text-white mb-3 flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-purple-500 rounded-sm"></span> Audit Logs
+                                </h3>
+                                <p class="relative text-zinc-400 text-sm leading-relaxed mb-6">
+                                    Visualización cronológica de cambios, permitiendo identificar quién y cuándo se
+                                    modificó un token específico.
+                                </p>
+                                <!-- Simulated Rollback List -->
+                                <div
+                                    class="relative bg-black/40 rounded-lg border border-zinc-800 p-4 font-mono text-[10px] space-y-3">
+                                    <div class="flex items-center justify-between border-b border-zinc-800/50 pb-2">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-green-500 font-bold">v2.1.0</span>
+                                            <span class="text-zinc-600">Primary colors sync</span>
+                                        </div>
+                                        <button
+                                            class="text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded bg-blue-500/5 hover:bg-blue-500/10 transition-colors">Restore</button>
+                                    </div>
+                                    <div class="flex items-center justify-between opacity-60">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-zinc-500 font-bold">v2.0.8</span>
+                                            <span class="text-zinc-600">Corner radius update</span>
+                                        </div>
+                                        <button
+                                            class="text-zinc-500 border border-zinc-700 px-2 py-0.5 rounded cursor-default">Restore</button>
+                                    </div>
+                                    <div class="flex items-center justify-between opacity-40">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-zinc-500 font-bold">v2.0.7</span>
+                                            <span class="text-zinc-600">Shadow elevation fix</span>
+                                        </div>
+                                        <button
+                                            class="text-zinc-500 border border-zinc-700 px-2 py-0.5 rounded cursor-default">Restore</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DESIGN SYSTEM (Métricas Operativas) -->
+        <section class="py-32 bg-black border-t border-zinc-900 relative">
+            <div
+                class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-900/50 via-black to-black">
+            </div>
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="grid md:grid-cols-12 gap-12">
+                    <div class="md:col-span-4 reveal-left">
+                        <span class="font-mono text-[var(--accent)] text-xs tracking-widest uppercase mb-4 block">05 /
+                            Metrics</span>
+                        <h2 class="text-3xl font-bold text-white mb-6">Métricas Operativas</h2>
+                    </div>
+                    <div class="md:col-span-8">
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div
+                                class="p-8 bg-zinc-900/30 backdrop-blur rounded-xl border border-zinc-800 hover:border-[var(--accent)]/50 transition-colors group text-center">
+                                <div
+                                    class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-500 mb-4 group-hover:to-[var(--accent)] transition-all">
+                                    100%</div>
+                                <div class="text-xs font-mono text-[var(--accent)] uppercase tracking-wider mb-2">
+                                    Resiliencia</div>
+                                <p class="text-zinc-500 text-xs text-center">100% de uptime en Vercel gracias a la
+                                    migración a Postgres, eliminando errores de escritura en disco.</p>
+                            </div>
+                            <div
+                                class="p-8 bg-zinc-900/30 backdrop-blur rounded-xl border border-zinc-800 hover:border-blue-500/50 transition-colors group text-center">
+                                <div
+                                    class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-500 mb-4 group-hover:to-blue-500 transition-all">
+                                    100%</div>
+                                <div class="text-xs font-mono text-blue-500 uppercase tracking-wider mb-2">Integridad
+                                </div>
+                                <p class="text-zinc-500 text-xs text-center">Cero pérdida de datos gracias al versionado
+                                    secuencial.</p>
+                            </div>
+                            <div
+                                class="p-8 bg-zinc-900/30 backdrop-blur rounded-xl border border-zinc-800 hover:border-purple-500/50 transition-colors group text-center">
+                                <div
+                                    class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-500 mb-4 group-hover:to-purple-500 transition-all">
+                                    ∞</div>
+                                <div class="text-xs font-mono text-purple-500 uppercase tracking-wider mb-2">
+                                    Flexibilidad</div>
+                                <p class="text-zinc-500 text-xs text-center">Salida agnóstica compatible con Tailwind
+                                    CSS y CSS estándar.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ============================================
+             7. CTA — ABOUT & CONTACT SPLIT (Same as home)
+             ============================================ -->
+        <section id="contact-split" class="py-32 bg-zinc-950 border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+
+                <!-- Left Column: About (El Artesano Rebelde) -->
+                <div class="reveal">
+                    <div
+                        class="w-24 h-24 bg-zinc-800 rounded-full mb-8 overflow-hidden grayscale hover:grayscale-0 transition-all border-2 border-zinc-800 hover:border-acid">
+                        <img src="jordi/jordi_exposito.png" alt="Jordi Expósito" class="w-full h-full object-cover">
+                    </div>
+                    <h2 class="text-4xl font-extrabold text-white-off mb-6">Deja de validar con diapositivas.</h2>
+                    <p class="text-xl text-zinc-400 leading-relaxed mb-8 max-w-lg">
+                        Tienes la visión. Te falta la ejecución técnica. Saltémonos la burocracia de las agencias y
+                        hablemos
+                        directamente de cómo llevar tu idea a producción.
+                    </p>
+                    <div class="p-6 bg-zinc-900 border border-zinc-800 inline-block rounded-sm mb-8">
+                        <h3 class="font-mono text-acid text-sm mb-2 uppercase">DISPONIBILIDAD</h3>
+                        <p class="text-white-off font-bold text-2xl">Q2 2026: 2 Plazas abiertas</p>
+                    </div>
+                    <p class="text-zinc-500 text-sm font-mono flex items-center gap-2">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-acid"></i> Base en Barcelona |
+                        <i data-lucide="globe" class="w-4 h-4 text-acid"></i> Remote Native
+                    </p>
+                </div>
+
+                <!-- Right Column: Lead Capture Form (Quick Signal) -->
+                <div>
+                    <div
+                        class="bg-zinc-900 border border-zinc-800 p-8 md:p-12 rounded h-full flex flex-col shadow-2xl hover:border-acid/30 transition-colors duration-500">
+                        <h2 class="text-acid font-mono text-sm font-bold uppercase tracking-widest mb-12">OPCIÓN B:
+                            QUICK SIGNAL (Formulario)</h2>
+
+                        <form action="#" class="space-y-8 flex-1" id="contact-form" novalidate>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <!-- Name -->
+                                <div class="group">
+                                    <label for="name" class="label-tech">[Nombre / Organización]:</label>
+                                    <input type="text" id="name" name="name" required placeholder="IDENTITY_INPUT"
+                                        class="input-tech">
+                                </div>
+
+                                <!-- Email -->
+                                <div class="group">
+                                    <label for="email" class="label-tech">[Email Corporativo]:</label>
+                                    <input type="email" id="email" name="email" required placeholder="COMM_PROTOCOL"
+                                        class="input-tech">
+                                </div>
+                            </div>
+
+                            <!-- Project Type (Custom Dropdown) -->
+                            <div class="custom-select-container">
+                                <label class="select-label">[Tipo de Proyecto]:</label>
+                                <select id="type" name="type" required class="custom-select">
+                                    <option value="" disabled selected>SELECCIONAR_MODALIDAD</option>
+                                    <option value="ux_ui_design">Diseño de Producto (UX/UI)</option>
+                                    <option value="mvp_prototype">MVP / Prototipo Funcional</option>
+                                    <option value="design_engineering">Design Engineering</option>
+                                    <option value="consultancy">Consultoría de Producto</option>
+                                </select>
+                            </div>
+
+                            <!-- Message (Payload) -->
+                            <div class="group">
+                                <label for="message" class="label-tech">[El Problema a Resolver (Payload)]:</label>
+                                <textarea id="message" name="message" rows="5" required
+                                    placeholder="Describe aquí el reto. Sé breve. Sé técnico."
+                                    class="input-tech resize-none"></textarea>
+                            </div>
+
+                            <!-- Privacy Policy -->
+                            <label class="custom-checkbox">
+                                <input type="checkbox" name="privacy" required>
+                                <span class="checkmark"></span>
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Acepto las
+                                    <a href="aviso-legal.html" target="_blank"
+                                        class="text-acid hover:underline">condiciones legales</a> y la
+                                    <a href="privacidad.html" target="_blank" class="text-acid hover:underline">Política
+                                        de Privacidad</a></span>
+                            </label>
+
+                            <!-- Submit Button -->
+                            <button type="submit"
+                                class="btn-hyperion w-full py-4 flex items-center justify-center gap-2 group mt-6">
+                                <span class="font-bold tracking-wider">ENVIAR_SEÑAL</span>
+                                <i data-lucide="arrow-right"
+                                    class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================
+             NEXT PROJECT
+             ============================================ -->
+        <section class="py-24 bg-black border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 text-center reveal">
+                <span class="text-zinc-500 font-mono text-xs uppercase tracking-widest block mb-4">Siguiente
+                    Proyecto</span>
+                <a href="gym.html"
+                    class="inline-block text-4xl md:text-6xl font-extrabold text-white hover:text-acid transition-colors group">
+                    Prime App
+                    <span class="inline-block transition-transform group-hover:translate-x-4">→</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-zinc-800 bg-zinc-950 pt-12 pb-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-zinc-500 text-xs font-mono uppercase tracking-widest">
+                © 2026 Jordi Expósito. All rights reserved.
+            </div>
+            <div class="flex gap-6">
+                <a href="https://www.linkedin.com/in/jordi-expósito-lozano/" target="_blank" rel="noopener noreferrer"
+                    class="text-zinc-500 hover:text-acid transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                        <rect width="4" height="12" x="2" y="9" />
+                        <circle cx="4" cy="4" r="2" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="cursor"></div>
+    <div class="cursor2"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Header Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('glass', 'py-4', 'border-zinc-800');
+                    navbar.classList.remove('py-6', 'border-transparent');
+                } else {
+                    navbar.classList.remove('glass', 'py-4', 'border-zinc-800');
+                    navbar.classList.add('py-6', 'border-transparent');
+                }
+            });
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                if (!mobileMenu) return;
+                const isClosed = mobileMenu.classList.contains('translate-x-full');
+                if (isClosed) {
+                    mobileMenu.classList.remove('translate-x-full');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    mobileMenu.classList.add('translate-x-full');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMenu);
+            if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+            // --- Reveal on Scroll ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('active');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+            // --- Custom Select Logic ---
+            const customSelects = document.getElementsByClassName("custom-select-container");
+            for (let i = 0; i < customSelects.length; i++) {
+                const selElmnt = customSelects[i].getElementsByTagName("select")[0];
+                const a = document.createElement("DIV");
+                a.setAttribute("class", "select-selected");
+                a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                customSelects[i].appendChild(a);
+
+                const b = document.createElement("DIV");
+                b.setAttribute("class", "select-items select-hide");
+                for (let j = 1; j < selElmnt.length; j++) {
+                    const c = document.createElement("DIV");
+                    c.innerHTML = selElmnt.options[j].innerHTML;
+                    c.addEventListener("click", function (e) {
+                        const y = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                        const h = this.parentNode.previousSibling;
+                        for (let k = 0; k < y.length; k++) {
+                            if (y.options[k].innerHTML == this.innerHTML) {
+                                y.selectedIndex = k;
+                                h.innerHTML = this.innerHTML;
+                                const sameSelected = this.parentNode.getElementsByClassName("same-as-selected");
+                                for (let l = 0; l < sameSelected.length; l++) {
+                                    sameSelected[l].removeAttribute("class");
+                                }
+                                this.setAttribute("class", "same-as-selected");
+                                break;
+                            }
+                        }
+                        h.click();
+                    });
+                    b.appendChild(c);
+                }
+                customSelects[i].appendChild(b);
+                a.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    closeAllSelect(this);
+                    this.nextSibling.classList.toggle("select-hide");
+                    this.classList.toggle("select-arrow-active");
+                });
+            }
+
+            function closeAllSelect(elmnt) {
+                const x = document.getElementsByClassName("select-items");
+                const y = document.getElementsByClassName("select-selected");
+                const arrNo = [];
+                for (let i = 0; i < y.length; i++) {
+                    if (elmnt == y[i]) {
+                        arrNo.push(i)
+                    } else {
+                        y[i].classList.remove("select-arrow-active");
+                    }
+                }
+                for (let i = 0; i < x.length; i++) {
+                    if (arrNo.indexOf(i)) {
+                        x[i].classList.add("select-hide");
+                    }
+                }
+            }
+            document.addEventListener("click", closeAllSelect);
+        });
+    </script>
+    <script src="https://unpkg.com/lucide@0.468.0"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="contact-form.js" defer></script>
+    <script src="cursor.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+/* iPhone 14/15 Pro Max CSS Frame */
+.iphone-frame {
+    position: relative;
+    width: 300px;
+    height: 600px;
+    background: #000;
+    border-radius: 50px;
+    box-shadow: 
+        0 0 0 2px #333,
+        0 0 0 6px #1a1a1a,
+        0 0 0 8px #000,
+        20px 20px 80px rgba(0,0,0,0.8);
+    overflow: hidden;
+    margin: 0 auto;
+    transform-style: preserve-3d;
+}
+
+/* Screen Content Area */
+.iphone-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 46px;
+    overflow: hidden;
+    background: #0F1115; /* Match app bg */
+    z-index: 10;
+}
+
+/* Dynamic Island / Notch Area */
+.iphone-notch {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 28px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 20;
+}
+
+/* Glare efffect */
+.iphone-frame::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.05) 100%);
+    border-radius: 50px;
+    z-index: 30;
+    pointer-events: none;
+}
+
+/* Side Buttons (Pseudo-elements on wrapper) */
+.iphone-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.iphone-wrapper::before,
+.iphone-wrapper::after {
+    content: '';
+    position: absolute;
+    background: #1a1a1a;
+    border-radius: 2px 0 0 2px;
+}
+
+/* Mute Switch */
+.iphone-wrapper::before {
+    top: 100px;
+    left: -10px;
+    width: 4px;
+    height: 30px;
+}
+
+/* Volume Buttons */
+.iphone-wrapper::after {
+    top: 150px;
+    left: -10px;
+    width: 4px;
+    height: 60px;
+    box-shadow: 0 70px 0 0 #1a1a1a; /* Second volume button */
+}
+
+/* Power Button */
+.iphone-power {
+    position: absolute;
+    top: 180px;
+    right: -10px;
+    width: 4px;
+    height: 90px;
+    background: #1a1a1a;
+    border-radius: 0 2px 2px 0;
+}

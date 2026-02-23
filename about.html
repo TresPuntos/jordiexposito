@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Jordi Expósito — Design Engineer & Founder | Barcelona</title>
+    <meta name="description"
+        content="Conoce a Jordi Expósito: Design Engineer en Barcelona y fundador de Tres Puntos, agencia UX/UI. 8 años diseñando interfaces y 13 años liderando equipos.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://jordiexposito.com/about.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="https://jordiexposito.com/about.html">
+    <meta property="og:title" content="Sobre Jordi Expósito — Design Engineer & Founder | Barcelona">
+    <meta property="og:description"
+        content="Design Engineer en Barcelona y fundador de Tres Puntos. 8 años como UX/UI Designer liderando equipos creativos.">
+    <meta property="og:image" content="https://jordiexposito.com/og-image.png">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Jordi Expósito">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sobre Jordi Expósito — Design Engineer & Founder">
+    <meta name="twitter:description"
+        content="Design Engineer en Barcelona y fundador de Tres Puntos. 8 años como UX/UI Designer liderando equipos creativos.">
+    <meta name="twitter:image" content="https://jordiexposito.com/og-image.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://jordiexposito.com/about.html",
+          "url": "https://jordiexposito.com/about.html",
+          "name": "Sobre Jordi Expósito — Design Engineer & Founder",
+          "isPartOf": {"@id": "https://jordiexposito.com/#website"},
+          "about": {"@id": "https://jordiexposito.com/#person"},
+          "inLanguage": "es"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordiexposito.com/"},
+            {"@type": "ListItem", "position": 2, "name": "About", "item": "https://jordiexposito.com/about.html"}
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS (CDN) -->
+    <link rel="stylesheet" href="dist.css">
+    <style>
+        body {
+            background-color: #09090B;
+            color: #EDEDED;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background-color: #CCFF00;
+            color: #000000;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #09090B;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #27272A;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3F3F46;
+        }
+
+        .glass {
+            background: rgba(9, 9, 11, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Codrops Hover Style 02 */
+        .link--io {
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            color: inherit;
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        .link--io::before,
+        .link--io::after {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: currentColor;
+            top: 100%;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .link--io::before {
+            content: '';
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+        }
+
+        .link--io:hover::before {
+            transform-origin: 0% 50%;
+            transform: scale3d(1, 1, 1);
+            transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+        }
+
+        .link--io::after {
+            content: '';
+            top: calc(100% + 4px);
+            transform-origin: 0% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+        }
+
+        .link--io:hover::after {
+            transform-origin: 100% 50%;
+            transform: scale3d(1, 1, 1);
+            transition-timing-function: cubic-bezier(0.4, 1, 0.8, 1);
+        }
+
+        /* --- Standardized Contact Form Styles --- */
+        .label-tech {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #52525B;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-tech {
+            background-color: transparent;
+            border-bottom: 1px solid #27272A;
+            font-family: 'JetBrains Mono', monospace;
+            color: #EDEDED;
+            padding: 0.75rem 0;
+            width: 100%;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+
+        .input-tech:focus {
+            outline: none;
+            border-bottom-color: #CCFF00;
+            box-shadow: 0 1px 0 0 #CCFF00;
+        }
+
+        .input-tech::placeholder {
+            color: #3F3F46;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+
+        /* Custom Checkbox */
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .custom-checkbox input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #27272A;
+            background: #09090B;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .custom-checkbox:hover .checkmark {
+            border-color: #CCFF00;
+        }
+
+        .custom-checkbox input:checked+.checkmark {
+            background: #CCFF00;
+            border-color: #CCFF00;
+        }
+
+        .custom-checkbox input:checked+.checkmark::after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid #000;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Custom Select */
+        .custom-select-container {
+            position: relative;
+            font-family: 'JetBrains Mono', monospace;
+            border-bottom: 1px solid #27272A;
+        }
+
+        .select-label {
+            display: block;
+            font-size: 10px;
+            color: #52525B;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .custom-select {
+            display: none;
+        }
+
+        .select-selected {
+            color: #EDEDED;
+            padding: 12px 0;
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .select-selected:after {
+            content: "↓";
+            font-size: 12px;
+            color: #CCFF00;
+            transition: transform 0.3s;
+        }
+
+        .select-arrow-active:after {
+            transform: rotate(180deg);
+        }
+
+        .select-items {
+            position: absolute;
+            background-color: #18181B;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            border: 1px solid #27272A;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .select-items div {
+            color: #A1A1AA;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+
+        .select-items div:hover {
+            background-color: #27272A;
+            color: #CCFF00;
+        }
+
+        .same-as-selected {
+            background-color: rgba(204, 255, 0, 0.1);
+            color: #CCFF00 !important;
+        }
+
+        .select-hide {
+            display: none;
+        }
+    </style>
+    <link rel="stylesheet" href="device.css">
+    <link rel="stylesheet" href="cursor.css">
+</head>
+
+<body class="antialiased">
+
+    <!-- NAVBAR -->
+    <header id="navbar"
+        class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 border-b border-transparent">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="block hover:opacity-80 transition-opacity">
+                <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
+            </a>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="work.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Work /
+                    Lab</a>
+                <a href="workflow.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Workflow</a>
+                <a href="about.html" class="text-acid text-sm font-medium transition-colors">About</a>
+                <a href="contacto.html"
+                    class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4">¿Hablamos?</a>
+            </nav>
+            <button id="mobile-menu-btn" class="md:hidden text-white-off focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu (Moved to Body Root for Stacking Context) -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-zinc-950 z-[60] transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center gap-8">
+        <a href="index.html" class="block hover:opacity-80 transition-opacity">
+            <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
+        </a>
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <a href="work.html" class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Work
+            /
+            Lab</a>
+        <a href="workflow.html"
+            class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Workflow</a>
+        <a href="about.html" class="text-2xl font-bold text-acid transition-colors mobile-link">About</a>
+        <a href="contacto.html"
+            class="link--io text-2xl font-bold text-white-off uppercase tracking-widest mt-4 mobile-link">
+            ¿Hablamos?
+        </a>
+    </div>
+
+    <main>
+        <!-- PROFILE SECTION -->
+        <section class="min-h-screen flex items-center pt-32 pb-20 relative overflow-hidden">
+            <!-- Background Grid -->
+            <div class="absolute inset-0 bg-grid-pattern bg-[length:40px_40px] opacity-10 pointer-events-none"></div>
+            <div
+                class="absolute inset-0 bg-gradient-to-b from-transparent via-zinc-950/50 to-zinc-950 pointer-events-none">
+            </div>
+
+            <div class="max-w-7xl mx-auto px-6 w-full relative z-10">
+
+                <!-- Breadcrumb / Eyebrow -->
+                <div class="mb-12 reveal">
+                    <span class="font-mono text-acid text-sm tracking-widest uppercase block mb-2">// 01. EL
+                        DISEÑADOR</span>
+                    <h1
+                        class="text-5xl md:text-7xl font-extrabold text-white-off tracking-tight leading-none uppercase">
+                        DESIGN <br>ENGINEER.
+                    </h1>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-16 items-start">
+
+                    <!-- Left Column: Content -->
+                    <div class="space-y-8 reveal delay-100">
+
+                        <div>
+                            <h2 class="text-3xl md:text-4xl font-bold text-white-off mb-2">Jordi Expósito.</h2>
+                            <p class="text-xl md:text-2xl text-acid font-medium">Design Engineer & Founder de <a
+                                    href="https://www.trespuntoscomunicacion.es" target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="underline decoration-acid/50 hover:decoration-acid transition-colors">Tres
+                                    Puntos</a>.</p>
+                        </div>
+
+                        <div class="border-l-2 border-acid/30 pl-6 py-2">
+                            <p class="text-lg md:text-xl text-white-off font-medium leading-relaxed">
+                                14 años de experiencia. 8 como UX/UI Designer. Obsesión por la excelencia.
+                            </p>
+                        </div>
+
+                        <p class="text-zinc-400 leading-relaxed text-lg">
+                            Opero en el punto exacto donde el diseño visual choca con la lógica de negocio. Con 8 años
+                            de experiencia pura como <strong class="text-white-off">UX/UI Designer</strong> y 13 años
+                            liderando <a href="https://www.trespuntoscomunicacion.es" target="_blank"
+                                rel="noopener noreferrer" class="text-acid hover:underline">Tres Puntos</a>, mi agencia
+                            de diseño y comunicación con clientes de alto nivel, entiendo el producto desde el píxel
+                            hasta el servidor.
+                        </p>
+
+                        <p class="text-zinc-400 leading-relaxed text-lg">
+                            No soy un desarrollador que simplemente maqueta pantallas; soy un diseñador que construye
+                            sistemas escalables. Mi código respeta el diseño porque nací en el diseño.
+                        </p>
+
+                        <!-- Status Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+                            <!-- Foco -->
+                            <div
+                                class="bg-zinc-900 border border-zinc-800 p-4 rounded hover:border-acid/50 transition-colors">
+                                <div class="text-acid mb-2">
+                                    <i data-lucide="crosshair" class="w-6 h-6"></i>
+                                </div>
+                                <h4 class="font-bold text-white-off text-sm uppercase mb-1">Foco</h4>
+                                <p class="text-zinc-500 text-xs leading-relaxed">Artesanía UX/UI + Estrategia de
+                                    Negocio.</p>
+                            </div>
+
+                            <!-- Stack -->
+                            <div
+                                class="bg-zinc-900 border border-zinc-800 p-4 rounded hover:border-acid/50 transition-colors">
+                                <div class="text-acid mb-2">
+                                    <i data-lucide="layers" class="w-6 h-6"></i>
+                                </div>
+                                <h4 class="font-bold text-white-off text-sm uppercase mb-1">Stack</h4>
+                                <p class="text-zinc-500 text-xs leading-relaxed">Ingeniería Full-Spectrum.</p>
+                            </div>
+
+                            <!-- Misión -->
+                            <div
+                                class="bg-zinc-900 border border-zinc-800 p-4 rounded hover:border-acid/50 transition-colors">
+                                <div class="text-acid mb-2">
+                                    <i data-lucide="zap" class="w-6 h-6"></i>
+                                </div>
+                                <h4 class="font-bold text-white-off text-sm uppercase mb-1">Misión</h4>
+                                <p class="text-zinc-500 text-xs leading-relaxed">Eliminar la brecha entre Figma y
+                                    Producción.</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column: Image -->
+                    <div class="relative reveal delay-200">
+                        <div class="group relative rounded-xl overflow-hidden border border-zinc-800">
+                            <!-- Image -->
+                            <img src="jordi_exposito.webp" alt="Jordi Expósito - Design Engineer"
+                                class="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                                width="600" height="600">
+
+                            <!-- Overlay Overlay Details -->
+                            <div
+                                class="absolute bottom-0 left-0 right-0 bg-zinc-950/80 backdrop-blur border-t border-zinc-800 p-4 flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-acid animate-pulse"></span>
+                                    <span
+                                        class="text-acid font-mono text-[10px] uppercase font-bold tracking-widest">STATUS:
+                                        OPERATING</span>
+                                </div>
+                                <div class="text-zinc-600 font-mono text-[10px]">V. 2.4.0</div>
+                            </div>
+
+                            <!-- Decorative corners -->
+                            <div class="absolute top-4 left-4 w-4 h-4 border-l border-t border-acid/50 opacity-50">
+                            </div>
+                            <div class="absolute top-4 right-4 w-4 h-4 border-r border-t border-acid/50 opacity-50">
+                            </div>
+                        </div>
+
+                        <!-- Floating Metadata Box -->
+                        <div
+                            class="absolute -bottom-6 -right-6 hidden md:block border border-zinc-700 bg-black p-2 font-mono text-[10px] text-zinc-400 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                            IMG_PROFILE_SCAN_001.JPG // 14Y_XP_DESIGNER
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- 02. OPERATIVA GLOBAL SECTION -->
+        <section class="py-32 bg-black border-t border-zinc-900 relative">
+            <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-16 items-center">
+
+                <!-- Left Column: Content -->
+                <div class="lg:col-span-7 reveal">
+                    <!-- Terminal Header Style -->
+                    <div class="flex items-center gap-2 mb-8 font-mono text-xl md:text-2xl font-bold tracking-tight">
+                        <span class="text-acid">›</span>
+                        <span class="text-white-off">SSH REMOTE</span><span class="text-zinc-500">@</span><span
+                            class="text-white-off">OPERATIVA_GLOBAL</span>
+                    </div>
+
+                    <!-- Highlight Box -->
+
+
+                    <div class="space-y-6 text-zinc-400 text-lg leading-relaxed">
+                        <p>
+                            La ingeniería moderna exige adaptabilidad. He gestionado mis empresas de forma asíncrona
+                            mucho antes de que el trabajo remoto fuera un estándar global.
+                        </p>
+                        <p>
+                            He desplegado proyectos desde bases en <strong class="text-acid">Tailandia (x4), Indonesia,
+                                Filipinas</strong> y coordinado equipos desde <strong class="text-acid">Colombia,
+                                Guatemala o Costa Rica</strong>.
+                        </p>
+                        <p>
+                            Viajar con el portátil no es turismo; es una prueba de estrés constante a la productividad.
+                            Estos entornos me han enseñado a optimizar recursos, valorar la simplicidad y entender la
+                            experiencia de usuario desde contextos culturales muy diversos. Mi oficina está donde abro
+                            el ordenador, pero la calidad de la entrega es innegociable.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Column: Location Log Visual -->
+                <div class="lg:col-span-5 reveal delay-100">
+                    <div class="bg-[#09090B] border border-zinc-800 p-8 rounded-lg shadow-2xl font-mono text-sm">
+                        <h3 class="text-acid font-bold uppercase tracking-widest mb-8 border-b border-zinc-800 pb-2">
+                            LOCATION_LOG</h3>
+
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center group">
+                                <span
+                                    class="text-zinc-500 group-hover:text-zinc-300 transition-colors">BANGKOK_HUB:</span>
+                                <span class="text-white-off font-bold">DEPLOYED_4X</span>
+                            </div>
+                            <div class="flex justify-between items-center group">
+                                <span class="text-zinc-500 group-hover:text-zinc-300 transition-colors">BALI_HUB:</span>
+                                <span class="text-white-off font-bold">ONLINE</span>
+                            </div>
+                            <div class="flex justify-between items-center group">
+                                <span
+                                    class="text-zinc-500 group-hover:text-zinc-300 transition-colors">MANILA_HUB:</span>
+                                <span class="text-white-off font-bold">COMPLETED</span>
+                            </div>
+                            <div class="flex justify-between items-center group">
+                                <span
+                                    class="text-zinc-500 group-hover:text-zinc-300 transition-colors">LATAM_GRID:</span>
+                                <span class="text-white-off font-bold">ACTIVE_SYNC</span>
+                            </div>
+                        </div>
+
+                        <!-- Status Footer -->
+                        <div
+                            class="mt-8 pt-4 border-t border-zinc-800 flex justify-between items-end text-xs text-zinc-600">
+                            <div class="flex flex-col gap-1">
+                                <span>STATE: OPEN</span>
+                                <span>PING: 24ms</span>
+                            </div>
+                            <div class="flex gap-1">
+                                <div class="w-1 h-1 bg-acid rounded-full animate-ping"></div>
+                                <div class="w-1 h-1 bg-acid rounded-full"></div>
+                                <div class="w-1 h-1 bg-acid rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 03. INFINITE MARQUEE SECTION -->
+        <section class="bg-acid py-12 overflow-hidden border-t border-zinc-900">
+            <div class="marquee-container flex whitespace-nowrap overflow-hidden">
+                <div class="marquee-content flex gap-8 animate-marquee">
+                    <span class="text-6xl md:text-8xl font-black text-black uppercase tracking-tighter">EL DISEÑO NO
+                        TIENE LÍMITES. YO TAMPOCO.</span>
+                    <span
+                        class="text-6xl md:text-8xl font-black text-black/20 uppercase tracking-tighter mx-8">//</span>
+                    <span class="text-6xl md:text-8xl font-black text-black uppercase tracking-tighter">EL DISEÑO NO
+                        TIENE LÍMITES. YO TAMPOCO.</span>
+                    <span
+                        class="text-6xl md:text-8xl font-black text-black/20 uppercase tracking-tighter mx-8">//</span>
+                </div>
+                <!-- Duplicate for seamless loop -->
+                <div class="marquee-content flex gap-8 animate-marquee" aria-hidden="true">
+                    <span class="text-6xl md:text-8xl font-black text-black uppercase tracking-tighter">EL DISEÑO NO
+                        TIENE LÍMITES. YO TAMPOCO.</span>
+                    <span
+                        class="text-6xl md:text-8xl font-black text-black/20 uppercase tracking-tighter mx-8">//</span>
+                    <span class="text-6xl md:text-8xl font-black text-black uppercase tracking-tighter">EL DISEÑO NO
+                        TIENE LÍMITES. YO TAMPOCO.</span>
+                    <span
+                        class="text-6xl md:text-8xl font-black text-black/20 uppercase tracking-tighter mx-8">//</span>
+                </div>
+            </div>
+        </section>
+
+        <style>
+            .animate-marquee {
+                animation: marquee 20s linear infinite;
+            }
+
+            @keyframes marquee {
+                0% {
+                    transform: translateX(0);
+                }
+
+                100% {
+                    transform: translateX(-100%);
+                }
+            }
+        </style>
+
+        <!-- 03. SYSTEM COOLDOWN SECTION -->
+        <section class="py-32 bg-zinc-950 border-t border-zinc-900 relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <!-- Header -->
+                <div class="mb-16 reveal">
+                    <div class="flex items-center gap-2 mb-4 font-mono text-xl md:text-2xl font-bold tracking-tight">
+                        <span class="text-acid">›</span>
+                        <span class="text-white-off">RUN SYSTEM_COOLDOWN.SH</span>
+                    </div>
+                    <h2
+                        class="text-3xl md:text-4xl font-bold text-white-off underline decoration-white-off/30 underline-offset-8">
+                        Salud Mental y Reset Biológico.</h2>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-16 items-start">
+
+                    <!-- Content -->
+                    <div class="space-y-8 reveal">
+                        <p class="text-zinc-400 text-lg leading-relaxed">
+                            El diseño complejo requiere una mente despejada. Para evitar el agotamiento y mantener la
+                            claridad cognitiva, confío mi gestión del estrés a mi sistema de soporte analógico: mis
+                            <strong class="text-acid">Golden Retrievers</strong>.
+                        </p>
+
+                        <div class="space-y-6 border-l-2 border-zinc-800 pl-6">
+                            <div>
+                                <h4 class="text-acid font-mono font-bold mb-2"># EL_LEGADO // NUK (🕊️)</h4>
+                                <p class="text-zinc-500">Mi primer compañero, quien sentó las bases de la lealtad y la
+                                    pausa necesaria. El benchmark de mi equilibrio actual.</p>
+                            </div>
+                            <div>
+                                <h4 class="text-acid font-mono font-bold mb-2"># EL_OPERADOR_ACTUAL // COOPER</h4>
+                                <p class="text-zinc-500">Cooper dicta los descansos y los ritmos de trabajo. Él decide
+                                    cuándo se cierra el entorno de desarrollo y cuándo empieza la aventura. Salimos
+                                    cuando el sistema se sobrecarga.</p>
+                            </div>
+                        </div>
+
+                        <p class="font-mono text-zinc-600 italic border border-zinc-900 p-4 bg-black/50">
+                            "Es mi conexión a tierra para volver al teclado con la mente fresca. Sin vida 'offline', no
+                            hay calidad 'online'."
+                        </p>
+                    </div>
+
+                    <!-- Visuals -->
+                    <div class="flex flex-col gap-12 items-center reveal delay-100">
+                        <!-- Nuk -->
+                        <div
+                            class="relative group w-80 border border-zinc-800 bg-zinc-900 p-1 transform -rotate-2 hover:rotate-0 transition-transform duration-500 hover:z-10">
+                            <img src="nuk.webp" alt="Nuk - Legacy"
+                                class="w-full h-auto aspect-square object-cover grayscale-0 opacity-100 transition-all duration-500"
+                                width="320" height="320" loading="lazy">
+                            <div
+                                class="absolute top-4 right-4 bg-acid font-mono text-black text-[10px] font-bold px-2 py-1 uppercase">
+                                LEGACY
+                            </div>
+                        </div>
+                        <!-- Cooper -->
+                        <div
+                            class="relative group w-80 border border-zinc-800 bg-zinc-900 p-1 border-b-4 border-b-acid transform rotate-2 hover:rotate-0 transition-transform duration-700 hover:z-10">
+                            <img src="cooper.webp" alt="Cooper - Operator"
+                                class="w-full h-auto aspect-square object-cover grayscale-0 opacity-100 transition-all duration-700"
+                                width="320" height="320" loading="lazy">
+                            <div
+                                class="absolute top-4 right-4 bg-acid/20 text-acid font-mono text-[10px] font-bold px-2 py-1 uppercase border border-acid/50">
+                                ACTIVE_SESSION
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Stats Footer -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-20 reveal delay-200">
+                    <div class="bg-zinc-900/50 border border-zinc-800 p-6 text-center">
+                        <div class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest mb-2">STRESS_LEVEL
+                        </div>
+                        <div class="text-2xl font-bold text-acid">0.02%</div>
+                    </div>
+                    <div class="bg-zinc-900/50 border border-zinc-800 p-6 text-center">
+                        <div class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest mb-2">COGNITIVE_LOAD
+                        </div>
+                        <div class="text-2xl font-bold text-acid">OPTIMAL</div>
+                    </div>
+                    <div class="bg-zinc-900/50 border border-zinc-800 p-6 text-center">
+                        <div class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest mb-2">DOG_WALK_REQ
+                        </div>
+                        <div class="text-2xl font-bold text-acid">READY</div>
+                    </div>
+                    <div class="bg-zinc-900/50 border border-zinc-800 p-6 text-center">
+                        <div class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest mb-2">OFFLINE_TIME
+                        </div>
+                        <div class="text-2xl font-bold text-acid">MANDATORY</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+
+        <!-- 4. ABOUT & CONTACT SPLIT (Standardized) -->
+        <section id="contact-split" class="py-32 bg-zinc-950 border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+
+                <!-- Left Column: About (El Artesano Rebelde) -->
+                <div class="reveal">
+                    <div
+                        class="w-24 h-24 bg-zinc-800 rounded-full mb-8 overflow-hidden grayscale hover:grayscale-0 transition-all border-2 border-zinc-800 hover:border-acid">
+                        <img src="jordi/jordi_exposito.png" alt="Jordi Expósito" class="w-full h-full object-cover">
+                    </div>
+                    <h2 class="text-4xl font-extrabold text-white-off mb-6">Deja de validar con diapositivas.</h2>
+                    <p class="text-xl text-zinc-400 leading-relaxed mb-8 max-w-lg">
+                        Tienes la visión. Te falta la ejecución técnica. Saltémonos la burocracia de las agencias y
+                        hablemos
+                        directamente de cómo llevar tu idea a producción.
+                    </p>
+                    <div class="p-6 bg-zinc-900 border border-zinc-800 inline-block rounded-sm mb-8">
+                        <h3 class="font-mono text-acid text-sm mb-2 uppercase">DISPONIBILIDAD</h3>
+                        <p class="text-white-off font-bold text-2xl">Q2 2026: 2 Plazas abiertas</p>
+                    </div>
+                    <p class="text-zinc-500 text-sm font-mono flex items-center gap-2">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-acid"></i> Base en Barcelona |
+                        <i data-lucide="globe" class="w-4 h-4 text-acid"></i> Remote Native
+                    </p>
+                </div>
+
+                <!-- Right Column: Lead Capture Form (Quick Signal) -->
+                <div>
+                    <div class="bg-zinc-900/50 border border-zinc-800 p-8 md:p-12 rounded h-full flex flex-col">
+                        <h2 class="text-acid font-mono text-sm font-bold uppercase tracking-widest mb-12">OPCIÓN B:
+                            QUICK SIGNAL (Formulario)</h2>
+
+                        <form action="#" class="space-y-8 flex-1" id="contact-form" novalidate>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <!-- Name -->
+                                <div class="group">
+                                    <label for="name" class="label-tech">[Nombre / Organización]:</label>
+                                    <input type="text" id="name" name="name" required placeholder="IDENTITY_INPUT"
+                                        class="input-tech">
+                                </div>
+
+                                <!-- Email -->
+                                <div class="group">
+                                    <label for="email" class="label-tech">[Email Corporativo]:</label>
+                                    <input type="email" id="email" name="email" required placeholder="COMM_PROTOCOL"
+                                        class="input-tech">
+                                </div>
+                            </div>
+
+                            <!-- Project Type (Custom Dropdown) -->
+                            <div class="custom-select-container">
+                                <label class="select-label">[Tipo de Proyecto]:</label>
+                                <select id="type" name="type" required class="custom-select">
+                                    <option value="" disabled selected>SELECCIONAR_MODALIDAD</option>
+                                    <option value="ux_ui_design">Diseño de Producto (UX/UI)</option>
+                                    <option value="mvp_prototype">MVP / Prototipo Funcional</option>
+                                    <option value="design_engineering">Design Engineering</option>
+                                    <option value="consultancy">Consultoría de Producto</option>
+                                </select>
+                            </div>
+
+                            <!-- Message (Payload) -->
+                            <div class="group">
+                                <label for="message" class="label-tech">[El Problema a Resolver (Payload)]:</label>
+                                <textarea id="message" name="message" rows="5" required
+                                    placeholder="Describe aquí el reto. Sé breve. Sé técnico."
+                                    class="input-tech resize-none"></textarea>
+                            </div>
+
+                            <!-- Privacy Policy -->
+                            <label class="custom-checkbox">
+                                <input type="checkbox" name="privacy" required>
+                                <span class="checkmark"></span>
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Acepto las
+                                    <a href="aviso-legal.html" target="_blank"
+                                        class="text-acid hover:underline">condiciones legales</a> y la
+                                    <a href="privacidad.html" target="_blank" class="text-acid hover:underline">Política
+                                        de Privacidad</a></span>
+                            </label>
+
+                            <!-- Submit Button -->
+                            <button type="submit"
+                                class="btn-hyperion w-full py-4 flex items-center justify-center gap-2 group mt-6">
+                                <span class="font-bold tracking-wider">ENVIAR_SEÑAL</span>
+                                <i data-lucide="arrow-right"
+                                    class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="border-t border-zinc-800 bg-zinc-950 pt-12 pb-12">
+            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-zinc-500 text-xs font-mono uppercase tracking-widest">
+                    © 2026 Jordi Expósito. All rights reserved.
+                </div>
+                <div class="flex gap-6">
+                    <a href="https://www.linkedin.com/in/jordi-expósito-lozano/" target="_blank"
+                        rel="noopener noreferrer" class="text-zinc-500 hover:text-acid transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-linkedin">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                            <rect width="4" height="12" x="2" y="9" />
+                            <circle cx="4" cy="4" r="2" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </footer>
+
+
+        <!-- Mobile Menu (Moved to Body Root for Stacking Context) -->
+
+
+        <!-- Custom Cursor Elements -->
+        <div class="cursor"></div>
+        <div class="cursor2"></div>
+
+        <!-- Scripts -->
+        <script src="https://unpkg.com/lucide@0.468.0"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                lucide.createIcons();
+
+                // --- Header Scroll Effect ---
+                const navbar = document.getElementById('navbar');
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) {
+                        navbar.classList.add('glass', 'py-4', 'border-zinc-800');
+                        navbar.classList.remove('py-6', 'border-transparent');
+                    } else {
+                        navbar.classList.remove('glass', 'py-4', 'border-zinc-800');
+                        navbar.classList.add('py-6', 'border-transparent');
+                    }
+                });
+
+                // --- Mobile Menu Toggle ---
+                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                const closeMenuBtn = document.getElementById('close-menu-btn');
+                const mobileMenu = document.getElementById('mobile-menu');
+                const mobileLinks = document.querySelectorAll('.mobile-link');
+
+                function toggleMenu() {
+                    if (!mobileMenu) return;
+                    const isClosed = mobileMenu.classList.contains('translate-x-full');
+                    if (isClosed) {
+                        mobileMenu.classList.remove('translate-x-full');
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        mobileMenu.classList.add('translate-x-full');
+                        document.body.style.overflow = '';
+                    }
+                }
+
+                if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMenu);
+                if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
+                mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+                // --- Reveal on Scroll ---
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+                // --- Custom Select Logic ---
+                const customSelects = document.getElementsByClassName("custom-select-container");
+                for (let i = 0; i < customSelects.length; i++) {
+                    const selElmnt = customSelects[i].getElementsByTagName("select")[0];
+                    const a = document.createElement("DIV");
+                    a.setAttribute("class", "select-selected");
+                    a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                    customSelects[i].appendChild(a);
+
+                    const b = document.createElement("DIV");
+                    b.setAttribute("class", "select-items select-hide");
+                    for (let j = 1; j < selElmnt.length; j++) {
+                        const c = document.createElement("DIV");
+                        c.innerHTML = selElmnt.options[j].innerHTML;
+                        c.addEventListener("click", function (e) {
+                            const y = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                            const h = this.parentNode.previousSibling;
+                            for (let k = 0; k < y.length; k++) {
+                                if (y.options[k].innerHTML == this.innerHTML) {
+                                    y.selectedIndex = k;
+                                    h.innerHTML = this.innerHTML;
+                                    const sameSelected = this.parentNode.getElementsByClassName("same-as-selected");
+                                    for (let l = 0; l < sameSelected.length; l++) { sameSelected[l].removeAttribute("class"); }
+                                    this.setAttribute("class", "same-as-selected");
+                                    break;
+                                }
+                            }
+                            h.click();
+                        });
+                        b.appendChild(c);
+                    }
+                    customSelects[i].appendChild(b);
+                    a.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        closeAllSelect(this);
+                        this.nextSibling.classList.toggle("select-hide");
+                        this.classList.toggle("select-arrow-active");
+                    });
+                }
+
+                function closeAllSelect(elmnt) {
+                    const x = document.getElementsByClassName("select-items");
+                    const y = document.getElementsByClassName("select-selected");
+                    const arrNo = [];
+                    for (let i = 0; i < y.length; i++) {
+                        if (elmnt == y[i]) { arrNo.push(i) } else { y[i].classList.remove("select-arrow-active"); }
+                    }
+                    for (let i = 0; i < x.length; i++) {
+                        if (arrNo.indexOf(i)) { x[i].classList.add("select-hide"); }
+                    }
+                }
+                document.addEventListener("click", closeAllSelect);
+            });
+        </script>
+        <script src="contact-form.js" defer></script>
+        <script src="cursor.js" defer></script>
+</body>
+
+</html>
