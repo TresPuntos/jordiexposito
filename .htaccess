@@ -1,20 +1,24 @@
 RewriteEngine On
 RewriteBase /
 
-# Redirigir dominio SIN www a CON www (SEO 301)
+# 1. Forzar HTTPS y WWW (evita loops)
+RewriteCond %{HTTPS} off [OR]
 RewriteCond %{HTTP_HOST} ^jordiexposito\.com$ [NC]
 RewriteRule ^(.*)$ https://www.jordiexposito.com/$1 [L,R=301]
 
-# Eliminar extensiones .html de las URLs mostradas
-RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.html\ HTTP
-RewriteRule ^([^.]+)\.html$ https://www.jordiexposito.com/$1 [L,R=301]
+# 2. Redirigir /index.html (y /index) puramente a la barra diagonal (/)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index(?:\.html)?\ HTTP [NC]
+RewriteRule ^index(?:\.html)?$ / [L,R=301]
 
-# Cargar el archivo .html aunque no se escriba en la URL
+# 3. Eliminar extensiones .html del resto de URLs (ej: /gym.html -> /gym)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^/]+)\.html\ HTTP [NC]
+RewriteRule ^([^/]+)\.html$ /$1 [L,R=301]
+
+# 4. Servir los .html de forma invisible (si existen y no son directorios)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^(.*?)/?$ $1.html [L]
+RewriteRule ^(.*)$ $1.html [L]
 
-# Forzar HTTPS (opcional, recomendado)
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# Configurar el index por defecto
+DirectoryIndex index.html
