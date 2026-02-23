@@ -61,7 +61,7 @@
                             }, { once: true });
                         }
                     }
-                } else if (!field.value.trim()) {
+                } else if (!field.value.trim() || !field.checkValidity()) {
                     isValid = false;
 
                     // Handle custom select container if it's the hidden select
@@ -71,9 +71,14 @@
                     } else {
                         shakeElement(field);
                         field.style.borderColor = '#EF4444';
-                        field.addEventListener('input', () => {
-                            if (field.value.trim()) field.style.borderColor = '';
-                        }, { once: true });
+
+                        const clearError = () => {
+                            if (field.value.trim() && field.checkValidity()) {
+                                field.style.borderColor = '';
+                                field.removeEventListener('input', clearError);
+                            }
+                        };
+                        field.addEventListener('input', clearError);
                     }
                 }
             }
