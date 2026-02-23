@@ -1,0 +1,20 @@
+RewriteEngine On
+RewriteBase /
+
+# Redirigir dominio SIN www a CON www (SEO 301)
+RewriteCond %{HTTP_HOST} ^jordiexposito\.com$ [NC]
+RewriteRule ^(.*)$ https://www.jordiexposito.com/$1 [L,R=301]
+
+# Eliminar extensiones .html de las URLs mostradas
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.html\ HTTP
+RewriteRule ^([^.]+)\.html$ https://www.jordiexposito.com/$1 [L,R=301]
+
+# Cargar el archivo .html aunque no se escriba en la URL
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*?)/?$ $1.html [L]
+
+# Forzar HTTPS (opcional, recomendado)
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
