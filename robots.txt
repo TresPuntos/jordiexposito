@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jordiexposito.com/sitemap.xml
+Sitemap: https://www.jordiexposito.com/sitemap.xml
