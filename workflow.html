@@ -590,6 +590,25 @@
 
         gtag('config', 'G-XZSD834B88');
     </script>
+
+  <style>
+    /* Fix nav shift when bold */
+    nav.hidden.md\:flex a {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav.hidden.md\:flex a::after {
+      content: attr(data-text);
+      font-weight: 700;
+      height: 0;
+      visibility: hidden;
+      overflow: hidden;
+      user-select: none;
+      pointer-events: none;
+    }
+  </style>
 </head>
 
 <body class="antialiased font-sans">
@@ -598,17 +617,16 @@
     <header id="navbar"
         class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 border-b border-transparent bg-zinc-950/80 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <a href="/" class="block hover:opacity-80 transition-opacity">
+            <a href="index.html" class="block hover:opacity-80 transition-opacity">
                 <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
             </a>
             <nav class="hidden md:flex items-center gap-8">
-                <a href="/work" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Work /
-                    Lab</a>
-                <a href="/workflow" class="text-acid text-sm font-bold transition-colors">Workflow</a>
-                <a href="/about"
-                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">About</a>
-                <a href="/contacto"
-                    class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4">¿Hablamos?</a>
+                <a href="work.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors" data-text="Work / Lab">Work / Lab</a>
+                <a href="workflow.html" class="text-acid text-sm font-bold transition-colors">Workflow</a>
+                <a href="about.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors" data-text="About">About</a>
+                <a href="contacto.html"
+                    class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4" data-text="¿Hablamos?">¿Hablamos?</a>
             </nav>
             <button id="mobile-menu-btn" class="md:hidden text-white-off focus:outline-none z-50">
                 <svg class="menu-icon w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1024,7 +1042,7 @@
                                 <span class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Acepto las
                                     <a href="/aviso-legal" target="_blank"
                                         class="text-acid hover:underline">condiciones legales</a> y la
-                                    <a href="/privacidad" target="_blank" class="text-acid hover:underline">Política
+                                    <a href="privacidad.html" target="_blank" class="text-acid hover:underline">Política
                                         de Privacidad</a></span>
                             </label>
 
@@ -1069,7 +1087,7 @@
     <!-- Mobile Menu (Moved to Body Root for Stacking Context) -->
     <div id="mobile-menu"
         class="fixed inset-0 bg-zinc-950 z-[60] transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center gap-8">
-        <a href="/" class="block hover:opacity-80 transition-opacity">
+        <a href="index.html" class="block hover:opacity-80 transition-opacity">
             <img src="jordi/logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
         </a>
         <button id="close-menu-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white">
@@ -1078,14 +1096,15 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
-        <a href="/work" class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Work
+        <a href="work.html" class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link" data-text="Work
+            / Lab">Work
             / Lab</a>
-        <a href="/workflow"
-            class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Workflow</a>
-        <a href="/about"
-            class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">About</a>
-        <a href="/contacto"
-            class="link--io text-2xl font-bold text-white-off uppercase tracking-widest mt-4 mobile-link">¿Hablamos?</a>
+        <a href="workflow.html"
+            class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link" data-text="Workflow">Workflow</a>
+        <a href="about.html"
+            class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link" data-text="About">About</a>
+        <a href="contacto.html"
+            class="link--io text-2xl font-bold text-white-off uppercase tracking-widest mt-4 mobile-link" data-text="¿Hablamos?">¿Hablamos?</a>
     </div>
 
     <!-- Custom Cursor Elements -->

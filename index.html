@@ -196,6 +196,42 @@
       }
     }
 
+    /* Responsive Fixes */
+    @media (max-width: 768px) {
+      .orbit-container {
+        display: none;
+      }
+
+      .hero-title {
+        font-size: 2.25rem !important;
+        line-height: 1.1 !important;
+      }
+
+      .hero-subtitle {
+        font-size: 0.95rem !important;
+      }
+
+      .ide-container {
+        transform: none !important;
+        margin-top: 2rem !important;
+        max-width: 100% !important;
+      }
+
+      .work-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .section-padding {
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+      }
+
+      .container {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+      }
+    }
+
     /* Custom Input Styles (Quick Signal) */
     .input-tech {
       background-color: transparent;
@@ -302,6 +338,7 @@
       height: 100%;
       pointer-events: none;
       z-index: 20;
+      overflow: hidden;
     }
 
     .orbit-item {
@@ -351,6 +388,8 @@
       border-right: 2px solid transparent;
       width: 0;
       animation: typing 4s steps(30, end) infinite alternate;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     /* Staggered typing animation */
@@ -646,6 +685,25 @@
 
     gtag('config', 'G-XZSD834B88');
   </script>
+
+  <style>
+    /* Fix nav shift when bold */
+    nav.hidden.md\:flex a {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav.hidden.md\:flex a::after {
+      content: attr(data-text);
+      font-weight: 700;
+      height: 0;
+      visibility: hidden;
+      overflow: hidden;
+      user-select: none;
+      pointer-events: none;
+    }
+  </style>
 </head>
 
 <body class="antialiased">
@@ -654,15 +712,15 @@
   <header id="navbar"
     class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 border-b border-transparent">
     <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
-      <a href="/" class="block hover:opacity-80 transition-opacity">
+      <a href="index.html" class="block hover:opacity-80 transition-opacity">
         <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
       </a>
       <nav class="hidden md:flex items-center gap-8">
-        <a href="/work" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Work / Lab</a>
-        <a href="/workflow" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Workflow</a>
-        <a href="/about" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">About</a>
-        <a href="/contacto"
-          class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4">¿Hablamos?</a>
+        <a href="work.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors" data-text="Work / Lab">Work / Lab</a>
+        <a href="workflow.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors" data-text="Workflow">Workflow</a>
+        <a href="about.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors" data-text="About">About</a>
+        <a href="contacto.html"
+          class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4" data-text="¿Hablamos?">¿Hablamos?</a>
       </nav>
       <button id="mobile-menu-btn" class="md:hidden text-white-off focus:outline-none">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -692,13 +750,13 @@
             </span>
           </div>
 
-          <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] text-white-off">
+          <h1 class="hero-title text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] text-white-off">
             <span class="text-2xl md:text-3xl block mb-2 opacity-80 font-medium">Jordi Expósito —</span>
             <span class="text-acid">Design Engineer</span> <br />
             en <span class="text-zinc-500">Barcelona</span>.
           </h1>
 
-          <h2 class="text-xl md:text-2xl text-zinc-400 font-light max-w-xl leading-relaxed">
+          <h2 class="hero-subtitle text-xl md:text-2xl text-zinc-400 font-light max-w-xl leading-relaxed">
             Transformo ideas abstractas en <strong
               class="text-white-off font-medium border-b border-zinc-700 pb-0.5">software vivo</strong>. Llevo tu visión
             a producción mientras otros siguen bocetando.
@@ -707,7 +765,7 @@
 
 
           <div class="flex flex-col sm:flex-row gap-4 pt-8">
-            <a href="/contacto" class="btn-hyperion py-4 px-10 text-sm">
+            <a href="contacto.html" class="btn-hyperion py-4 px-10 text-sm">
               <span><span>¿HABLAMOS?</span></span>
             </a>
           </div>
@@ -715,7 +773,6 @@
 
         <!-- Hero Visual: IDE + Floating Logos -->
         <div class="block relative perspective-1000 group reveal delay-200 h-[400px] lg:h-[500px]">
-
           <!-- Orbits Container -->
           <div class="orbit-container">
             <!-- Icon 1: Figma -->
@@ -864,7 +921,7 @@
 
           <!-- IDE Window -->
           <div
-            class="w-full max-w-lg mx-auto bg-[#0d1117] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden relative z-10 top-10">
+            class="ide-container w-full max-w-lg mx-auto bg-[#0d1117] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden relative z-10 top-10">
             <!-- Window Header -->
             <div class="bg-zinc-900 px-4 py-3 border-b border-zinc-800 flex items-center justify-between">
               <div class="flex gap-2">
@@ -877,7 +934,7 @@
             </div>
 
             <!-- Window Body (Code) -->
-            <div class="p-6 font-mono text-xs md:text-sm leading-relaxed text-zinc-300">
+            <div class="p-6 font-mono text-xs md:text-sm leading-relaxed text-zinc-300 overflow-x-auto">
               <div class="code-line"><span class="text-[#ff7b72]">import</span> { <span
                   class="text-[#d2a8ff]">Product</span> } <span class="text-[#ff7b72]">from</span> <span
                   class="text-[#a5d6ff]">'./builder'</span>;</div>
@@ -1172,7 +1229,7 @@
                 class="text-zinc-500 decoration-acid underline decoration-2 underline-offset-8">Visionarios</span>.
             </h2>
           </div>
-          <a href="/work"
+          <a href="work.html"
             class="hidden md:flex items-center gap-2 text-zinc-400 hover:text-acid transition-colors group mt-4 md:mt-0 font-mono text-sm uppercase tracking-wide">
             Ver archivo completo
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -1186,7 +1243,7 @@
         <div class="space-y-6">
 
           <!-- Item 1: Gym Tracker Pro (Featured — Horizontal Layout) -->
-          <a href="/gym"
+          <a href="gym.html"
             class="group block bg-zinc-900 border border-zinc-800 hover:border-acid transition-colors overflow-hidden reveal">
             <div class="grid md:grid-cols-2 gap-0 min-h-[420px]">
               <!-- Left: Content -->
@@ -1235,7 +1292,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             <!-- Item 2: Financial Pipeline (Automation Showcase) -->
-            <a href="/invoices"
+            <a href="invoices.html"
               class="group relative bg-zinc-900 border border-zinc-800 hover:border-amber-500/50 transition-colors overflow-hidden reveal delay-100 min-h-[440px] flex flex-col">
               <!-- Visual Section -->
               <div
@@ -1289,7 +1346,7 @@
             </a>
 
             <!-- Item 3: TokenSync (Figma Automation) -->
-            <a href="/sync-engine"
+            <a href="sync-engine.html"
               class="group relative bg-zinc-900 border border-zinc-800 hover:border-acid/50 transition-colors overflow-hidden reveal delay-200 min-h-[440px] flex flex-col">
               <!-- Visual Section -->
               <div
@@ -1362,7 +1419,7 @@
             </a>
 
             <!-- Item 4: LinkedIn Autonomous OS -->
-            <a href="/linkedin"
+            <a href="linkedin.html"
               class="group relative bg-zinc-900 border border-zinc-800 hover:border-[#0A66C2]/50 transition-colors overflow-hidden reveal delay-300 min-h-[440px] flex flex-col md:col-span-2">
               <!-- Visual Section -->
               <div
@@ -1421,7 +1478,115 @@
               </div>
             </a>
 
-          </div>
+            <!-- Item 5: RetailGen — Multimodal Semantic Engine -->
+            <a href="retailgen.html"
+              class="group relative bg-zinc-900 border border-zinc-800 hover:border-emerald-500/50 transition-colors overflow-hidden reveal delay-400 min-h-[440px] flex flex-col md:col-span-1">
+              <div class="h-56 bg-zinc-950 flex items-center justify-center p-4 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent"></div>
+                <div
+                  class="relative z-10 w-full max-w-sm bg-[#0a0a0b] rounded-lg border border-zinc-800 p-3 shadow-2xl group-hover:-translate-y-2 transition-transform duration-500">
+                  <div class="flex items-center gap-1.5 mb-2 pb-2 border-b border-zinc-800">
+                    <div class="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-yellow-500"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                    <span class="text-[7px] text-zinc-600 font-mono ml-auto">RetailGen — Output</span>
+                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                  </div>
+                  <div class="font-mono text-[11px] leading-relaxed space-y-0.5">
+                    <div><span style="color:#71717a">// RetailGen v1.0</span></div>
+                    <div><span style="color:#a1a1aa">{</span></div>
+                    <div><span style="color:#fbbf24">&nbsp;&nbsp;"title"</span><span style="color:#71717a">:
+                      </span><span style="color:#10b981">"Premiata Mick"</span></div>
+                    <div><span style="color:#fbbf24">&nbsp;&nbsp;"description"</span><span style="color:#71717a">:
+                      </span><span style="color:#10b981">"Running heritage..."</span></div>
+                    <div><span style="color:#fbbf24">&nbsp;&nbsp;"e_e_a_t"</span><span style="color:#71717a">:
+                      </span><span style="color:#a78bfa">0.94</span></div>
+                    <div><span style="color:#a1a1aa">}</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-8 flex flex-col justify-end flex-1 relative z-20">
+                <div class="flex gap-3 mb-3">
+                  <span
+                    class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2 py-1 uppercase tracking-wider">eCommerce
+                    // AI</span>
+                  <span
+                    class="text-zinc-400 text-[10px] font-mono border border-zinc-700 px-2 py-1 uppercase bg-zinc-950/50">LLM
+                    + Vision</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white-off mb-2">RetailGen: Motor Semántico</h3>
+                <p class="text-zinc-400 text-sm max-w-md leading-relaxed mb-4">Motor semántico multimodal para
+                  generación programática de contenido en catálogos ecommerce.</p>
+                <div
+                  class="flex items-center gap-2 text-zinc-500 text-sm font-mono uppercase tracking-wide group-hover:text-emerald-400 transition-colors">
+                  Ver Estudio
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" class="w-4 h-4 group-hover:translate-x-1 transition-transform">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </div>
+              </div>
+            </a>
+
+            <!-- Item 6: Workflow — El Protocolo -->
+            <a href="workflow.html"
+              class="group relative bg-zinc-900 border border-zinc-800 hover:border-acid/50 transition-colors overflow-hidden reveal delay-500 min-h-[400px] flex flex-col md:col-span-1">
+              <div
+                class="h-48 bg-zinc-950 flex items-center justify-center p-6 relative overflow-hidden bg-grid-pattern bg-[length:20px_20px]">
+                <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent"></div>
+                <div
+                  class="relative z-10 w-full max-w-[220px] group-hover:-translate-y-2 transition-transform duration-500">
+                  <div class="space-y-3">
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-6 h-6 rounded bg-acid/20 border border-acid/30 flex items-center justify-center text-[8px] font-mono text-acid font-bold">
+                        01</div>
+                      <div class="h-[1px] flex-1 bg-zinc-700"></div>
+                      <div
+                        class="w-6 h-6 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[8px] font-mono text-zinc-500">
+                        02</div>
+                      <div class="h-[1px] flex-1 bg-zinc-700"></div>
+                      <div
+                        class="w-6 h-6 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[8px] font-mono text-zinc-500">
+                        03</div>
+                      <div class="h-[1px] flex-1 bg-zinc-700"></div>
+                      <div
+                        class="w-6 h-6 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[8px] font-mono text-zinc-500">
+                        04</div>
+                    </div>
+                    <div class="text-center">
+                      <span class="font-mono text-acid text-[10px] tracking-widest uppercase">El Protocolo v2.4</span>
+                    </div>
+                    <div class="flex gap-1">
+                      <div class="h-1 flex-1 rounded-full bg-acid"></div>
+                      <div class="h-1 flex-1 rounded-full bg-acid/40"></div>
+                      <div class="h-1 flex-1 rounded-full bg-zinc-800"></div>
+                      <div class="h-1 flex-1 rounded-full bg-zinc-800"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-6 flex flex-col justify-end flex-1 relative z-20">
+                <div class="flex gap-2 mb-3">
+                  <span
+                    class="bg-acid/10 text-acid border border-acid/20 text-[10px] font-bold px-2 py-1 uppercase tracking-wider">Metodología</span>
+                  <span
+                    class="text-zinc-400 text-[10px] font-mono border border-zinc-700 px-2 py-1 uppercase bg-zinc-950/50">Figma
+                    + React</span>
+                </div>
+                <h3 class="text-xl font-bold text-white-off mb-2">El Protocolo: Workflow</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed mb-4">Ingeniería de diseño sin cajas negras. Del
+                  diagnóstico a producción con transparencia radical.</p>
+                <div
+                  class="flex items-center gap-2 text-zinc-500 text-sm font-mono uppercase tracking-wide group-hover:text-acid transition-colors">
+                  Ver Metodología
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" class="w-4 h-4 group-hover:translate-x-1 transition-transform">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </div>
+              </div>
+            </a>
 
         </div>
       </div>
@@ -1710,7 +1875,7 @@
                 <span class="checkmark"></span>
                 <span class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Acepto las <a
                     href="/aviso-legal" target="_blank" class="text-acid hover:underline">condiciones legales</a> y
-                  la <a href="/privacidad" target="_blank" class="text-acid hover:underline">Política de
+                  la <a href="privacidad.html" target="_blank" class="text-acid hover:underline">Política de
                     Privacidad</a></span>
               </label>
 
@@ -1756,7 +1921,7 @@
   <!-- Mobile Menu (Moved to Body Root for Stacking Context) -->
   <div id="mobile-menu"
     class="fixed inset-0 bg-zinc-950 z-[60] transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center gap-8">
-    <a href="/" class="block hover:opacity-80 transition-opacity">
+    <a href="index.html" class="block hover:opacity-80 transition-opacity">
       <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
     </a>
     <button id="close-menu-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white"> <svg
@@ -1765,12 +1930,11 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
-    <a href="/work" class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Work /
-      Lab</a>
-    <a href="/workflow"
-      class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">Workflow</a>
-    <a href="/about" class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link">About</a>
-    <a href="/contacto" class="link--io text-2xl font-bold text-white-off uppercase tracking-widest mt-4 mobile-link">
+    <a href="work.html" class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link" data-text="Work / Lab">Work / Lab</a>
+    <a href="workflow.html"
+      class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link" data-text="Workflow">Workflow</a>
+    <a href="about.html" class="text-2xl font-bold text-white-off hover:text-acid transition-colors mobile-link" data-text="About">About</a>
+    <a href="contacto.html" class="link--io text-2xl font-bold text-white-off uppercase tracking-widest mt-4 mobile-link" data-text="¿Hablamos?">
       ¿Hablamos?
     </a>
   </div>
@@ -1806,10 +1970,17 @@
         const isClosed = mobileMenu.classList.contains('translate-x-full');
         if (isClosed) {
           mobileMenu.classList.remove('translate-x-full');
-          document.body.style.overflow = 'hidden';
+          const scrollY = window.scrollY;
+          document.body.style.position = 'fixed';
+          document.body.style.top = `-${scrollY}px`;
+          document.body.style.width = '100%';
         } else {
           mobileMenu.classList.add('translate-x-full');
-          document.body.style.overflow = '';
+          const scrollY = document.body.style.top;
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.width = '';
+          window.scrollTo(0, parseInt(scrollY || '0') * -1);
         }
       }
 

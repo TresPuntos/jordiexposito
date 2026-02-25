@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RetailGen: Motor Semántico Multimodal — Case Study | Jordi Expósito, Design Engineer</title>
+    <meta name="description"
+        content="Case Study: arquitectura de procesamiento sin servidor para generación programática en ecommerce, basada en modelos de lenguaje multimodales. Diseñado por Jordi Expósito." />
+    <link rel="canonical" href="https://www.jordiexposito.com/retailgen.html">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.jordiexposito.com/retailgen.html">
+    <meta property="og:title" content="RetailGen: Motor Semántico Multimodal — Case Study por Jordi Expósito">
+    <meta property="og:description"
+        content="Arquitectura serverless para generación programática en ecommerce con LLMs multimodales.">
+    <meta property="og:image" content="https://www.jordiexposito.com/og-image.png">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Jordi Expósito">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RetailGen: Motor Semántico Multimodal — Case Study">
+    <meta name="twitter:description"
+        content="Arquitectura serverless para generación programática en ecommerce con LLMs multimodales.">
+    <meta name="twitter:image" content="https://www.jordiexposito.com/og-image.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CreativeWork",
+          "@id": "https://www.jordiexposito.com/retailgen.html",
+          "url": "https://www.jordiexposito.com/retailgen.html",
+          "name": "RetailGen: Motor Semántico Multimodal",
+          "description": "Arquitectura de procesamiento sin servidor para generación programática en comercio electrónico, basada en modelos de lenguaje multimodales y estructura de autoridad.",
+          "author": {"@id": "https://www.jordiexposito.com/#person"},
+          "inLanguage": "es",
+          "keywords": ["LLM", "Vision AI", "eCommerce", "SEO", "Node.js", "Automatización", "E-E-A-T"]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.jordiexposito.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Work / Lab", "item": "https://www.jordiexposito.com/work.html"},
+            {"@type": "ListItem", "position": 3, "name": "RetailGen", "item": "https://www.jordiexposito.com/retailgen.html"}
+          ]
+        }
+      ]
+    }
+    </script>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dist.css">
+    <style>
+        
+        :root {
+            --accent: #10B981;
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --accent-light: #34D399;
+            --acid: #CCFF00;
+        }
+
+        body {
+            background-color: #000000;
+            color: #f4f4f5;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal.delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .reveal.delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal.delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .reveal.delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        .reveal.delay-5 {
+            transition-delay: 0.5s;
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .link--io {
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            color: inherit;
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        .link--io::before,
+        .link--io::after {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: currentColor;
+            top: 100%;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .link--io::before {
+            content: '';
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s;
+        }
+
+        .link--io:hover::before {
+            transform-origin: 0% 50%;
+            transform: scale3d(1, 1, 1);
+        }
+
+        .link--io::after {
+            content: '';
+            transform-origin: 0% 50%;
+            transform: scale3d(0, 1, 1);
+            transition: transform 0.3s 0.1s;
+        }
+
+        .link--io:hover::after {
+            transform-origin: 100% 50%;
+            transform: scale3d(1, 1, 1);
+        }
+
+        @keyframes orbit {
+            from {
+                transform: rotate(0deg) translateX(280px) rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg) translateX(280px) rotate(-360deg);
+            }
+        }
+
+        @keyframes orbit-mobile {
+            from {
+                transform: rotate(0deg) translateX(140px) rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg) translateX(140px) rotate(-360deg);
+            }
+        }
+
+        .orbit-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .orbit-item {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 56px;
+            height: 56px;
+            margin: -28px 0 0 -28px;
+            animation: orbit 25s linear infinite;
+            pointer-events: auto;
+        }
+
+        .orbit-item:nth-child(2) {
+            animation-delay: -6.25s;
+        }
+
+        .orbit-item:nth-child(3) {
+            animation-delay: -12.5s;
+        }
+
+        .orbit-item:nth-child(4) {
+            animation-delay: -18.75s;
+        }
+
+        @media (max-width: 768px) {
+            .orbit-item {
+                animation-name: orbit-mobile;
+                width: 40px;
+                height: 40px;
+                margin: -20px 0 0 -20px;
+            }
+        }
+
+        .code-line {
+            opacity: 0;
+            animation: fadeInLine 0.5s ease forwards;
+        }
+
+        @keyframes fadeInLine {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .code-line:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .code-line:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .code-line:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .code-line:nth-child(4) {
+            animation-delay: 0.9s;
+        }
+
+        .code-line:nth-child(5) {
+            animation-delay: 1.2s;
+        }
+
+        .code-line:nth-child(6) {
+            animation-delay: 1.5s;
+        }
+
+        .code-line:nth-child(7) {
+            animation-delay: 1.8s;
+        }
+
+        .code-line:nth-child(8) {
+            animation-delay: 2.1s;
+        }
+
+        .code-line:nth-child(9) {
+            animation-delay: 2.4s;
+        }
+
+        .code-line:nth-child(10) {
+            animation-delay: 2.7s;
+        }
+
+        .cursor-blink {
+            border-right: 2px solid var(--accent);
+            animation: cursor-blink 0.75s step-end infinite;
+        }
+
+        @keyframes cursor-blink {
+            50% {
+                border-color: transparent
+            }
+        }
+
+        @keyframes float-anim {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .float-anim {
+            animation: float-anim 4s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 15px var(--accent-glow), 0 0 30px transparent;
+            }
+
+            50% {
+                box-shadow: 0 0 25px var(--accent-glow), 0 0 50px var(--accent-glow);
+            }
+        }
+
+        .glow-ring {
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        .pipeline-node {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(24, 24, 27, 0.8);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        .pipeline-path {
+            width: 2px;
+            height: 32px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            margin-left: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pipeline-path::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            animation: flow-path 2s ease-in-out infinite;
+        }
+
+        @keyframes flow-path {
+            0% {
+                top: -100%;
+            }
+
+            50% {
+                top: 0;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        .pipeline-path-h {
+            height: 2px;
+            width: 40px;
+            background: linear-gradient(to right, var(--accent), transparent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pipeline-path-h::after {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            background: var(--accent);
+            animation: flow-path-h 2s ease-in-out infinite;
+        }
+
+        @keyframes flow-path-h {
+            0% {
+                left: -100%;
+            }
+
+            50% {
+                left: 0;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .btn-hyperion {
+            pointer-events: auto;
+            cursor: pointer;
+            background: #CCFF00;
+            border: 1px solid #000;
+            padding: 1rem 2rem;
+            font-family: inherit;
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .btn-hyperion span {
+            display: block;
+            position: relative;
+        }
+
+        .btn-hyperion>span {
+            overflow: hidden;
+            mix-blend-mode: normal;
+        }
+
+        .btn-hyperion>span>span {
+            overflow: hidden;
+            mix-blend-mode: normal;
+        }
+
+        .btn-hyperion:hover>span>span {
+            animation: MoveUpInitial 0.2s forwards, MoveUpEnd 0.2s forwards 0.2s;
+        }
+
+        @keyframes MoveUpInitial {
+            to {
+                transform: translate3d(0, -105%, 0);
+            }
+        }
+
+        @keyframes MoveUpEnd {
+            from {
+                transform: translate3d(0, 100%, 0);
+            }
+
+            to {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .btn-hyperion::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+            transform-origin: 100% 50%;
+            transform: scale3d(0, 1, 1);
+        }
+
+        .btn-hyperion:hover::before {
+            transform: scale3d(1, 1, 1);
+            transform-origin: 0% 50%;
+        }
+
+        .btn-hyperion:hover {
+            color: #CCFF00;
+            border-color: #CCFF00;
+        }
+
+        .input-tech {
+            background-color: transparent;
+            border-bottom: 1px solid #52525B;
+            font-family: 'JetBrains Mono', monospace;
+            color: #fff;
+            padding: 0.75rem 0;
+            width: 100%;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+
+        .input-tech:focus {
+            outline: none;
+            border-bottom-color: #CCFF00;
+            box-shadow: 0 1px 0 0 #CCFF00;
+        }
+
+        .input-tech::placeholder {
+            color: #71717A;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+
+        .label-tech {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #A1A1AA;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select {
+            display: none;
+        }
+
+        .select-selected {
+            background-color: transparent;
+            border-bottom: 1px solid #52525B;
+            border-radius: 0;
+            color: #fff;
+            padding: 0.75rem 0;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+        }
+
+        .select-selected:after {
+            position: absolute;
+            content: "";
+            top: 50%;
+            right: 0;
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-color: #71717A transparent transparent transparent;
+            transform: translateY(-25%);
+        }
+
+        .select-selected.select-arrow-active:after {
+            border-color: transparent transparent #ccff00 transparent;
+            transform: translateY(-75%);
+        }
+
+        .select-selected.select-arrow-active,
+        .select-selected:hover {
+            border-bottom-color: #ccff00;
+            box-shadow: 0 1px 0 0 #ccff00;
+        }
+
+        .select-items div,
+        .select-selected {
+            color: #fff;
+            padding: 12px 16px;
+            border: 1px solid transparent;
+            border-color: transparent transparent rgba(255, 255, 255, 0.05) transparent;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .select-items div {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+
+        .select-items {
+            position: absolute;
+            background-color: #09090b;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            border: 1px solid #52525B;
+            border-radius: 0;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            margin-top: 1px;
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .select-hide {
+            display: none;
+        }
+
+        .select-items div:hover,
+        .same-as-selected {
+            background-color: #18181b;
+            color: #ccff00;
+        }
+
+        .select-label {
+            position: relative;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #A1A1AA;
+            display: block;
+            margin-bottom: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+            color: #a1a1aa;
+            font-size: 0.875rem;
+            margin-top: 24px;
+        }
+
+        .custom-checkbox input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #52525B;
+            background: #09090b;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .custom-checkbox:hover .checkmark {
+            border-color: #ccff0080;
+        }
+
+        .custom-checkbox input:checked+.checkmark {
+            background: #ccff00;
+            border-color: #ccff00;
+        }
+
+        .custom-checkbox input:checked+.checkmark:after {
+            content: "";
+            width: 5px;
+            height: 10px;
+            border: solid #000;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            margin-bottom: 2px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .shimmer-line {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #27272A 25%, #3f3f46 50%, #27272A 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes data-pulse {
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .data-pulse {
+            animation: data-pulse 3s ease-in-out infinite;
+        }
+    </style>
+    <link rel="stylesheet" href="cursor.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZSD834B88"></script>
+    <script> window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-XZSD834B88'); </script>
+
+  <style>
+    /* Fix nav shift when bold */
+    nav.hidden.md\:flex a {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav.hidden.md\:flex a::after {
+      content: attr(data-text);
+      font-weight: 700;
+      height: 0;
+      visibility: hidden;
+      overflow: hidden;
+      user-select: none;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+    <!-- NAVIGATION -->
+    <header id="navbar"
+        class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 border-b border-transparent">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="block hover:opacity-80 transition-opacity"><img src="logo_Jordiexposito.svg"
+                    alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24"></a>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="work.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors" data-text="Work / Lab">Work / Lab</a>
+                <a href="workflow.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors" data-text="Workflow">Workflow</a>
+                <a href="about.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors" data-text="About">About</a>
+                <a href="contacto.html"
+                    class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4" data-text="¿Hablamos?">¿Hablamos?</a>
+            </nav>
+            <button id="mobile-menu-btn" class="md:hidden text-white-off focus:outline-none"><svg
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg></button>
+        </div>
+    </header>
+    <main>
+        <!-- 1. HERO -->
+        <section class="min-h-screen pt-32 pb-20 flex items-center relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <div
+                        class="reveal inline-flex items-center gap-2 border border-zinc-800 bg-zinc-900/50 rounded-full px-3 py-1 mb-8 backdrop-blur-sm glow-ring">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse"></span><span
+                            class="text-xs font-mono text-zinc-400 uppercase tracking-wider">v1.0 — Production</span>
+                    </div>
+                    <h1
+                        class="reveal delay-1 text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight leading-[1.1]">
+                        RetailGen<span class="text-[var(--accent)]">:</span> Motor Semántico Multimodal<span
+                            class="text-[var(--accent)]">.</span></h1>
+                    <p class="reveal delay-2 text-xl text-zinc-300 font-medium mb-6 leading-tight">Arquitectura de
+                        procesamiento sin servidor para generación programática en comercio electrónico.</p>
+                    <div class="reveal delay-3 prose prose-invert text-zinc-400 leading-relaxed mb-8 max-w-lg">
+                        <p>Motor de ingesta y procesamiento dual que intercepta datos del producto y devuelve contenido
+                            estructurado optimizado para posicionamiento, listo para despliegue en el CMS.</p>
+                    </div>
+                    <div class="reveal delay-4 grid grid-cols-2 gap-4 max-w-md">
+                        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4"><span
+                                class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest block mb-1">Rol</span><span
+                                class="text-white font-bold text-sm">Arquitecto IA & Automatización</span></div>
+                        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4"><span
+                                class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest block mb-1">Estado</span><span
+                                class="text-[var(--accent)] font-bold text-sm flex items-center gap-1.5"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Producción</span></div>
+                        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 col-span-2"><span
+                                class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest block mb-1">Stack</span><span
+                                class="text-zinc-300 text-xs">LLMs (Visión Artificial / NLP) · Node.js · Browser
+                                Automation · HTTP Requests</span></div>
+                    </div>
+                </div>
+                <!-- Right: Browser with product image (left) + generated code (right) -->
+                <div class="reveal-right block relative">
+                    <div class="bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden shadow-2xl max-h-[400px]">
+                        <!-- Browser header -->
+                        <div class="bg-zinc-900 px-3 py-2 border-b border-zinc-800 flex items-center justify-between">
+                            <div class="flex gap-1.5">
+                                <div class="w-2.5 h-2.5 rounded-full bg-red-500/70"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-green-500/70"></div>
+                            </div>
+                            <span class="text-[9px] font-mono text-zinc-500">RetailGen — Motor Semántico</span>
+                            <div class="flex items-center gap-1">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse"></div>
+                                <span class="text-[7px] font-mono text-[var(--accent)]">LIVE</span>
+                            </div>
+                        </div>
+                        <!-- Content: photo left + code right -->
+                        <div class="flex items-stretch overflow-hidden" style="height: 340px;">
+                            <!-- Small product photo -->
+                            <div
+                                class="w-[20%] flex-shrink-0 border-r border-zinc-800 bg-zinc-900/50 p-2 overflow-hidden">
+                                <div class="flex items-center gap-1.5 mb-2">
+                                    <i data-lucide="image" class="w-3 h-3 text-[var(--accent)]"></i>
+                                    <span class="text-[8px] font-mono text-zinc-500 uppercase">Input</span>
+                                </div>
+                                <div class="bg-zinc-800/60 rounded-lg p-2 flex items-center justify-center">
+                                    <img src="Proyectos/Retailgen/mick-27891.jpg" alt="Premiata Mick Sneaker"
+                                        style="width:80px;height:auto;max-height:80px;" class="object-contain rounded">
+                                </div>
+                                <div class="mt-2 space-y-1">
+                                    <div class="text-[7px] font-mono text-zinc-600">mick-27891.jpg</div>
+                                    <div class="text-[7px] font-mono text-zinc-600">Premiata Mick</div>
+                                    <div class="flex gap-1 mt-1">
+                                        <span
+                                            class="text-[6px] font-mono px-1 py-0.5 rounded bg-zinc-800 text-zinc-500">2400×1600</span>
+                                        <span
+                                            class="text-[6px] font-mono px-1 py-0.5 rounded bg-zinc-800 text-zinc-500">1.2MB</span>
+                                    </div>
+                                </div>
+                                <!-- Procesando indicator -->
+                                <div class="mt-3 flex items-center justify-center gap-1">
+                                    <i data-lucide="sparkles" class="w-3 h-3 text-[var(--accent)]"></i>
+                                    <span
+                                        class="text-[7px] font-mono text-[var(--accent)]/70 uppercase">Procesando</span>
+                                </div>
+                            </div>
+                            <!-- Typewriter output -->
+                            <div class="w-[80%] flex flex-col overflow-hidden">
+                                <div
+                                    class="px-3 py-1.5 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/30 flex-shrink-0">
+                                    <div class="flex items-center gap-1.5">
+                                        <i data-lucide="file-text" class="w-3 h-3 text-[var(--accent)]"></i>
+                                        <span class="text-[8px] font-mono text-zinc-500 uppercase">Output: CMS
+                                            Preview</span>
+                                    </div>
+                                    <div class="flex gap-1.5">
+                                        <span
+                                            class="text-[7px] font-mono px-1.5 py-0.5 rounded border border-[var(--accent)]/30 text-[var(--accent)]">E-E-A-T</span>
+                                        <span
+                                            class="text-[7px] font-mono px-1.5 py-0.5 rounded border border-purple-500/30 text-purple-400">Vision
+                                            AI</span>
+                                    </div>
+                                </div>
+                                <div id="code-typewriter"
+                                    class="p-3 font-mono text-sm leading-6 overflow-y-auto flex-1">
+                                    <div class="tw-line" style="display:none"><span style="color:#71717a">// RetailGen
+                                            v1.0 Output</span></div>
+                                    <div class="tw-line" style="display:none"><span style="color:#a1a1aa">{</span></div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#fbbf24">&nbsp;&nbsp;"title"</span><span
+                                            style="color:#71717a">: </span><span style="color:#10b981">"Premiata Mick
+                                            Sneaker"</span><span style="color:#71717a">,</span></div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#fbbf24">&nbsp;&nbsp;"badge"</span><span
+                                            style="color:#71717a">: </span><span style="color:#10b981">"Heritage
+                                            Italiano"</span><span style="color:#71717a">,</span></div>
+                                    <div class="tw-line" style="display:none">&nbsp;</div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#fbbf24">&nbsp;&nbsp;"description"</span><span
+                                            style="color:#71717a">: </span><span style="color:#10b981">"La
+                                            Premiata</span></div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#10b981">&nbsp;&nbsp;&nbsp;&nbsp;Mick redefine el running
+                                            con</span></div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#10b981">&nbsp;&nbsp;&nbsp;&nbsp;artesania italiana y
+                                            silueta</span></div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#10b981">&nbsp;&nbsp;&nbsp;&nbsp;retro"</span><span
+                                            style="color:#71717a">,</span></div>
+                                    <div class="tw-line" style="display:none">&nbsp;</div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#fbbf24">&nbsp;&nbsp;"materiales"</span><span
+                                            style="color:#71717a">: [</span></div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#10b981">&nbsp;&nbsp;&nbsp;&nbsp;"Ante italiano"</span><span
+                                            style="color:#71717a">,</span></div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#10b981">&nbsp;&nbsp;&nbsp;&nbsp;"Nylon balistico azul"</span>
+                                    </div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#71717a">&nbsp;&nbsp;],</span></div>
+                                    <div class="tw-line" style="display:none">&nbsp;</div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#fbbf24">&nbsp;&nbsp;"e_e_a_t"</span><span
+                                            style="color:#71717a">: </span><span style="color:#a78bfa">0.94</span><span
+                                            style="color:#71717a">,</span></div>
+                                    <div class="tw-line" style="display:none"><span
+                                            style="color:#fbbf24">&nbsp;&nbsp;"vision_score"</span><span
+                                            style="color:#71717a">: </span><span style="color:#a78bfa">0.97</span></div>
+                                    <div class="tw-line" style="display:none"><span style="color:#a1a1aa">}</span></div>
+                                    <span id="typewriter-cursor" class="cursor-blink"
+                                        style="color:#10b981">&#9608;</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Browser footer -->
+                        <div class="bg-zinc-900 px-3 py-1.5 border-t border-zinc-800 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse"></div>
+                                <span class="text-[7px] text-zinc-500 font-mono uppercase">Generando contenido...</span>
+                            </div>
+                            <span class="text-[7px] font-mono text-zinc-600">RetailGen Engine v1.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 2. THE CHALLENGE -->
+        <section class="py-32 bg-black border-t border-zinc-900 relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="max-w-3xl mb-20">
+                    <span class="reveal font-mono text-[var(--accent)] text-xs uppercase tracking-widest block mb-4">//
+                        El Reto Principal</span>
+                    <h2 class="reveal delay-1 text-3xl md:text-5xl font-extrabold text-white mb-8 leading-tight">
+                        Catálogos con densidad semántica<br><span class="text-[var(--accent)]">ínfima</span>.</h2>
+                    <p class="reveal delay-2 text-lg text-zinc-400 leading-relaxed">Las páginas de detalle de producto
+                        presentaban un volumen de información inferior a 8 líneas. Indexado deficiente, alta
+                        penalización en SERPs y nula autoridad de dominio. Generar descripciones optimizadas a escala
+                        para un catálogo multimarca era inasumible manualmente.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div
+                        class="reveal bg-zinc-950 border border-zinc-800 p-8 rounded-xl hover:border-[var(--accent)]/30 transition-colors duration-300">
+                        <div
+                            class="w-12 h-12 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-6">
+                            <i data-lucide="file-warning" class="w-6 h-6 text-red-400"></i>
+                        </div>
+                        <h3 class="text-white font-bold text-lg mb-3">Densidad Semántica Nula</h3>
+                        <p class="text-zinc-500 text-sm leading-relaxed">Páginas de producto con &lt;8 líneas de
+                            contenido. Los rastreadores no encuentran señales relevantes para indexar.</p>
+                        <div class="mt-6 pt-4 border-t border-zinc-800"><span
+                                class="text-red-400 font-mono text-xs">&lt;8 líneas por producto</span></div>
+                    </div>
+                    <div
+                        class="reveal delay-1 bg-zinc-950 border border-zinc-800 p-8 rounded-xl hover:border-[var(--accent)]/30 transition-colors duration-300">
+                        <div
+                            class="w-12 h-12 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-6">
+                            <i data-lucide="search-x" class="w-6 h-6 text-amber-400"></i>
+                        </div>
+                        <h3 class="text-white font-bold text-lg mb-3">Penalización en SERPs</h3>
+                        <p class="text-zinc-500 text-sm leading-relaxed">Contenido duplicado y genérico. Los motores de
+                            búsqueda penalizan la falta de originalidad y profundidad.</p>
+                        <div class="mt-6 pt-4 border-t border-zinc-800"><span class="text-amber-400 font-mono text-xs">0
+                                autoridad de dominio</span></div>
+                    </div>
+                    <div
+                        class="reveal delay-2 bg-zinc-950 border border-zinc-800 p-8 rounded-xl hover:border-[var(--accent)]/30 transition-colors duration-300">
+                        <div
+                            class="w-12 h-12 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6">
+                            <i data-lucide="timer" class="w-6 h-6 text-blue-400"></i>
+                        </div>
+                        <h3 class="text-white font-bold text-lg mb-3">Escala Inasumible</h3>
+                        <p class="text-zinc-500 text-sm leading-relaxed">Catálogo multimarca con miles de referencias.
+                            La redacción manual de cada producto es operativa y económicamente inviable.</p>
+                        <div class="mt-6 pt-4 border-t border-zinc-800"><span
+                                class="text-[var(--accent)] font-mono text-xs">25 min / producto manual</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 3. ARCHITECTURE -->
+        <section class="py-32 bg-zinc-950 border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="max-w-3xl mb-20">
+                    <span class="reveal font-mono text-[var(--accent)] text-xs uppercase tracking-widest block mb-4">//
+                        Arquitectura a Fondo</span>
+                    <h2 class="reveal delay-1 text-3xl md:text-5xl font-extrabold text-white mb-8 leading-tight">Ingesta
+                        Dual<span class="text-[var(--accent)]">,</span> Salida Unificada<span
+                            class="text-[var(--accent)]">.</span></h2>
+                    <p class="reveal delay-2 text-lg text-zinc-400 leading-relaxed">Dos flujos de entrada paralelos
+                        convergen en un modelo de lenguaje orquestador que reestructura el contenido basándose en
+                        directrices de marca.</p>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-16 items-start">
+                    <div class="reveal-left">
+                        <div class="mb-2"><span
+                                class="text-[10px] font-mono text-[var(--accent)] uppercase tracking-widest mb-3 block">Flujo
+                                01 — Extracción Web</span>
+                            <div class="pipeline-node">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/30 flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="link" class="w-4 h-4 text-[var(--accent-light)]"></i>
+                                </div>
+                                <div><span class="text-white text-xs font-bold block">Nodo de Enlace →
+                                        Extractor</span><span class="text-zinc-600 text-[10px]">Ingesta URL · Limpieza
+                                        DOM · Serialización</span></div>
+                            </div>
+                        </div>
+                        <div class="pipeline-path"></div>
+                        <div class="mb-2"><span
+                                class="text-[10px] font-mono text-purple-400 uppercase tracking-widest mb-3 block">Flujo
+                                02 — Visión Artificial</span>
+                            <div class="pipeline-node" style="border-color: rgba(168,85,247,0.3);">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="scan-eye" class="w-4 h-4 text-purple-400"></i>
+                                </div>
+                                <div><span class="text-white text-xs font-bold block">Nodo de Imagen → Vision
+                                        API</span><span class="text-zinc-600 text-[10px]">Atributos · Materiales ·
+                                        Colores · Zero-shot</span></div>
+                            </div>
+                        </div>
+                        <div class="pipeline-path"></div>
+                        <div class="mb-2"><span
+                                class="text-[10px] font-mono text-[var(--accent-light)] uppercase tracking-widest mb-3 block">Convergencia
+                                — Motor de Marca</span>
+                            <div class="pipeline-node border-[var(--accent)]/50 bg-[var(--accent)]/5">
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-[var(--accent)]/20 border border-[var(--accent)]/40 flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="brain" class="w-4 h-4 text-[var(--accent-light)]"></i>
+                                </div>
+                                <div><span class="text-[var(--accent-light)] text-xs font-bold block">Motor Lingüístico
+                                        de Marca</span><span class="text-zinc-500 text-[10px]">Temp. 0.2 · Directrices
+                                        corporativas · E-E-A-T</span></div>
+                            </div>
+                        </div>
+                        <div class="pipeline-path"></div>
+                        <div class="pipeline-node">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="database" class="w-4 h-4 text-amber-400"></i>
+                            </div>
+                            <div><span class="text-white text-xs font-bold block">CMS Deployment</span><span
+                                    class="text-zinc-600 text-[10px]">Inyección directa via API · Schema de
+                                    autoridad</span></div>
+                        </div>
+                    </div>
+                    <div class="reveal-right">
+                        <div class="bg-zinc-900/30 border border-zinc-800 rounded-xl overflow-hidden">
+                            <table class="w-full text-left text-sm text-zinc-400">
+                                <thead class="bg-zinc-900/60 border-b border-zinc-800">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-4 font-mono text-[10px] text-zinc-500 uppercase tracking-widest">
+                                            Componente</th>
+                                        <th
+                                            class="px-6 py-4 font-mono text-[10px] text-zinc-500 uppercase tracking-widest">
+                                            Tecnología</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-zinc-800/50">
+                                    <tr class="hover:bg-zinc-900/30 transition-colors">
+                                        <td class="px-6 py-4 font-bold text-white">Extracción Web</td>
+                                        <td class="px-6 py-4">Puppeteer + Cheerio</td>
+                                    </tr>
+                                    <tr class="hover:bg-zinc-900/30 transition-colors">
+                                        <td class="px-6 py-4 font-bold text-white">Visión Artificial</td>
+                                        <td class="px-6 py-4">GPT-4 Vision (Zero-shot)</td>
+                                    </tr>
+                                    <tr class="hover:bg-zinc-900/30 transition-colors">
+                                        <td class="px-6 py-4 font-bold text-white">Motor Semántico</td>
+                                        <td class="px-6 py-4">LLM Orquestador · Temp. 0.2</td>
+                                    </tr>
+                                    <tr class="hover:bg-zinc-900/30 transition-colors">
+                                        <td class="px-6 py-4 font-bold text-white">Validación E-E-A-T</td>
+                                        <td class="px-6 py-4">Schema.org + Autor Dinámico</td>
+                                    </tr>
+                                    <tr class="hover:bg-zinc-900/30 transition-colors">
+                                        <td class="px-6 py-4 font-bold text-white">Entorno</td>
+                                        <td class="px-6 py-4">Node.js (Serverless)</td>
+                                    </tr>
+                                    <tr class="hover:bg-zinc-900/30 transition-colors">
+                                        <td class="px-6 py-4 font-bold text-white">Inyección CMS</td>
+                                        <td class="px-6 py-4">API REST Automatizada</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 4. THE BRAIN -->
+        <section class="py-32 bg-black border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <span
+                            class="reveal font-mono text-[var(--accent)] text-xs uppercase tracking-widest block mb-4">//
+                            El Cerebro</span>
+                        <h2 class="reveal delay-1 text-3xl md:text-5xl font-extrabold text-white mb-8 leading-tight">
+                            Lógica Computacional<span class="text-[var(--accent)]">.</span></h2>
+                        <div class="reveal delay-2 space-y-6 text-zinc-400 leading-relaxed">
+                            <p>El núcleo del sistema es un <strong class="text-white">cerebro digital calibrado para la
+                                    marca</strong>. Utiliza prompt engineering avanzada para replicar el tono
+                                corporativo de forma determinista.</p>
+                            <p>Implementamos una capa de validación <strong
+                                    class="text-[var(--accent)]">E-E-A-T</strong>: el algoritmo inyecta dinámicamente la
+                                firma y credenciales de autores reales dentro de las páginas de producto y el blog
+                                generado programáticamente.</p>
+                            <p>Esto estructura un <strong class="text-white">grafo de entidades</strong> que obliga al
+                                buscador a reconocer la autoridad semántica del contenido.</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right">
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- BEFORE: Short sparse description -->
+                            <div
+                                class="bg-zinc-900/50 border border-red-500/20 rounded-xl p-5 relative overflow-hidden">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="text-[10px] font-mono text-red-400 uppercase tracking-widest">Antes</span>
+                                    <div
+                                        class="w-6 h-6 rounded bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                                        <i data-lucide="x" class="w-3 h-3 text-red-400"></i>
+                                    </div>
+                                </div>
+                                <div class="space-y-3 opacity-70">
+                                    <p class="text-zinc-500 text-[10px] leading-relaxed">Zapatilla Premiata modelo Mick.
+                                    </p>
+                                    <p class="text-zinc-600 text-[10px] leading-relaxed">Color azul. Disponible varias
+                                        tallas.</p>
+                                    <div class="h-20"></div>
+                                </div>
+                                <div class="absolute bottom-4 left-5 right-5">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="h-1 w-8 rounded bg-red-500/20"></div>
+                                        <div class="h-1 w-5 rounded bg-red-500/10"></div>
+                                    </div>
+                                    <span class="text-red-400/60 font-mono text-[9px]">2 líneas · 0 SEO · 0
+                                        autoridad</span>
+                                </div>
+                            </div>
+                            <!-- AFTER: Rich AI-generated description -->
+                            <div
+                                class="bg-zinc-900/50 border border-[var(--accent)]/30 rounded-xl p-5 relative overflow-hidden">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="text-[10px] font-mono text-[var(--accent)] uppercase tracking-widest">Después</span>
+                                    <div
+                                        class="w-6 h-6 rounded bg-[var(--accent)]/10 border border-[var(--accent)]/30 flex items-center justify-center">
+                                        <i data-lucide="check" class="w-3 h-3 text-[var(--accent)]"></i>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <p class="text-white text-[9px] font-bold">Premiata Mick Sneaker Hombre</p>
+                                    <p class="text-[var(--accent)] text-[7px] font-mono tracking-widest mb-1">RUNNING
+                                        HERITAGE ITALIANO</p>
+                                    <p class="text-zinc-400 text-[8px] leading-relaxed">La Premiata Mick redefine el
+                                        concepto de sneaker running con ejecución artesanal italiana. Silueta retro,
+                                        volumen contenido...</p>
+                                    <p class="text-[var(--accent-light)] text-[7px] font-mono tracking-widest mt-2">
+                                        MATERIALES</p>
+                                    <p class="text-zinc-500 text-[8px]">Ante italiano y nylon balístico en azul cobalto.
+                                    </p>
+                                    <p class="text-purple-400 text-[7px] font-mono tracking-widest mt-2">INSIDE EXIT BCN
+                                    </p>
+                                    <p class="text-zinc-500 text-[8px] italic">"Combínala con Berwich y Belstaff"</p>
+                                </div>
+                                <div class="mt-3 flex gap-1.5 flex-wrap">
+                                    <span
+                                        class="text-[7px] font-mono px-1.5 py-0.5 rounded border border-[var(--accent)]/30 text-[var(--accent)]">Schema.org</span>
+                                    <span
+                                        class="text-[7px] font-mono px-1.5 py-0.5 rounded border border-purple-500/30 text-purple-400">E-E-A-T</span>
+                                    <span
+                                        class="text-[7px] font-mono px-1.5 py-0.5 rounded border border-amber-500/30 text-amber-400">Autor</span>
+                                    <span
+                                        class="text-[7px] font-mono px-1.5 py-0.5 rounded border border-blue-500/30 text-blue-400">SEO</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 5. INVISIBLE UX -->
+        <section class="py-32 bg-zinc-950 border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 text-center max-w-3xl">
+                <span class="reveal font-mono text-[var(--accent)] text-xs uppercase tracking-widest block mb-4">//
+                    Interfaz Invisible</span>
+                <h2 class="reveal delay-1 text-3xl md:text-5xl font-extrabold text-white mb-8 leading-tight">Cero
+                    Fricción Operativa<span class="text-[var(--accent)]">.</span></h2>
+                <p class="reveal delay-2 text-lg text-zinc-400 leading-relaxed mb-12">El usuario arrastra una imagen o
+                    pega una URL. El procesamiento — extracción, análisis visual, generación de contenido, formateo y
+                    taxonomías de autor — ocurre en segundo plano. Una vez procesado, inserción directa al CMS.</p>
+                <div class="reveal delay-3 grid grid-cols-3 gap-6 max-w-xl mx-auto">
+                    <div
+                        class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-[var(--accent)]/30 transition-all duration-300">
+                        <i data-lucide="image" class="w-8 h-8 text-[var(--accent)] mx-auto mb-3"></i><span
+                            class="text-white text-xs font-bold block">Drop Image</span><span
+                            class="text-zinc-600 text-[10px] font-mono">Vision API</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-[var(--accent)]/30 transition-all duration-300">
+                        <i data-lucide="link-2" class="w-8 h-8 text-purple-400 mx-auto mb-3"></i><span
+                            class="text-white text-xs font-bold block">Paste URL</span><span
+                            class="text-zinc-600 text-[10px] font-mono">HTML Parser</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-[var(--accent)]/30 transition-all duration-300">
+                        <i data-lucide="rocket" class="w-8 h-8 text-amber-400 mx-auto mb-3"></i><span
+                            class="text-white text-xs font-bold block">Auto Deploy</span><span
+                            class="text-zinc-600 text-[10px] font-mono">CMS API</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 6. METRICS -->
+        <section class="py-32 bg-black border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-16 items-start">
+                    <div><span
+                            class="reveal font-mono text-[var(--accent)] text-xs uppercase tracking-widest block mb-4">//
+                            Métricas</span>
+                        <h2 class="reveal delay-1 text-3xl md:text-5xl font-extrabold text-white mb-8 leading-tight">
+                            Sistema Operativo<span class="text-[var(--accent)]">.</span></h2>
+                        <p class="reveal delay-2 text-lg text-zinc-400 leading-relaxed mb-12">Resultados medibles desde
+                            la implementación del motor semántico.</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div
+                            class="reveal delay-1 bg-zinc-900/30 border border-zinc-800 p-6 rounded-xl flex items-center justify-between hover:border-[var(--accent)]/30 transition-colors duration-300">
+                            <span class="text-zinc-400">Latencia por producto</span><span
+                                class="text-2xl font-mono font-bold text-[var(--accent)]">~2.4s</span>
+                        </div>
+                        <div
+                            class="reveal delay-2 bg-zinc-900/30 border border-zinc-800 p-6 rounded-xl flex items-center justify-between hover:border-[var(--accent)]/30 transition-colors duration-300">
+                            <span class="text-zinc-400">Reducción vs. manual</span><span
+                                class="text-2xl font-mono font-bold text-green-400">-99.8%</span>
+                        </div>
+                        <div
+                            class="reveal delay-3 bg-zinc-900/30 border border-zinc-800 p-6 rounded-xl flex items-center justify-between hover:border-[var(--accent)]/30 transition-colors duration-300">
+                            <span class="text-zinc-400">Adherencia tono de marca</span><span
+                                class="text-2xl font-mono font-bold text-white">100%</span>
+                        </div>
+                        <div
+                            class="reveal delay-4 bg-zinc-900/30 border border-zinc-800 p-6 rounded-xl flex items-center justify-between hover:border-[var(--accent)]/30 transition-colors duration-300">
+                            <span class="text-zinc-400">Blog clusters paralelos</span><span
+                                class="text-2xl font-mono font-bold text-amber-400">Automático</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 7. CTA CONTACT -->
+        <section id="contact-split" class="py-32 bg-zinc-950 border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <div
+                        class="w-24 h-24 bg-zinc-800 rounded-full mb-8 overflow-hidden grayscale hover:grayscale-0 transition-all border-2 border-zinc-800 hover:border-acid">
+                        <img src="jordi/jordi_exposito.webp" alt="Jordi Expósito" class="w-full h-full object-cover">
+                    </div>
+                    <h2 class="text-4xl font-extrabold text-white-off mb-6">¿Tienes un catálogo que necesita
+                        inteligencia?</h2>
+                    <p class="text-xl text-zinc-400 leading-relaxed mb-8 max-w-lg">Si tu ecommerce tiene cientos de
+                        productos sin optimizar, hablemos de cómo escalar contenido con IA sin perder el tono de marca.
+                    </p>
+                    <div class="p-6 bg-zinc-900 border border-zinc-800 inline-block rounded-sm mb-8">
+                        <h3 class="font-mono text-acid text-sm mb-2 uppercase">DISPONIBILIDAD</h3>
+                        <p class="text-white-off font-bold text-2xl">Q2 2026: 2 Plazas abiertas</p>
+                    </div>
+                    <p class="text-zinc-500 text-sm font-mono flex items-center gap-2"><i data-lucide="map-pin"
+                            class="w-4 h-4 text-acid"></i> Base en Barcelona | <i data-lucide="globe"
+                            class="w-4 h-4 text-acid"></i> Remote Native</p>
+                </div>
+                <div>
+                    <div
+                        class="bg-zinc-900 border border-zinc-800 p-8 md:p-12 rounded h-full flex flex-col shadow-2xl hover:border-acid/30 transition-colors duration-500">
+                        <h2 class="text-acid font-mono text-sm font-bold uppercase tracking-widest mb-12">QUICK SIGNAL
+                        </h2>
+                        <form action="#" class="space-y-8 flex-1" id="contact-form" novalidate>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div class="group"><label for="name" class="label-tech">[Nombre /
+                                        Organización]:</label><input type="text" id="name" name="name" required
+                                        placeholder="IDENTITY_INPUT" class="input-tech"></div>
+                                <div class="group"><label for="email" class="label-tech">[Email
+                                        Corporativo]:</label><input type="email" id="email" name="email" required
+                                        placeholder="COMM_PROTOCOL" class="input-tech"></div>
+                            </div>
+                            <div class="custom-select-container"><label class="select-label">[Tipo de
+                                    Proyecto]:</label><select id="type" name="type" required class="custom-select">
+                                    <option value="" disabled selected>SELECCIONAR_MODALIDAD</option>
+                                    <option value="ux_ui_design">Diseño de Producto (UX/UI)</option>
+                                    <option value="mvp_prototype">MVP / Prototipo Funcional</option>
+                                    <option value="design_engineering">Design Engineering</option>
+                                    <option value="consultancy">Consultoría de Producto</option>
+                                </select></div>
+                            <div class="group"><label for="message" class="label-tech">[El Problema a Resolver
+                                    (Payload)]:</label><textarea id="message" name="message" rows="5" required
+                                    placeholder="Describe aquí el reto. Sé breve. Sé técnico."
+                                    class="input-tech resize-none"></textarea></div>
+                            <label class="custom-checkbox"><input type="checkbox" name="privacy" required><span
+                                    class="checkmark"></span><span
+                                    class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Acepto las <a
+                                        href="/aviso-legal" target="_blank"
+                                        class="text-acid hover:underline">condiciones legales</a> y la <a
+                                        href="privacidad.html" target="_blank" class="text-acid hover:underline">Política de
+                                        Privacidad</a></span></label>
+                            <button type="submit"
+                                class="btn-hyperion w-full py-4 flex items-center justify-center gap-2 group mt-6"><span
+                                    class="font-bold tracking-wider">ENVIAR_SEÑAL</span><i data-lucide="arrow-right"
+                                    class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 8. NEXT PROJECT -->
+        <section class="py-24 bg-zinc-950 border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 text-center reveal">
+                <span class="text-zinc-500 font-mono text-xs uppercase tracking-widest block mb-4">Siguiente
+                    Proyecto</span>
+                <a href="linkedin.html"
+                    class="inline-block text-4xl md:text-6xl font-extrabold text-white hover:text-acid transition-colors group">LinkedIn
+                    Automation<span class="inline-block transition-transform group-hover:translate-x-4">→</span></a>
+            </div>
+        </section>
+        <!-- FOOTER -->
+        <footer class="py-12 bg-black border-t border-zinc-900">
+            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <span class="text-zinc-600 text-xs font-mono">© 2026 Jordi Expósito. Todos los derechos
+                    reservados.</span>
+                <div class="flex gap-6"><a href="https://linkedin.com/in/jordi-exposito" target="_blank"
+                        class="text-zinc-500 hover:text-[var(--accent)] transition-colors"><i data-lucide="linkedin"
+                            class="w-5 h-5"></i></a><a href="https://github.com/jordiexposito" target="_blank"
+                        class="text-zinc-500 hover:text-[var(--accent)] transition-colors"><i data-lucide="github"
+                            class="w-5 h-5"></i></a></div>
+            </div>
+        </footer>
+    </main>
+    <script>
+        function initTypewriter() {
+            const container = document.getElementById('code-typewriter');
+            if (!container) return;
+            const lines = container.querySelectorAll('.tw-line');
+            const cursor = document.getElementById('typewriter-cursor');
+            let i = 0;
+            function revealNext() {
+                if (i >= lines.length) { if (cursor) cursor.style.display = 'inline'; return; }
+                lines[i].style.display = 'block';
+                i++;
+                setTimeout(revealNext, 120 + Math.random() * 100);
+            }
+            if (cursor) cursor.style.display = 'inline';
+            let started = false;
+            function startTyping() { if (started) return; started = true; setTimeout(revealNext, 600); }
+            const obs = new IntersectionObserver((entries) => { if (entries[0].isIntersecting) { obs.disconnect(); startTyping(); } }, { threshold: 0.05 });
+            obs.observe(container);
+            setTimeout(startTyping, 2000);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            initTypewriter();
+            const revealObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }); }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => revealObserver.observe(el));
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => { if (window.scrollY > 50) { navbar.classList.add('py-3', 'bg-black/80', 'backdrop-blur-xl', 'border-zinc-800'); navbar.classList.remove('py-6', 'border-transparent'); } else { navbar.classList.remove('py-3', 'bg-black/80', 'backdrop-blur-xl', 'border-zinc-800'); navbar.classList.add('py-6', 'border-transparent'); } });
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn'), closeMenuBtn = document.getElementById('close-menu-btn'), mobileMenu = document.getElementById('mobile-menu');
+            function toggleMenu() { if (!mobileMenu) return; if (mobileMenu.classList.contains('translate-x-full')) { mobileMenu.classList.remove('translate-x-full'); document.body.style.overflow = 'hidden'; } else { mobileMenu.classList.add('translate-x-full'); document.body.style.overflow = ''; } }
+            if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMenu);
+            if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
+            if (mobileMenu) mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', toggleMenu));
+            const customSelects = document.getElementsByClassName("custom-select-container");
+            for (let i = 0; i < customSelects.length; i++) { const selElmnt = customSelects[i].getElementsByTagName("select")[0]; const a = document.createElement("DIV"); a.setAttribute("class", "select-selected"); a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML; customSelects[i].appendChild(a); const b = document.createElement("DIV"); b.setAttribute("class", "select-items select-hide"); for (let j = 1; j < selElmnt.length; j++) { const c = document.createElement("DIV"); c.innerHTML = selElmnt.options[j].innerHTML; c.addEventListener("click", function (e) { const y = this.parentNode.parentNode.getElementsByTagName("select")[0]; const h = this.parentNode.previousSibling; for (let k = 0; k < y.length; k++) { if (y.options[k].innerHTML == this.innerHTML) { y.selectedIndex = k; h.innerHTML = this.innerHTML; const s = this.parentNode.getElementsByClassName("same-as-selected"); for (let l = 0; l < s.length; l++) s[l].removeAttribute("class"); this.setAttribute("class", "same-as-selected"); break; } } h.click(); }); b.appendChild(c); } customSelects[i].appendChild(b); a.addEventListener("click", function (e) { e.stopPropagation(); closeAllSelect(this); this.nextSibling.classList.toggle("select-hide"); this.classList.toggle("select-arrow-active"); }); }
+            function closeAllSelect(elmnt) { const x = document.getElementsByClassName("select-items"); const y = document.getElementsByClassName("select-selected"); const arrNo = []; for (let i = 0; i < y.length; i++) { if (elmnt == y[i]) arrNo.push(i); else y[i].classList.remove("select-arrow-active"); } for (let i = 0; i < x.length; i++) { if (arrNo.indexOf(i)) x[i].classList.add("select-hide"); } }
+            document.addEventListener("click", closeAllSelect);
+        });
+    </script>
+    <script src="https://unpkg.com/lucide@0.468.0"></script>
+    <script>lucide.createIcons();</script>
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-zinc-950 z-40 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center gap-8">
+        <a href="index.html" class="block hover:opacity-80 transition-opacity"><img src="logo_Jordiexposito.svg"
+                alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24"></a>
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white"><svg
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg></button>
+        <a href="work.html" class="text-2xl font-bold text-white-off hover:text-[var(--accent)] transition-colors">Work / Lab</a>
+        <a href="workflow.html"
+            class="text-2xl font-bold text-white-off hover:text-[var(--accent)] transition-colors">Workflow</a>
+        <a href="about.html"
+            class="text-2xl font-bold text-white-off hover:text-[var(--accent)] transition-colors">About</a>
+        <a href="contacto.html"
+            class="link--io text-2xl font-bold text-white-off uppercase tracking-widest mt-4" data-text="¿Hablamos?">¿Hablamos?</a>
+    </div>
+    <div class="cursor"></div>
+    <div class="cursor2"></div>
+    <script src="contact-form.js" defer></script>
+    <script src="cursor.js" defer></script>
+</body>
+
+</html>

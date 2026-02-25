@@ -86,6 +86,25 @@
 
         gtag('config', 'G-XZSD834B88');
     </script>
+
+  <style>
+    /* Fix nav shift when bold */
+    nav.hidden.md\:flex a {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav.hidden.md\:flex a::after {
+      content: attr(data-text);
+      font-weight: 700;
+      height: 0;
+      visibility: hidden;
+      overflow: hidden;
+      user-select: none;
+      pointer-events: none;
+    }
+  </style>
 </head>
 
 <body class="antialiased">
@@ -93,18 +112,17 @@
     <header id="navbar"
         class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 border-b border-transparent">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <a href="/" class="block hover:opacity-80 transition-opacity">
+            <a href="index.html" class="block hover:opacity-80 transition-opacity">
                 <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-6 w-auto" width="120" height="24">
             </a>
             <nav class="hidden md:flex items-center gap-8">
-                <a href="/work" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Work /
-                    Lab</a>
-                <a href="/workflow"
-                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">Workflow</a>
-                <a href="/about"
-                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors">About</a>
-                <a href="/contacto"
-                    class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4">¿Hablamos?</a>
+                <a href="work.html" class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors" data-text="Work / Lab">Work / Lab</a>
+                <a href="workflow.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors" data-text="Workflow">Workflow</a>
+                <a href="about.html"
+                    class="text-zinc-400 text-sm font-medium hover:text-acid transition-colors" data-text="About">About</a>
+                <a href="contacto.html"
+                    class="link--io text-white-off text-sm font-bold uppercase tracking-widest ml-4" data-text="¿Hablamos?">¿Hablamos?</a>
             </nav>
         </div>
     </header>
@@ -175,11 +193,12 @@
                 <div class="mt-12 pt-8 border-t border-zinc-800">
                     <p class="text-zinc-500 text-xs font-mono">Última actualización: Febrero 2026</p>
                     <div class="flex gap-4 mt-4 text-xs font-mono">
-                        <a href="/aviso-legal" class="text-zinc-400 hover:text-acid transition-colors">Aviso
+                        <a href="/aviso-legal" class="text-zinc-400 hover:text-acid transition-colors" data-text="Aviso
+                            Legal">Aviso
                             Legal</a>
                         <span class="text-zinc-700">|</span>
                         <a href="/privacidad-redes"
-                            class="text-zinc-400 hover:text-acid transition-colors">Privacidad Redes Sociales</a>
+                            class="text-zinc-400 hover:text-acid transition-colors" data-text="Privacidad Redes Sociales">Privacidad Redes Sociales</a>
                     </div>
                 </div>
             </div>
@@ -189,7 +208,7 @@
     <!-- FOOTER -->
     <footer class="border-t border-zinc-800 py-12">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <a href="/" class="block hover:opacity-80 transition-opacity">
+            <a href="index.html" class="block hover:opacity-80 transition-opacity">
                 <img src="logo_Jordiexposito.svg" alt="Jordi Exposito" class="h-5 w-auto" width="100" height="20">
             </a>
             <p class="text-zinc-600 text-xs font-mono">© 2026 Jordi Expósito — Tres Puntos Comunicación S.L.</p>
